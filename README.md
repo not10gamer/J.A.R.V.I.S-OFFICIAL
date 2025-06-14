@@ -1,7 +1,7 @@
 
 # J.A.R.V.I.S
 
-A customizable AI made in python with a user friendly GUI.
+A customizable AI made in python usable exclusively through CLI. (GUI in development)
 
 
 
@@ -19,7 +19,13 @@ You can pick which model to use by viewing the official ollama github [page](htt
     
 ## Deployment
 
-once you have installed the required model change the used model in vars.py, then run the main.py
+once you have installed the required model change the used model in "vars.py",
+
+```bash
+  JARVIS_MODEL = "your model"
+```
+
+then run the main.py
 
 ```bash
   main.py
@@ -38,7 +44,6 @@ Go to the project directory
 
 ```bash
   cd J.A.R.V.I.S
-
 ```
 
 Install dependencies
@@ -50,7 +55,7 @@ Install dependencies
 Start the AI
 
 ```bash
-  nain.py
+  main.py
 ```
 
 
@@ -70,7 +75,6 @@ Start the AI
 
 ## Features
 
-- GUI
 - Customizable AI
 - Open Source
 - Cross platform
