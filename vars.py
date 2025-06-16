@@ -1,12 +1,13 @@
 """
 The different AI models categorized based of their speciality
 
-Speed_acc  (4.7 GB)
-consistent (2.0 GB)
-based      (2.5 GB)
-open_based (4.1 GB)
-speed      (839 MB)
-unhinged   (3.8 GB)
+Speed_acc  (4.7 GB) --- Done
+consistent (2.0 GB) --- Done
+based      (2.5 GB) --- Not Done
+open_based (4.1 GB) --- Not in the WORKS
+speed      (839 MB) --- In the WORKS
+unhinged   (3.8 GB) --- In the WORKS
+* These are the estimated sizes of the models
 * These are estimated sizes the true sizes can be found in the official ollama github plus the
                                                                                         manifest files (2 MB to 1.6 GB).
 
@@ -14,7 +15,7 @@ Pick the model that you prefer and replace the JARVIS_MODEL variable with your p
 """
 import vers
 
-JARVIS_MODEL = vers.speed_acc
+JARVIS_MODEL = vers.consistent
 TEMPLATE = """
 Your name is Jarvis.
 Your creator is Ethan (Don't Mention unless asked).
