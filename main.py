@@ -20,9 +20,9 @@ def record_speech():
             with speech_recognition.Microphone() as source:
                 recognizer.adjust_for_ambient_noise(source, duration=0.5)
                 print("listening...")
-                winsound.Beep(frequency=2000, duration=250)
-                audio = recognizer.listen(source)
                 winsound.Beep(frequency=1500, duration=250)
+                audio = recognizer.listen(source)
+                winsound.Beep(frequency=1250, duration=250)
                 return recognizer.recognize_google(audio)
 
         except speech_recognition.UnknownValueError as e:
