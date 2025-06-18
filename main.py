@@ -18,11 +18,12 @@ def record_speech():
     while 1:
         try:
             with speech_recognition.Microphone() as source:
-                recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                print("listening...")
+                recognizer.adjust_for_ambient_noise(source, duration=1)
+                print("listening...", end=" ")
+                winsound.Beep(frequency=2000, duration=250)
+                audio = recognizer.listen(source, )
+                print("Understanding...")
                 winsound.Beep(frequency=1500, duration=250)
-                audio = recognizer.listen(source)
-                winsound.Beep(frequency=1250, duration=250)
                 return recognizer.recognize_google(audio)
 
         except speech_recognition.UnknownValueError as e:
@@ -51,6 +52,7 @@ speak.runAndWait()
 while True:
     user_in = record_speech()
     print(f"You: {user_in}")
+    print("Thinking...")
     if str(user_in).lower() == "bye":
         result = chain.invoke({"context": context, "question": "bye"})
         print("JARVIS: " + result, end="")
