@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Changes to documentation">
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Addition Plus Changes to documentation.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
@@ -190,7 +190,23 @@
       <option name="project" value="LOCAL" />
       <updated>1750273934042</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Addition Plus Changes to documentation.">
+      <option name="closed" value="true" />
+      <created>1750274643799</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1750274643799</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Addition Plus Changes to documentation.">
+      <option name="closed" value="true" />
+      <created>1750274929190</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1750274929190</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -214,6 +230,7 @@
     <MESSAGE value="Structure for future updates added" />
     <MESSAGE value="Added The Ability to change Settings. (Further documentation will be added)" />
     <MESSAGE value="Changes to documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes to documentation" />
+    <MESSAGE value="Addition Plus Changes to documentation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Addition Plus Changes to documentation." />
   </component>
 </project>

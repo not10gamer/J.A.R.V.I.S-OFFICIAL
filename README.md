@@ -19,14 +19,13 @@ You can pick which model to use by viewing the official ollama GitHub [page](htt
     
 ## Deployment
 
-once you have installed the required model change the used model in "vars.py",
+once you have installed the required model change the used model in "vars.py".
 
 ```bash
   JARVIS_MODEL = vers.{WhatEverYouWantBasedOnTheOptions}   # These can be altered vers.py
 ```
 
 then run the main.py
-
 ```bash
   main.py
 ```
