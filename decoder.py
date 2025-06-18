@@ -5,9 +5,9 @@ for i in range(len(text)):
     info.append(text[i].split(" :: "))
     del info[i][0]
 
-output = info[0][0][2:-1]
-user_input = info[1][0][2:-1]
-gui = info[2][0][2:-1]
+output = str(info[0][0][2:-1])
+user_input = str(info[1][0][2:-1])
+gui = str(info[2][0][2:-1])
 
 file.close()
 

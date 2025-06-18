@@ -7,7 +7,7 @@ import winsound
 import time
 from decoder import return_info
 
-o, i, ui = str(return_info())
+o, i, ui = return_info()
 model = OllamaLLM(model=vars.JARVIS_MODEL)
 prompt = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt | model
