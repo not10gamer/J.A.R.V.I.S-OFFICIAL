@@ -5,7 +5,9 @@ import pyttsx3
 import speech_recognition
 import winsound
 import time
+from decoder import return_info
 
+o, i, ui = str(return_info())
 model = OllamaLLM(model=vars.JARVIS_MODEL)
 prompt = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt | model
@@ -50,7 +52,11 @@ speak.say(start_up[8:])
 speak.runAndWait()
 
 while True:
-    user_in = record_speech()
+    if i == "audio":
+        user_in = record_speech()
+    else:
+        user_in = input("You: ")
+
     print(f"You: {user_in}")
     print("Thinking...")
     if str(user_in).lower() == "bye":
@@ -73,10 +79,11 @@ while True:
 
     print("JARVIS: " + result)
 
-    if result.startswith("<think>"):
-        speak.say(result.split("</think>")[1])
-    else:
-        speak.say(result)
-    speak.runAndWait()
+    if o == "audio":
+        if result.startswith("<think>"):
+            speak.say(result.split("</think>")[1])
+        else:
+            speak.say(result)
+        speak.runAndWait()
 
     context += f"\nUser: {user_in}\nJarvis: {result}\n"
