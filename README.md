@@ -15,14 +15,14 @@ you'll need to install a model from [ollama](https://ollama.com/download/OllamaS
 
 Then use this command to download any model.
 
-You can pick which model to use by viewing the official ollama github [page](https://github.com/ollama/ollama).
+You can pick which model to use by viewing the official ollama GitHub [page](https://github.com/ollama/ollama).
     
 ## Deployment
 
 once you have installed the required model change the used model in "vars.py",
 
 ```bash
-  JARVIS_MODEL = "your model"
+  JARVIS_MODEL = vers.{WhatEverYouWantBasedOnTheOptions}   # These can be altered vers.py
 ```
 
 then run the main.py
@@ -37,20 +37,16 @@ then run the main.py
 Clone the project
 
 ```bash
-  git clone https://github.com/not10gamer/J.A.R.V.I.S.git
+  git clone https://github.com/not10gamer/J.A.R.V.I.S-OFFICIAL.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd J.A.R.V.I.S
+  cd J.A.R.V.I.S-OFFICIAL
 ```
 
-Install dependencies
-
-```bash
-  pip install -r requirements.txt
-```
+Install dependencies   (Documentation will be added soon)
 
 Start the AI
 
@@ -65,7 +61,7 @@ Start the AI
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 ![Static Badge](https://img.shields.io/badge/Certification--B)
-![Static Badge](https://img.shields.io/badge/Grade-B+-green)
+![Static Badge](https://img.shields.io/badge/Grade-A-green)
 
 
 ## Authors
