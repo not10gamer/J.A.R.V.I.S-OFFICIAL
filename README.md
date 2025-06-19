@@ -3,7 +3,9 @@
 
 A customizable AI made in python usable exclusively through CLI. (GUI in development)
 
+If you want an indepth guide onj how to use J.A.R.V.I.S please check out the 
 
+####  [How To Use J.A.R.V.I.S](https://github.com/not10gamer/J.A.R.V.I.S-OFFICIAL/blob/main/HowToUse.md)
 
 ## Installation
 
