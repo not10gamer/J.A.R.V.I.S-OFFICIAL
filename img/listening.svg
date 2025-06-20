@@ -1,0 +1,163 @@
+<svg viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Container background gradient - Warm for listening -->
+    <linearGradient id="containerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0a;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#2a1a15;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#1f1510;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0a05;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Listening pulse background -->
+    <linearGradient id="animatedBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0a;stop-opacity:1">
+        <animate attributeName="stop-color" values="#1a0f0a;#2a1f1a;#1a0f0a" dur="3s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#2a1a15;stop-opacity:1">
+        <animate attributeName="stop-color" values="#2a1a15;#3a2a25;#2a1a15" dur="2.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#0f0a05;stop-opacity:1">
+        <animate attributeName="stop-color" values="#0f0a05;#1f1a15;#0f0a05" dur="3.5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Diamond core gradient - Orange/red for listening -->
+    <radialGradient id="diamondCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ff6600;stop-opacity:1">
+        <animate attributeName="stop-color" values="#ff6600;#ff4400;#ff8800;#ff6600" dur="2s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#cc4400;stop-opacity:0.9">
+        <animate attributeName="stop-color" values="#cc4400;#aa2200;#dd5500;#cc4400" dur="2s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#882200;stop-opacity:0.7">
+        <animate attributeName="stop-color" values="#882200;#661100;#993300;#882200" dur="2s" repeatCount="indefinite"/>
+      </stop>
+    </radialGradient>
+
+    <!-- Active scan ring gradient -->
+    <linearGradient id="scanRing" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6600;stop-opacity:0.9">
+        <animate attributeName="stop-opacity" values="0.9;0.5;0.9" dur="1.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#cc4400;stop-opacity:0.6">
+        <animate attributeName="stop-opacity" values="0.6;0.9;0.6" dur="1.8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#882200;stop-opacity:0.4">
+        <animate attributeName="stop-opacity" values="0.4;0.7;0.4" dur="2s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Neural connection gradient - Active flow -->
+    <linearGradient id="neuralGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6600;stop-opacity:0" />
+      <stop offset="25%" style="stop-color:#ff6600;stop-opacity:0.7">
+        <animateTransform attributeName="gradientTransform" type="translate"
+                          values="0 0;100 0;0 0" dur="1.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="75%" style="stop-color:#ff6600;stop-opacity:0.9">
+        <animateTransform attributeName="gradientTransform" type="translate"
+                          values="0 0;100 0;0 0" dur="1.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#ff6600;stop-opacity:0" />
+    </linearGradient>
+
+    <!-- Audio wave gradient -->
+    <linearGradient id="audioWave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6600;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#ff6600;stop-opacity:0.8">
+        <animate attributeName="stop-opacity" values="0.8;0.3;0.8" dur="1s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#ff6600;stop-opacity:0" />
+    </linearGradient>
+
+    <!-- Multiple shimmer effects for listening mode -->
+    <linearGradient id="shimmer1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgba(255,102,0,0)" />
+      <stop offset="50%" style="stop-color:rgba(255,102,0,0.4)" />
+      <stop offset="100%" style="stop-color:rgba(255,102,0,0)" />
+      <animateTransform attributeName="gradientTransform" type="translate"
+                        values="-100 0;400 0;-100 0" dur="2s" repeatCount="indefinite"/>
+    </linearGradient>
+
+    <linearGradient id="shimmer2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgba(255,68,0,0)" />
+      <stop offset="50%" style="stop-color:rgba(255,68,0,0.3)" />
+      <stop offset="100%" style="stop-color:rgba(255,68,0,0)" />
+      <animateTransform attributeName="gradientTransform" type="translate"
+                        values="400 0;-100 0;400 0" dur="2.5s" repeatCount="indefinite"/>
+    </linearGradient>
+
+    <!-- Listening text gradient -->
+    <linearGradient id="textGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6600;stop-opacity:1">
+        <animate attributeName="stop-opacity" values="1;0.7;1" dur="1.5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Enhanced filters for listening mode -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="strongGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="5" result="strongColoredBlur"/>
+      <feMerge>
+        <feMergeNode in="strongColoredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5" result="softColoredBlur"/>
+      <feMerge>
+        <feMergeNode in="softColoredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Animated container background with listening pulse -->
+  <rect x="5" y="5" width="310" height="80" rx="8" ry="8"
+        fill="url(#animatedBg)" stroke="#444" stroke-width="1" opacity="0.95">
+    <animate attributeName="opacity" values="0.95;0.85;0.95" dur="2s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Active shimmer overlays -->
+  <rect x="5" y="5" width="310" height="80" rx="8" ry="8" fill="url(#shimmer1)" opacity="0.7"/>
+  <rect x="5" y="5" width="310" height="80" rx="8" ry="8" fill="url(#shimmer2)" opacity="0.5"/>
+
+  <!-- Active background neural network lines -->
+  <g opacity="0.4">
+    <!-- Fast-moving data streams -->
+    <line x1="20" y1="20" x2="290" y2="30" stroke="#ff6600" stroke-width="1">
+      <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="1;2;1" dur="2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="20" y1="60" x2="290" y2="50" stroke="#ff4400" stroke-width="0.8">
+      <animate attributeName="opacity" values="0.8;0.4;0.8" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="0.8;1.5;0.8" dur="1.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="50" y1="15" x2="280" y2="70" stroke="#ff8800" stroke-width="0.6">
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="0.6;1.2;0.6" dur="2.5s" repeatCount="indefinite"/>
+    </line>
+
+    <!-- Audio wave patterns -->
+    <path d="M 50 40 Q 100 30 150 40 Q 200 50 250 40" stroke="url(#audioWave)" stroke-width="1.5" fill="none">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate"
+                        values="0 0;10 0;0 0" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 50 40 Q 100 30 150 40 Q 200 50 250 40" stroke="url(#audioWave)" stroke-width="1.5" fill="none">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate"
+                        values="0 0;-10 0;0 0" dur="1s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

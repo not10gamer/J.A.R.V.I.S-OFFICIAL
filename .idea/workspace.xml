@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu">
-      <change afterPath="$PROJECT_DIR$/idle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img_install.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/listening.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/thinking.svg" afterDir="false" />
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="The Setup for the GUI">
+      <change afterPath="$PROJECT_DIR$/img/listening.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,6 +60,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Main\JARVIS-v.3.0+\img" />
       <recent name="C:\Main\JARVIS-v.3.0+" />
     </key>
   </component>
@@ -243,7 +240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750446474550</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="The Setup for the GUI">
+      <option name="closed" value="true" />
+      <created>1750450342884</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1750450342884</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -275,6 +280,7 @@
     <MESSAGE value="A massive change to security and Documentation." />
     <MESSAGE value="A tiny Update" />
     <MESSAGE value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
+    <MESSAGE value="The Setup for the GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="The Setup for the GUI" />
   </component>
 </project>
