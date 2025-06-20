@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="A tiny Update">
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu">
+      <change afterPath="$PROJECT_DIR$/idle.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img_install.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/listening.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/thinking.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,6 +47,7 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
@@ -229,8 +235,19 @@
       <option name="project" value="LOCAL" />
       <updated>1750331175044</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu">
+      <option name="closed" value="true" />
+      <created>1750446474550</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1750446474550</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.settings" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -257,6 +274,7 @@
     <MESSAGE value="Updates To Maintenance and Support Systems." />
     <MESSAGE value="A massive change to security and Documentation." />
     <MESSAGE value="A tiny Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="A tiny Update" />
+    <MESSAGE value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
   </component>
 </project>
