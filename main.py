@@ -52,7 +52,7 @@ speak.say(start_up[8:])
 speak.runAndWait()
 
 while True:
-    if i == "audio":
+    if i:
         user_in = record_speech()
     else:
         user_in = input("You: ")
@@ -79,7 +79,7 @@ while True:
 
     print("JARVIS: " + result)
 
-    if o == "audio":
+    if o:
         if result.startswith("<think>"):
             speak.say(result.split("</think>")[1])
         else:
