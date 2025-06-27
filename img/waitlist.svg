@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS AI Waitlist Banner</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .banner {
+            width: 1200px;
+            height: 628px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <svg width="1200" height="628" viewBox="0 0 1200 628" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <!-- Enhanced gradients for larger format -->
+                <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+                    <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:#0f0f0f;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+                </radialGradient>
+
+                <!-- Primary cyan gradient with more stops -->
+                <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+                    <stop offset="30%" style="stop-color:#00e6ff;stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:#00ccff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0099ff;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Electric blue gradient -->
+                <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#6B7AEE;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Text gradient -->
+                <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#00ffff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Glow effects -->
+                <filter id="strongGlow">
+                    <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <filter id="subtleGlow">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+
+                <filter id="textGlow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Background -->
+            <rect width="1200" height="628" fill="url(#bgGradient)"/>
+
+            <!-- Animated background particles -->
+            <g opacity="0.1">
+                <circle r="2" fill="#00ffff">
+                    <animateMotion dur="20s" repeatCount="indefinite">
+                        <path d="M 0,100 Q 300,50 600,150 T 1200,100"/>
+                    </animateMotion>
+                    <animate attributeName="opacity" values="0.1;0.3;0.1" dur="8s" repeatCount="indefinite"/>
+                </circle>
+                <circle r="1.5" fill="#7B68EE">
+                    <animateMotion dur="25s" repeatCount="indefinite">
+                        <path d="M 1200,200 Q 900,150 600,250 T 0,200"/>
+                    </animateMotion>
+                    <animate attributeName="opacity" values="0.1;0.4;0.1" dur="6s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+
+            <!-- Left side - Enhanced JARVIS logo -->
+            <g transform="translate(200, 314)">
+                <!-- Multiple layered outer rings for depth -->
+                <circle cx="0" cy="0" r="125" fill="none" stroke="#00ffff" stroke-width="0.5" opacity="0.15"/>
+                <circle cx="0" cy="0" r="115" fill="none" stroke="#00ccff" stroke-width="1" opacity="0.25"/>
+                <circle cx="0" cy="0" r="105" fill="none" stroke="url(#primaryGrad)" stroke-width="1.5" opacity="0.4"/>
+
+                <!-- Main geometric structure with enhanced design -->
+                <g filter="url(#strongGlow)">
+                    <!-- Central hexagonal core -->
+                    <polygon points="0,-60 35,-30 35,30 0,60 -35,30 -35,-30"
+                             fill="rgba(0,255,255,0.1)" stroke="url(#primaryGrad)" stroke-width="3"/>
+
+                    <!-- Inner diamond -->
+                    <polygon points="0,-40 25,-20 0,0 -25,-20"
+                             fill="rgba(123,104,238,0.2)" stroke="url(#accentGrad)" stroke-width="2.5"/>
+
+                    <!-- Extending geometric arms -->
+                    <g stroke="url(#primaryGrad)" stroke-width="2.5" fill="none">
+                        <!-- Primary arms -->
+                        <line x1="0" y1="-60" x2="0" y2="-85"/>
+                        <line x1="35" y1="-30" x2="60" y2="-50"/>
+                        <line x1="35" y1="30" x2="60" y2="50"/>
+                        <line x1="0" y1="60" x2="0" y2="85"/>
+                        <line x1="-35" y1="30" x2="-60" y2="50"/>
+                        <line x1="-35" y1="-30" x2="-60" y2="-50"/>
+
+                        <!-- Secondary connectors -->
+                        <line x1="30" y1="-45" x2="50" y2="-65" stroke-width="1.5"/>
+                        <line x1="30" y1="45" x2="50" y2="65" stroke-width="1.5"/>
+                        <line x1="-30" y1="45" x2="-50" y2="65" stroke-width="1.5"/>
+                        <line x1="-30" y1="-45" x2="-50" y2="-65" stroke-width="1.5"/>
+                    </g>
+
+                    <!-- Tech brackets in corners -->
+                    <g stroke="#00ffff" stroke-width="2" fill="none" opacity="0.7">
+                        <path d="M 70,-70 L 85,-70 L 85,-55"/>
+                        <path d="M 70,70 L 85,70 L 85,55"/>
+                        <path d="M -70,70 L -85,70 L -85,55"/>
+                        <path d="M -70,-70 L -85,-70 L -85,-55"/>
+                    </g>
+                </g>
+
+                <!-- Enhanced neural network with pulsing effect -->
+                <g filter="url(#subtleGlow)">
+                    <!-- Central AI core with pulsing -->
+                    <circle cx="0" cy="-20" r="8" fill="url(#accentGrad)" stroke="#ffffff" stroke-width="1.5">
+                        <animate attributeName="r" values="8;10;8" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="1;0.7;1" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+
+                    <!-- Primary neural nodes -->
+                    <circle cx="-25" cy="-45" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+                    <circle cx="25" cy="-45" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+                    <circle cx="40" cy="-5" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+                    <circle cx="25" cy="35" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+                    <circle cx="-25" cy="35" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+                    <circle cx="-40" cy="-5" r="4" fill="url(#primaryGrad)" opacity="0.9"/>
+
+                    <!-- Secondary network nodes -->
+                    <circle cx="-50" cy="-20" r="2.5" fill="#00ffff" opacity="0.8"/>
+                    <circle cx="50" cy="-20" r="2.5" fill="#00ffff" opacity="0.8"/>
+                    <circle cx="0" cy="-70" r="2.5" fill="#00ffff" opacity="0.8"/>
+                    <circle cx="0" cy="50" r="2.5" fill="#00ffff" opacity="0.8"/>
+
+                    <!-- Dynamic connection network -->
+                    <g stroke="#00ffff" stroke-width="1.5" opacity="0.6">
+                        <line x1="0" y1="-20" x2="-25" y2="-45">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="-20" x2="25" y2="-45">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="-20" x2="40" y2="-5">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="-20" x2="25" y2="35">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="-20" x2="-25" y2="35">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="0" y1="-20" x2="-40" y2="-5">
+                            <animate attributeName="opacity" values="0.6;1;0.6" dur="3.2s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- Extended connections -->
+                        <line x1="0" y1="-20" x2="-50" y2="-20" opacity="0.4"/>
+                        <line x1="0" y1="-20" x2="50" y2="-20" opacity="0.4"/>
+                        <line x1="0" y1="-20" x2="0" y2="-70" opacity="0.4"/>
+                        <line x1="0" y1="-20" x2="0" y2="50" opacity="0.4"/>
+                    </g>
+                </g>
+
+                <!-- Enhanced rotating elements -->
+                <g fill="none" opacity="0.3">
+                    <!-- Primary scan ring -->
+                    <circle cx="0" cy="0" r="95" stroke="url(#primaryGrad)" stroke-width="2"
+                            stroke-dasharray="8,16" opacity="0.4">
+                        <animateTransform attributeName="transform" type="rotate"
+                                        values="0 0 0;360 0 0" dur="10s" repeatCount="indefinite"/>
+                    </circle>
+
+                    <!-- Secondary scan ring -->
+                    <circle cx="0" cy="0" r="110" stroke="#00ffff" stroke-width="1"
+                            stroke-dasharray="4,20" opacity="0.25">
+                        <animateTransform attributeName="transform" type="rotate"
+                                        values="360 0 0;0 0 0" dur="15s" repeatCount="indefinite"/>
+                    </circle>
+
+                    <!-- Fast inner ring -->
+                    <circle cx="0" cy="0" r="75" stroke="#7B68EE" stroke-width="1.5"
+                            stroke-dasharray="2,8" opacity="0.3">
+                        <animateTransform attributeName="transform" type="rotate"
+                                        values="0 0 0;360 0 0" dur="6s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+
+                <!-- Enhanced data particles -->
+                <g>
+                    <!-- Main data stream -->
+                    <circle r="2.5" fill="#00ffff" opacity="0.9">
+                        <animateMotion dur="5s" repeatCount="indefinite">
+                            <path d="M -35,-30 L 35,-30 L 35,30 L -35,30 Z"/>
+                        </animateMotion>
+                        <animate attributeName="opacity" values="0.9;0.3;0.9" dur="5s" repeatCount="indefinite"/>
+                    </circle>
+
+                    <!-- Secondary stream -->
+                    <circle r="2" fill="#7B68EE" opacity="0.8">
+                        <animateMotion dur="4s" repeatCount="indefinite">
+                            <path d="M 0,-60 L 35,30 L -35,30 L 0,-60 Z"/>
+                        </animateMotion>
+                        <animate attributeName="opacity" values="0.8;0.2;0.8" dur="4s" repeatCount="indefinite"/>
+                    </circle>
+
+                    <!-- Tertiary particles -->
+                    <circle r="1.5" fill="#00ccff" opacity="0.7">
+                        <animateMotion dur="7s" repeatCount="indefinite">
+                            <path d="M -40,-5 L 40,-5 L 0,-70 L 0,50 Z"/>
+                        </animateMotion>
+                        <animate attributeName="opacity" values="0.7;0.2;0.7" dur="7s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+            </g>
+
+            <!-- Right side - Text content -->
+            <g transform="translate(600, 250)">
+                <!-- Main heading -->
+                <text x="0" y="0" font-family="'JetBrains Mono', 'Fira Code', monospace"
+                      font-size="72" font-weight="600" fill="url(#textGrad)"
+                      filter="url(#textGlow)" letter-spacing="8px">
+                    JARVIS
+                </text>
+
+                <!-- Subtitle -->
+                <text x="0" y="50" font-family="'Inter', sans-serif"
+                      font-size="28" fill="#00ffff" opacity="0.9"
+                      letter-spacing="3px" font-weight="300">
+                    AI ASSISTANT
+                </text>
+
+                <!-- Accent line -->
+                <line x1="0" y1="70" x2="280" y2="70" stroke="url(#primaryGrad)"
+                      stroke-width="2" opacity="0.6"/>
+
+                <!-- Waitlist call to action -->
+                <text x="0" y="120" font-family="'Inter', sans-serif"
+                      font-size="24" fill="#ffffff" opacity="0.9"
+                      font-weight="400" letter-spacing="1px">
+                    Join the Future of AI
+                </text>
+
+                <text x="0" y="155" font-family="'Inter', sans-serif"
+                      font-size="18" fill="#00ccff" opacity="0.7"
+                      font-weight="300" letter-spacing="0.5px">
+                    Get early access • Be the first to experience next-gen AI
+                </text>
+            </g>
+
+            <!-- Bottom accent elements -->
+            <g transform="translate(0, 580)">
+                <rect x="0" y="0" width="1200" height="2" fill="url(#primaryGrad)" opacity="0.3"/>
+                <rect x="100" y="10" width="300" height="1" fill="#00ffff" opacity="0.2"/>
+                <rect x="800" y="10" width="300" height="1" fill="#00ffff" opacity="0.2"/>
+            </g>
+
+            <!-- Floating tech elements -->
+            <g opacity="0.15">
+                <circle cx="950" cy="150" r="30" fill="none" stroke="#00ffff" stroke-width="1"
+                        stroke-dasharray="2,4">
+                    <animateTransform attributeName="transform" type="rotate"
+                                    values="0 950 150;360 950 150" dur="20s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="1050" cy="450" r="25" fill="none" stroke="#7B68EE" stroke-width="1"
+                        stroke-dasharray="1,6">
+                    <animateTransform attributeName="transform" type="rotate"
+                                    values="360 1050 450;0 1050 450" dur="15s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>
