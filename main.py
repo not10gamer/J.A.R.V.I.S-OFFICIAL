@@ -49,16 +49,17 @@ def main():
 
     context = context + start_up
     print(start_up)
-    speak.say(start_up[8:])
-    speak.runAndWait()
+    if i:
+        speak.say(start_up[8:])
+        speak.runAndWait()
 
     while True:
         if i:
             user_in = record_speech()
+            print(f"You: {user_in}")
         else:
             user_in = input("You: ")
 
-        print(f"You: {user_in}")
         print("Thinking...")
         if str(user_in).lower() == "bye":
             result = chain.invoke({"context": context, "question": "bye"})

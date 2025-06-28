@@ -20,7 +20,8 @@ vers.py
 You can change the settings 
 
 ```bash
-info.settings   # This is still heavily under development and will be improved in the future (It is still usable at the current time).
+# This is still heavily under development and will be improved in the future (It is still usable at the current time (audio and text)).
+info.settings
 ```
 
 ## Usage
