@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="GUI">
-      <change afterPath="$PROJECT_DIR$/img/index.html" afterDir="false" />
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Bug Fixes, Better Documentation and GUI Setup.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HowToUse.md" beforeDir="false" afterPath="$PROJECT_DIR$/HowToUse.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/waitlist.svg" beforeDir="false" afterPath="$PROJECT_DIR$/img/waitlist.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -53,6 +50,7 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "Python.decoder.executor": "Run",
+    "Python.gui.executor": "Run",
     "Python.main.executor": "Run",
     "Python.settings_modifier.executor": "Run",
     "Python.start.executor": "Run",
@@ -310,7 +308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751022252040</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Bug Fixes, Better Documentation and GUI Setup.">
+      <option name="closed" value="true" />
+      <created>1751120025582</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1751120025582</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -345,6 +351,7 @@
     <MESSAGE value="The Setup for the GUI" />
     <MESSAGE value="Improved workflow for future updates. Preparation for GUI." />
     <MESSAGE value="GUI" />
-    <option name="LAST_COMMIT_MESSAGE" value="GUI" />
+    <MESSAGE value="Bug Fixes, Better Documentation and GUI Setup." />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug Fixes, Better Documentation and GUI Setup." />
   </component>
 </project>

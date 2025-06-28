@@ -77,6 +77,9 @@ def main():
         start = time.time()
         result = chain.invoke({"context": context, "question": user_in})
         end = time.time()
+        dump = open("crash.txt", "w")
+        dump.write(user_in + "\n" + result + "\n" + str(end - start) + "\n")
+        dump.close()
         print(f"Time taken: {end - start}")
 
         print("JARVIS: " + result)
