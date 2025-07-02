@@ -15,7 +15,17 @@ Pick the model that you prefer and replace the JARVIS_MODEL variable with your p
 """
 import vers
 
+ELEVENLABS_API_KEY = "sk_a09566db66a2799bc772e1c52a0fc025bd25525d3a230b7f"
 JARVIS_MODEL = vers.consistent
+
+MODELS = {
+    "Consistent": "consistent",
+    "Speed Accurate": "speed_acc",
+    "Based": "based",
+    "Open Based": "open_based",
+    "Speed": "speed",
+    "Unhinged": "unhinged"
+}
 TEMPLATE = """
 Your name is Jarvis.
 Your creator is Ethan (Don't Mention unless asked).

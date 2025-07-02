@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>J.A.R.V.I.S</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #1e1e2e 0%, #2a2a3e 100%);
+            border-right: 2px solid #4a4a6a;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(155, 89, 182, 0.8)); }
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, #00d4ff, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .system-stats {
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #a0a0a0;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .chart-container {
+            height: 60px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-listen {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-context {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-small {
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            color: white;
+        }
+
+        .btn-exit {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .status {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .status-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .status-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-customize, .btn-reset {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-customize {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .chat-container {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            max-width: 85%;
+            width: fit-content;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-message .timestamp {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            margin-left: auto;
+            align-items: flex-end;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            align-items: flex-start;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            padding: 12px;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #00d4ff, #9b59b6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4ff, #9b59b6);
+            border-radius: 4px;
+        }
+
+        /* Modal Styles */
+        .modal-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e1e2e, #2a2a3e);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #4a4a6a;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        #modalConfirm {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        #modalCancel {
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            color: white;
+        }
+
+        /* Customization Modal Styles */
+        #customizeModal .modal-content {
+            max-width: 500px;
+        }
+
+        .customization-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .customization-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .customization-section h3 {
+            font-size: 18px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .theme-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn[data-theme="dark"] {
+            background: #1a1a2e;
+            color: #ffffff;
+            border: 1px solid #4a4a6a;
+        }
+
+        .theme-btn[data-theme="light"] {
+            background: #e0e0e0;
+            color: #1a1a2e;
+            border: 1px solid #cccccc;
+        }
+
+        .theme-btn[data-theme="blue"] {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+        }
+
+        .theme-btn.active {
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.7);
+            transform: translateY(-3px);
+        }
+
+        #modelSelect {
+            width: calc(100% - 24px); /* Adjust for padding */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            padding: 10px;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1em;
+        }
+
+        #setModelBtn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="header">
+            <div class="logo">
+                <img alt="J.A.R.V.I.S Logo" src="img/logo.svg">
+            </div>
+            <div class="title">J.A.R.V.I.S</div>
+        </div>
+
+        <div class="system-stats">
+            <div class="stat">
+                <div class="stat-label">CPU</div>
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">RAM</div>
+                <div class="chart-container">
+                    <canvas id="ramChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">GPU</div>
+                <div class="chart-container">
+                    <canvas id="gpuChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-context" onclick="openContext()">CONTEXT</button>
+            <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="btn btn-small" onclick="saveChat()" title="Save Chat">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="btn btn-exit" onclick="exitApp()">EXIT</button>
+        </div>
+
+        <div class="status">
+            <div class="status-text" id="statusText">Idle</div>
+            <img alt="Status" class="status-icon" id="statusIcon" src="img/idle.svg">
+            <button class="btn btn-customize" onclick="customize()">CUSTOMIZE</button>
+            <button class="btn btn-reset" onclick="resetSystem()">RESET</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="main-header">
+            <div class="main-title">Conversation</div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" id="speakToggle">SPEAK</button>
+                <button class="btn" id="conversationModeToggle">CONVERSATION MODE</button>
+            </div>
+        </div>
+        <div class="chat-container scrollbar-custom" id="chatContainer">
+            <!-- Chat messages will be loaded here -->
+        </div>
+
+        <div class="input-container">
+            <input class="input-field" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Ask J.A.R.V.I.S anything..."
+                   type="text">
+            <button class="btn btn-listen" id="listenButton" onclick="listen()">LISTEN</button>
+            <button class="send-btn" onclick="sendMessage()">SEND</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-container" id="modal">
+    <div class="modal-content">
+        <p id="modalText"></p>
+        <div class="modal-buttons">
+            <button class="btn" id="modalConfirm">Confirm</button>
+            <button class="btn" id="modalCancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Customization Modal -->
+<div class="modal-container" id="customizeModal">
+    <div class="modal-content">
+        <h2>Customization</h2>
+        <div class="customization-section">
+            <h3>Theme</h3>
+            <div class="theme-options">
+                <button class="btn theme-btn" data-theme="dark">Dark</button>
+                <button class="btn theme-btn" data-theme="light">Light</button>
+                <button class="btn theme-btn" data-theme="blue">Blue</button>
+            </div>
+        </div>
+        <div class="customization-section">
+            <h3>LLM Model</h3>
+            <select id="modelSelect" class="input-field"></select>
+            <button class="btn" id="setModelBtn">Set Model</button>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="closeCustomizeModal">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isListening = false;
+    let chatHistory = [];
+    let cpuChart, ramChart, gpuChart;
+    let recognition;
+    let speakEnabled = false;
+    let conversationModeEnabled = false;
+
+    const statusText = document.getElementById('statusText');
+    const statusIcon = document.getElementById('statusIcon');
+    const chatContainer = document.getElementById('chatContainer');
+    const messageInput = document.getElementById('messageInput');
+    const speakToggle = document.getElementById('speakToggle');
+    const conversationModeToggle = document.getElementById('conversationModeToggle');
+    const customizeModal = document.getElementById('customizeModal');
+    const closeCustomizeModalBtn = document.getElementById('closeCustomizeModal');
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const modelSelect = document.getElementById('modelSelect');
+    const setModelBtn = document.getElementById('setModelBtn');
+
+    // --- State Management ---
+    function setStatus(status) {
+        switch (status) {
+            case 'listening':
+                isListening = true;
+                statusText.textContent = 'Listening...';
+                statusIcon.src = 'img/listening.svg';
+                break;
+            case 'thinking':
+                isListening = false;
+                statusText.textContent = 'Thinking...';
+                statusIcon.src = 'img/thinking.svg';
+                break;
+            case 'idle':
+            default:
+                isListening = false;
+                statusText.textContent = 'Idle';
+                statusIcon.src = 'img/idle.svg';
+                break;
+        }
+    }
+
+    // --- System Stats ---
+    async function updateSystemStats() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/system_stats');
+            if (!response.ok) return;
+
+            const stats = await response.json();
+
+            if (stats.gpu_error) {
+                showModal(stats.gpu_error, () => {}, true);
+            }
+
+            updateChart(cpuChart, stats.cpu);
+            updateChart(ramChart, stats.ram);
+            updateChart(gpuChart, stats.gpu);
+
+        } catch (error) {
+            console.error("Error fetching system stats:", error);
+        }
+    }
+
+    // --- Charting ---
+    function createChart(ctx, label, color) {
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    label: label,
+                    data: Array(20).fill(0),
+                    borderColor: color,
+                    backgroundColor: color + '33',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        display: false
+                    },
+                    x: {
+                        display: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    function updateChart(chart, value) {
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[0].data.push(value);
+        chart.update('none');
+    }
+
+    // --- Chat Functionality ---
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    async function sendMessage(messageOverride) {
+        const message = messageOverride || messageInput.value.trim();
+        if (!message) return;
+
+        addMessageToChat(message, 'user');
+        messageInput.value = '';
+        setStatus('thinking');
+
+        try {
+            const response = await callYourLLM(message);
+            addMessageToChat(response, 'ai');
+            if (speakEnabled) {
+                speak(response);
+            }
+        } catch (error) {
+            console.error("LLM Error:", error);
+            addMessageToChat('Sorry, I encountered an error. Please try again.', 'ai');
+        } finally {
+            setStatus(isListening ? 'listening' : 'idle');
+        }
+    }
+
+    function addMessageToChat(message, sender, save = true) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+
+        const messageContent = document.createElement('p');
+        messageContent.textContent = message;
+
+        const timestamp = document.createElement('span');
+        timestamp.className = 'timestamp';
+        timestamp.textContent = new Date().toLocaleTimeString();
+
+        messageDiv.appendChild(messageContent);
+        messageDiv.appendChild(timestamp);
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        if (save) {
+            chatHistory.push({ message, sender, timestamp: new Date().toISOString() });
+            localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
+        }
+    }
+
+    // --- LLM Integration ---
+    async function callYourLLM(message) {
+        const response = await fetch('http://127.0.0.1:5000/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                history: chatHistory.slice(0, -1)
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server.' }));
+            console.error('API Error:', errorData);
+            throw new Error(errorData.error || 'An unknown network error occurred.');
+        }
+
+        const data = await response.json();
+        return data.response;
+    }
+
+    // --- Speech Recognition and Synthesis ---
+    function listen() {
+        if (isListening && !conversationModeEnabled) {
+            recognition.stop();
+            return;
+        }
+
+        try {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                setStatus('listening');
+            };
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                sendMessage(speechResult);
+            };
+
+            recognition.onspeechend = () => {
+                if (conversationModeEnabled) {
+                    // If in conversation mode, restart listening after a short delay
+                    setStatus('idle'); // Briefly show idle before restarting listen
+                    setTimeout(() => {
+                        if (conversationModeEnabled) { // Check again in case mode was toggled off
+                            listen();
+                        }
+                    }, 500); 
+                } else {
+                    setStatus('idle');
+                }
+            };
+
+            recognition.onerror = (event) => {
+                showModal(`Error occurred in recognition: ${event.error}`, () => {}, true);
+                setStatus('idle');
+                if (conversationModeEnabled) {
+                    // If in conversation mode, try to restart listening on error
+                    setTimeout(() => {
+                        if (conversationModeEnabled) {
+                            listen();
+                        }
+                    }, 1000);
+                }
+            };
+
+            recognition.start();
+        } catch (e) {
+            showModal("Speech recognition is not supported by your browser. Please use Chrome or another supported browser.", () => {}, true);
+        }
+    }
+
+    async function speak(text) {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/speak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server.' }));
+                showModal(`ElevenLabs API Error: ${errorData.error || response.statusText}`, () => {}, true);
+                return;
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+
+            return new Promise(resolve => {
+                audio.onended = resolve;
+            });
+
+        } catch (error) {
+            console.error("Error speaking text:", error);
+            showModal(`Error playing audio: ${error.message}`, () => {}, true);
+        }
+    }
+
+    speakToggle.addEventListener('click', () => {
+        speakEnabled = !speakEnabled;
+        speakToggle.style.backgroundColor = speakEnabled ? '#10b981' : '#6366f1';
+        speakToggle.textContent = speakEnabled ? 'SPEAKING' : 'SPEAK';
+    });
+
+    conversationModeToggle.addEventListener('click', () => {
+        conversationModeEnabled = !conversationModeEnabled;
+        conversationModeToggle.style.backgroundColor = conversationModeEnabled ? '#10b981' : '#6366f1';
+        conversationModeToggle.textContent = conversationModeEnabled ? 'CONVERSATION ON' : 'CONVERSATION OFF';
+
+        if (conversationModeEnabled) {
+            listen(); // Start listening immediately when conversation mode is enabled
+        } else {
+            if (isListening) {
+                recognition.stop();
+            }
+            setStatus('idle');
+        }
+    });
+
+    // --- Sidebar Controls ---
+    function openContext() {
+        showModal("Context management is not yet implemented. This feature will allow you to load and manage documents for the AI.", () => {}, true);
+    }
+
+    function deleteChat() {
+        showModal('Are you sure you want to permanently delete the chat history?', () => {
+            chatContainer.innerHTML = '';
+            chatHistory = [];
+            localStorage.removeItem('jarvisChatHistory');
+            addMessageToChat("Chat cleared. How can I assist you?", 'ai', true);
+        });
+    }
+
+    function saveChat() {
+        if (chatHistory.length === 0) {
+            showModal("There is no chat history to save.", () => {}, true);
+            return;
+        }
+        const dataStr = JSON.stringify(chatHistory, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileDefaultName = `jarvis_chat_${new Date().getTime()}.json`;
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+    }
+
+    function customize() {
+        showModal("The customization panel is a planned feature. You will be able to adjust themes and settings here.", () => {}, true);
+    }
+
+    function resetSystem() {
+        showModal('Are you sure you want to reset the system? This will clear the chat and reload the application.', () => {
+            localStorage.removeItem('jarvisChatHistory');
+            location.reload();
+        });
+    }
+
+    function exitApp() {
+        showModal('Are you sure you want to exit J.A.R.V.I.S?', () => {
+            window.close();
+        });
+    }
+
+    // --- Modal ---
+    function showModal(text, onConfirm, isAlert = false) {
+        const modal = document.getElementById('modal');
+        const modalText = document.getElementById('modalText');
+        const confirmBtn = document.getElementById('modalConfirm');
+        const cancelBtn = document.getElementById('modalCancel');
+
+        modalText.textContent = text;
+
+        if (isAlert) {
+            confirmBtn.style.display = 'none';
+            cancelBtn.textContent = 'Close';
+        } else {
+            confirmBtn.style.display = 'inline-flex';
+            cancelBtn.textContent = 'Cancel';
+        }
+
+        modal.style.display = 'flex';
+
+        const confirmHandler = () => {
+            onConfirm();
+            closeModal();
+        };
+
+        const cancelHandler = () => {
+            closeModal();
+        };
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
+        }
+
+        confirmBtn.addEventListener('click', confirmHandler);
+        cancelBtn.addEventListener('click', cancelHandler);
+    }
+
+    // --- Initialization ---
+    function loadChatHistory() {
+        const savedHistory = localStorage.getItem('jarvisChatHistory');
+        if (savedHistory && savedHistory.length > 2) { // Check for non-empty array
+            chatHistory = JSON.parse(savedHistory);
+            chatContainer.innerHTML = '';
+            chatHistory.forEach(item => {
+                addMessageToChat(item.message, item.sender, false);
+            });
+        } else {
+            addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
+        ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
+        gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
+
+        loadChatHistory();
+        setStatus('idle');
+        setInterval(updateSystemStats, 1000);
+        messageInput.focus();
+
+        loadModels();
+        loadTheme();
+    });
+
+    // --- Sidebar Controls ---
+    function openContext() {
+        showModal("Context management is not yet implemented. This feature will allow you to load and manage documents for the AI.", () => {}, true);
+    }
+
+    function customize() {
+        customizeModal.style.display = 'flex';
+        loadModels();
+        loadTheme();
+    }
+
+    closeCustomizeModalBtn.addEventListener('click', () => {
+        customizeModal.style.display = 'none';
+    });
+
+    themeButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const theme = event.target.dataset.theme;
+            setTheme(theme);
+        });
+    });
+
+    setModelBtn.addEventListener('click', async () => {
+        const selectedModel = modelSelect.value;
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/set_model', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ model_key: selectedModel })
+            });
+            const data = await response.json();
+            if (data.success) {
+                showModal(`LLM model successfully set to ${selectedModel}.`, () => {}, true);
+                localStorage.setItem('jarvisLLMModel', selectedModel);
+            } else {
+                showModal(`Failed to set LLM model: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error setting LLM model:", error);
+            showModal("Error communicating with the server to set the LLM model.", () => {}, true);
+        }
+    });
+
+    async function loadModels() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/models');
+            if (!response.ok) {
+                showModal("Failed to load LLM models from the server.", () => {}, true);
+                return;
+            }
+            const models = await response.json();
+            modelSelect.innerHTML = '';
+            for (const key in models) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                modelSelect.appendChild(option);
+            }
+            const savedModel = localStorage.getItem('jarvisLLMModel');
+            if (savedModel) {
+                modelSelect.value = savedModel;
+            }
+        } catch (error) {
+            console.error("Error loading LLM models:", error);
+            showModal("Error fetching LLM models from the server.", () => {}, true);
+        }
+    }
+
+    function setTheme(theme) {
+        document.body.className = ''; // Clear existing themes
+        document.body.classList.add(theme);
+        localStorage.setItem('jarvisTheme', theme);
+        themeButtons.forEach(btn => {
+            if (btn.dataset.theme === theme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('jarvisTheme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme('dark'); // Default theme
+        }
+    }
+</script>
+</body>
+</html>
