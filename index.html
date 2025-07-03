@@ -14,10 +14,82 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-gradient-start: #0a0a0a;
+            --bg-gradient-mid: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --text-color: #ffffff;
+            --sidebar-bg-gradient-start: #1e1e2e;
+            --sidebar-bg-gradient-end: #2a2a3e;
+            --sidebar-border-color: #4a4a6a;
+            --chat-bg: rgba(0, 0, 0, 0.3);
+            --chat-border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --input-placeholder-color: rgba(255, 255, 255, 0.5);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.1);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00d4ff, #9b59b6);
+            --modal-bg-gradient-start: #1e1e2e;
+            --modal-bg-gradient-end: #2a2a3e;
+            --modal-border: #4a4a6a;
+            --main-title-color: #00d4ff;
+            --main-title-shadow: rgba(0, 212, 255, 0.5);
+            --status-text-color: #00d4ff;
+            --status-text-shadow: rgba(0, 212, 255, 0.5);
+        }
+
+        body.light {
+            --bg-gradient-start: #f0f2f5;
+            --bg-gradient-mid: #e0e2e5;
+            --bg-gradient-end: #d0d2d5;
+            --text-color: #333333;
+            --sidebar-bg-gradient-start: #ffffff;
+            --sidebar-bg-gradient-end: #f0f0f0;
+            --sidebar-border-color: #cccccc;
+            --chat-bg: rgba(255, 255, 255, 0.7);
+            --chat-border: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --input-border: rgba(0, 0, 0, 0.1);
+            --input-placeholder-color: rgba(0, 0, 0, 0.5);
+            --scrollbar-track-bg: rgba(0, 0, 0, 0.1);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #007bff, #0056b3);
+            --modal-bg-gradient-start: #f0f0f0;
+            --modal-bg-gradient-end: #ffffff;
+            --modal-border: #cccccc;
+            --main-title-color: #007bff;
+            --main-title-shadow: rgba(0, 123, 255, 0.3);
+            --status-text-color: #007bff;
+            --status-text-shadow: rgba(0, 123, 255, 0.3);
+        }
+
+        body.blue {
+            --bg-gradient-start: #0f1c3a;
+            --bg-gradient-mid: #1a2a4a;
+            --bg-gradient-end: #2a3a5a;
+            --text-color: #e0e0e0;
+            --sidebar-bg-gradient-start: #1a2a4a;
+            --sidebar-bg-gradient-end: #2a3a5a;
+            --sidebar-border-color: #5a6a8a;
+            --chat-bg: rgba(26, 42, 74, 0.7);
+            --chat-border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-placeholder-color: rgba(255, 255, 255, 0.6);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.15);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00aaff, #0077cc);
+            --modal-bg-gradient-start: #1a2a4a;
+            --modal-bg-gradient-end: #2a3a5a;
+            --modal-border: #5a6a8a;
+            --main-title-color: #00aaff;
+            --main-title-shadow: rgba(0, 170, 255, 0.4);
+            --status-text-color: #00aaff;
+            --status-text-shadow: rgba(0, 170, 255, 0.4);
+        }
+
         body {
             font-family: 'Orbitron', monospace;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+            color: var(--text-color);
             height: 100vh;
             overflow: hidden;
         }
@@ -25,13 +97,13 @@
         .container {
             display: flex;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--chat-bg);
         }
 
         .sidebar {
             width: 300px;
-            background: linear-gradient(180deg, #1e1e2e 0%, #2a2a3e 100%);
-            border-right: 2px solid #4a4a6a;
+            background: linear-gradient(180deg, var(--sidebar-bg-gradient-start) 0%, var(--sidebar-bg-gradient-end) 100%);
+            border-right: 2px solid var(--sidebar-border-color);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -64,7 +136,7 @@
             font-size: 28px;
             font-weight: 900;
             letter-spacing: 3px;
-            background: linear-gradient(45deg, #00d4ff, #9b59b6);
+            background: linear-gradient(45deg, var(--main-title-color), #9b59b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -80,7 +152,7 @@
 
         .stat-label {
             font-size: 14px;
-            color: #a0a0a0;
+            color: var(--text-color);
             margin-bottom: 5px;
             letter-spacing: 1px;
         }
@@ -216,7 +288,7 @@
 
         .chat-container {
             flex: 1;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--chat-bg);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px;
@@ -266,7 +338,7 @@
         .input-container {
             display: flex;
             gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--input-bg);
             padding: 15px;
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);

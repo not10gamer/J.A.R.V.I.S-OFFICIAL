@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Addition of Crash Dump">
-      <change afterPath="$PROJECT_DIR$/GUI.html" afterDir="false" />
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="GUI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI.html" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/vars.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -327,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751121097454</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="GUI">
+      <option name="closed" value="true" />
+      <created>1751471907599</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1751471907599</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -361,9 +367,9 @@
     <MESSAGE value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
     <MESSAGE value="The Setup for the GUI" />
     <MESSAGE value="Improved workflow for future updates. Preparation for GUI." />
-    <MESSAGE value="GUI" />
     <MESSAGE value="Bug Fixes, Better Documentation and GUI Setup." />
     <MESSAGE value="Addition of Crash Dump" />
-    <option name="LAST_COMMIT_MESSAGE" value="Addition of Crash Dump" />
+    <MESSAGE value="GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI" />
   </component>
 </project>

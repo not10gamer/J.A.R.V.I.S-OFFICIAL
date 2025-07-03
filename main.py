@@ -2,11 +2,11 @@ import webbrowser
 
 import GPUtil
 import psutil
+from elevenlabs import ElevenLabs
 from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
-from elevenlabs import ElevenLabs, stream
 
 import vars
 
@@ -26,24 +26,29 @@ model = OllamaLLM(model=current_model_name)
 prompt_template = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt_template | model
 
+
 def update_llm_chain(new_model_name):
     global current_model_name, model, chain
     current_model_name = new_model_name
     model = OllamaLLM(model=current_model_name)
     chain = prompt_template | model
 
+
 # --- API Endpoints ---
 @app.route('/')
 def serve_gui():
-    return send_from_directory('.', 'GUI.html')
+    return send_from_directory('.', 'index.html')
+
 
 @app.route('/img/<path:filename>')
 def serve_img(filename):
     return send_from_directory('img', filename)
 
+
 @app.route('/api/models')
 def get_models():
     return jsonify(vars.MODELS)
+
 
 @app.route('/api/set_model', methods=['POST'])
 def set_model():
@@ -58,6 +63,7 @@ def set_model():
     except Exception as e:
         print(f"Error setting model: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
+
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
@@ -81,6 +87,7 @@ def chat():
         print(f"Error in /api/chat: {e}")
         return jsonify({'error': 'An internal server error occurred.'}), 500
 
+
 @app.route('/api/speak', methods=['POST'])
 def speak_text():
     try:
@@ -89,7 +96,8 @@ def speak_text():
             return jsonify({'error': 'No text provided for speech synthesis.'}), 400
 
         if elevenlabs_client:
-            audio_stream = elevenlabs_client.text_to_speech.stream(text=text, voice_id="pNInz6obpgDQGXGNn6iq", model_id="eleven_multilingual_v2")
+            audio_stream = elevenlabs_client.text_to_speech.stream(text=text, voice_id="pNInz6obpgDQGXGNn6iq",
+                                                                   model_id="eleven_multilingual_v2")
         else:
             return jsonify({'error': 'ElevenLabs client not initialized. API key might be missing.'}), 500
 
@@ -98,6 +106,7 @@ def speak_text():
     except Exception as e:
         print(f"Error in /api/speak: {e}")
         return jsonify({'error': f'ElevenLabs API error: {e}'}), 500
+
 
 @app.route('/api/system_stats')
 def system_stats():
@@ -128,12 +137,15 @@ def system_stats():
             'error': 'Could not retrieve system stats.'
         })
 
+
 # --- Main Execution ---
 def open_browser():
     webbrowser.open_new("http://127.0.0.1:5000/")
 
+
 if __name__ == '__main__':
     print("Starting J.A.R.V.I.S web server...")
     from threading import Timer
+
     Timer(1, open_browser).start()
     app.run(port=5000, debug=False)
