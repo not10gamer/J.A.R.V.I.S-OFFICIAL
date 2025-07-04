@@ -39,21 +39,21 @@
         }
 
         body.light {
-            --bg-gradient-start: #f0f2f5;
-            --bg-gradient-mid: #e0e2e5;
-            --bg-gradient-end: #d0d2d5;
-            --text-color: #333333;
+            --bg-gradient-start: #ffffff;
+            --bg-gradient-mid: #ffffff;
+            --bg-gradient-end: #ffffff;
+            --text-color: #000000;
             --sidebar-bg-gradient-start: #ffffff;
-            --sidebar-bg-gradient-end: #f0f0f0;
+            --sidebar-bg-gradient-end: #ffffff;
             --sidebar-border-color: #cccccc;
-            --chat-bg: rgba(255, 255, 255, 0.7);
+            --chat-bg: rgba(255, 255, 255, 0.9);
             --chat-border: rgba(0, 0, 0, 0.1);
             --input-bg: rgba(0, 0, 0, 0.05);
             --input-border: rgba(0, 0, 0, 0.1);
             --input-placeholder-color: rgba(0, 0, 0, 0.5);
             --scrollbar-track-bg: rgba(0, 0, 0, 0.1);
             --scrollbar-thumb-bg: linear-gradient(135deg, #007bff, #0056b3);
-            --modal-bg-gradient-start: #f0f0f0;
+            --modal-bg-gradient-start: #ffffff;
             --modal-bg-gradient-end: #ffffff;
             --modal-border: #cccccc;
             --main-title-color: #007bff;
@@ -63,27 +63,51 @@
         }
 
         body.blue {
-            --bg-gradient-start: #0f1c3a;
-            --bg-gradient-mid: #1a2a4a;
-            --bg-gradient-end: #2a3a5a;
-            --text-color: #e0e0e0;
-            --sidebar-bg-gradient-start: #1a2a4a;
-            --sidebar-bg-gradient-end: #2a3a5a;
+            --bg-gradient-start: #0000ff;
+            --bg-gradient-mid: #0000ff;
+            --bg-gradient-end: #0000ff;
+            --text-color: #ffffff;
+            --sidebar-bg-gradient-start: #0000ff;
+            --sidebar-bg-gradient-end: #0000ff;
             --sidebar-border-color: #5a6a8a;
-            --chat-bg: rgba(26, 42, 74, 0.7);
+            --chat-bg: rgba(0, 0, 255, 0.7);
             --chat-border: rgba(255, 255, 255, 0.15);
             --input-bg: rgba(255, 255, 255, 0.1);
             --input-border: rgba(255, 255, 255, 0.2);
             --input-placeholder-color: rgba(255, 255, 255, 0.6);
             --scrollbar-track-bg: rgba(255, 255, 255, 0.15);
             --scrollbar-thumb-bg: linear-gradient(135deg, #00aaff, #0077cc);
-            --modal-bg-gradient-start: #1a2a4a;
-            --modal-bg-gradient-end: #2a3a5a;
+            --modal-bg-gradient-start: #0000ff;
+            --modal-bg-gradient-end: #0000ff;
             --modal-border: #5a6a8a;
             --main-title-color: #00aaff;
             --main-title-shadow: rgba(0, 170, 255, 0.4);
             --status-text-color: #00aaff;
             --status-text-shadow: rgba(0, 170, 255, 0.4);
+        }
+
+        body.green {
+            --bg-gradient-start: #1a3a1a;
+            --bg-gradient-mid: #2a4a2a;
+            --bg-gradient-end: #3a5a3a;
+            --text-color: #e0e0e0;
+            --sidebar-bg-gradient-start: #2a4a2a;
+            --sidebar-bg-gradient-end: #3a5a3a;
+            --sidebar-border-color: #5a8a5a;
+            --chat-bg: rgba(42, 74, 42, 0.7);
+            --chat-border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-placeholder-color: rgba(255, 255, 255, 0.6);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.15);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00cc00, #009900);
+            --modal-bg-gradient-start: #2a4a2a;
+            --modal-bg-gradient-end: #3a5a3a;
+            --modal-border: #5a8a5a;
+            --main-title-color: #00cc00;
+            --main-title-shadow: rgba(0, 204, 0, 0.4);
+            --status-text-color: #00cc00;
+            --status-text-shadow: rgba(0, 204, 0, 0.4);
         }
 
         body {
@@ -528,6 +552,8 @@
     </style>
 </head>
 <body>
+    <input type="file" id="contextFileInput" style="display: none;">
+    <input type="file" id="chatHistoryInput" accept=".json" style="display: none;">
 <div class="container">
     <div class="sidebar">
         <div class="header">
@@ -560,6 +586,12 @@
 
         <div class="controls">
             <button class="btn btn-context" onclick="openContext()">CONTEXT</button>
+            <button class="btn btn-small" onclick="addContext()" title="Add Context">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </button>
             <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
@@ -572,6 +604,12 @@
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round"
                           stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="btn btn-small" onclick="loadChat()" title="Load Chat">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                 </svg>
             </button>
             <button class="btn btn-exit" onclick="exitApp()">EXIT</button>
@@ -607,12 +645,39 @@
 </div>
 
 <!-- Modal -->
-<div class="modal-container" id="modal">
+<div class="modal-container" id="infoModal">
     <div class="modal-content">
         <p id="modalText"></p>
         <div class="modal-buttons">
             <button class="btn" id="modalConfirm">Confirm</button>
             <button class="btn" id="modalCancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Context Modal -->
+<div class="modal-container" id="contextModal">
+    <div class="modal-content" style="max-width: 600px; text-align: left;">
+        <h2>Context Management</h2>
+        <div class="customization-section">
+            <h3>Loaded File Context</h3>
+            <p id="contextFileDisplay" style="font-size: 14px; margin-bottom: 10px; word-wrap: break-word; max-height: 150px; overflow-y: auto;"></p>
+            <button class="btn" id="clearFileContextBtn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white;">Clear File Context</button>
+        </div>
+        <div class="customization-section">
+            <h3>Typed Context</h3>
+            <textarea id="typedContextInput" class="input-field" rows="6" placeholder="Add any additional context here..." style="width: 100%; margin-bottom: 10px;"></textarea>
+            <button class="btn" id="saveTypedContextBtn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Save Typed Context</button>
+            <button class="btn" id="clearTypedContextBtn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; margin-left: 10px;">Clear Typed Context</button>
+        </div>
+        <div class="customization-section">
+            <h3>Chat Summary</h3>
+            <p id="chatSummaryDisplay" style="font-size: 14px; word-wrap: break-word; max-height: 150px; overflow-y: auto;"></p>
+            <button class="btn" id="summarizeChatBtn" style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; margin-top: 10px;">Summarize</button>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="clearAllContextBtn" style="background: linear-gradient(135deg, #e53e3e, #9b2c2c); color: white;">Clear All Context</button>
+            <button class="btn" id="closeContextModal">Close</button>
         </div>
     </div>
 </div>
@@ -627,6 +692,7 @@
                 <button class="btn theme-btn" data-theme="dark">Dark</button>
                 <button class="btn theme-btn" data-theme="light">Light</button>
                 <button class="btn theme-btn" data-theme="blue">Blue</button>
+                <button class="btn theme-btn" data-theme="green">Green</button>
             </div>
         </div>
         <div class="customization-section">
@@ -659,6 +725,19 @@
     const themeButtons = document.querySelectorAll('.theme-btn');
     const modelSelect = document.getElementById('modelSelect');
     const setModelBtn = document.getElementById('setModelBtn');
+    const contextFileInput = document.getElementById('contextFileInput');
+    const chatHistoryInput = document.getElementById('chatHistoryInput');
+
+    const contextModal = document.getElementById('contextModal');
+    const closeContextModalBtn = document.getElementById('closeContextModal');
+    const contextFileDisplay = document.getElementById('contextFileDisplay');
+    const typedContextInput = document.getElementById('typedContextInput');
+    const chatSummaryDisplay = document.getElementById('chatSummaryDisplay');
+    const saveTypedContextBtn = document.getElementById('saveTypedContextBtn');
+    const clearTypedContextBtn = document.getElementById('clearTypedContextBtn');
+    const clearFileContextBtn = document.getElementById('clearFileContextBtn');
+    const clearAllContextBtn = document.getElementById('clearAllContextBtn');
+    const summarizeChatBtn = document.getElementById('summarizeChatBtn');
 
     // --- State Management ---
     function setStatus(status) {
@@ -931,8 +1010,120 @@
 
     // --- Sidebar Controls ---
     function openContext() {
-        showModal("Context management is not yet implemented. This feature will allow you to load and manage documents for the AI.", () => {}, true);
+        contextModal.style.display = 'flex';
+        loadContextData();
     }
+
+    closeContextModalBtn.addEventListener('click', () => {
+        contextModal.style.display = 'none';
+    });
+
+    async function loadContextData() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/context');
+            const data = await response.json();
+            contextFileDisplay.textContent = data.file_context || 'No file context loaded.';
+            typedContextInput.value = data.typed_context || '';
+            chatSummaryDisplay.textContent = data.chat_summary || 'Chat summary not yet available.';
+        } catch (error) {
+            console.error("Error loading context data:", error);
+            showModal("Failed to load context data from the server.", () => {}, true);
+        }
+    }
+
+    clearFileContextBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/clear_file_context', { method: 'POST' });
+            const data = await response.json();
+            if (data.success) {
+                showModal('File context cleared successfully.', () => {}, true);
+                loadContextData(); // Refresh display
+            } else {
+                showModal(`Failed to clear file context: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error clearing file context:", error);
+            showModal("Error communicating with the server to clear file context.", () => {}, true);
+        }
+    });
+
+    saveTypedContextBtn.addEventListener('click', async () => {
+        const context = typedContextInput.value;
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/save_typed_context', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ context: context })
+            });
+            const data = await response.json();
+            if (data.success) {
+                showModal('Typed context saved successfully.', () => {}, true);
+            } else {
+                showModal(`Failed to save typed context: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error saving typed context:", error);
+            showModal("Error communicating with the server to save typed context.", () => {}, true);
+        }
+    });
+
+    clearTypedContextBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/clear_typed_context', { method: 'POST' });
+            const data = await response.json();
+            if (data.success) {
+                showModal('Typed context cleared successfully.', () => {}, true);
+                typedContextInput.value = ''; // Clear the textarea
+            } else {
+                showModal(`Failed to clear typed context: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error clearing typed context:", error);
+            showModal("Error communicating with the server to clear typed context.", () => {}, true);
+        }
+    });
+
+    clearAllContextBtn.addEventListener('click', async () => {
+        showModal('Are you sure you want to clear all context? This action cannot be undone.', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('All context has been cleared.', () => {}, true);
+                    loadContextData(); // Refresh the modal display
+                } else {
+                    showModal(`Failed to clear all context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error clearing all context:", error);
+                showModal("An error occurred while communicating with the server.", () => {}, true);
+            }
+        });
+    });
+
+    summarizeChatBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/summarize_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ history: chatHistory })
+            });
+            const data = await response.json();
+            if (data.success) {
+                chatSummaryDisplay.textContent = data.summary;
+                showModal('Chat summary has been updated.', () => {}, true);
+            } else {
+                showModal(`Failed to summarize chat: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error summarizing chat:", error);
+            showModal("An error occurred while communicating with the server.", () => {}, true);
+        }
+    });
 
     function deleteChat() {
         showModal('Are you sure you want to permanently delete the chat history?', () => {
@@ -958,8 +1149,20 @@
         linkElement.click();
     }
 
+    function loadChat() {
+        console.log('loadChat called');
+        chatHistoryInput.click();
+    }
+
+    function addContext() {
+        console.log('addContext called');
+        contextFileInput.click();
+    }
+
     function customize() {
-        showModal("The customization panel is a planned feature. You will be able to adjust themes and settings here.", () => {}, true);
+        customizeModal.style.display = 'flex';
+        loadModels();
+        loadTheme();
     }
 
     function resetSystem() {
@@ -977,7 +1180,7 @@
 
     // --- Modal ---
     function showModal(text, onConfirm, isAlert = false) {
-        const modal = document.getElementById('modal');
+        const modal = document.getElementById('infoModal');
         const modalText = document.getElementById('modalText');
         const confirmBtn = document.getElementById('modalConfirm');
         const cancelBtn = document.getElementById('modalCancel');
@@ -1028,6 +1231,13 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const contextFileInput = document.getElementById('contextFileInput');
+        const chatHistoryInput = document.getElementById('chatHistoryInput');
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const contextFileInput = document.getElementById('contextFileInput');
+        const chatHistoryInput = document.getElementById('chatHistoryInput');
+
         cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
         ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
         gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
@@ -1040,17 +1250,6 @@
         loadModels();
         loadTheme();
     });
-
-    // --- Sidebar Controls ---
-    function openContext() {
-        showModal("Context management is not yet implemented. This feature will allow you to load and manage documents for the AI.", () => {}, true);
-    }
-
-    function customize() {
-        customizeModal.style.display = 'flex';
-        loadModels();
-        loadTheme();
-    }
 
     closeCustomizeModalBtn.addEventListener('click', () => {
         customizeModal.style.display = 'none';
@@ -1083,6 +1282,35 @@
         } catch (error) {
             console.error("Error setting LLM model:", error);
             showModal("Error communicating with the server to set the LLM model.", () => {}, true);
+        }
+    });
+
+    chatHistoryInput.addEventListener('change', async () => {
+        if (chatHistoryInput.files.length === 0) {
+            return; // No file selected
+        }
+        const file = chatHistoryInput.files[0];
+        const formData = new FormData();
+        formData.append('context_file', file);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/load_context', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success && data.history) {
+                chatHistory = data.history;
+                localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
+                loadChatHistory(); // Reload the chat display
+                showModal(`Chat history loaded successfully from ${file.name}.`, () => {}, true);
+            } else {
+                showModal(`Failed to load chat history: ${data.error || 'Invalid file format.'}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error loading chat history:", error);
+            showModal("Error communicating with the server to load the file.", () => {}, true);
         }
     });
 
@@ -1133,5 +1361,5 @@
         }
     }
 </script>
-</body>
+    </body>
 </html>

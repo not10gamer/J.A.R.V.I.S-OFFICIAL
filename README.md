@@ -1,39 +1,58 @@
 
 # J.A.R.V.I.S
 
-A customizable AI made in python usable exclusively through CLI. (GUI in development)
+A customizable AI with a user-friendly GUI, powered by Ollama models.
 
 Sign up for the next big update https://tally.so/r/mBYkjY
 
-If you want an indepth guide onj how to use J.A.R.V.I.S please check out the 
+For an in-depth guide on how to use J.A.R.V.I.S, please check out the 
 
 ####  [How To Use J.A.R.V.I.S](https://github.com/not10gamer/J.A.R.V.I.S-OFFICIAL/blob/main/HowToUse.md)
 
+## Features
+
+- Customizable AI models (now with user-friendly names like "J.A.R.V.I.S - Lite")
+- Load various file types (text, PDF, images) as context for the AI
+- Open Source
+- Cross-platform
+- Intuitive Graphical User Interface (GUI)
+
 ## Installation
 
-you'll need to install a model from [ollama](https://ollama.com/download/OllamaSetup.exe)
+1.  **Install Ollama:** Download and install Ollama from [ollama.com/download](https://ollama.com/download).
 
-```bash
-  ollama run <Your Model>
-```
+2.  **Pull Models:** After installing Ollama, pull the desired models. For example, to get the default model:
+    ```bash
+    ollama run llama2
+    ```
+    You can find more models on the official Ollama GitHub [page](https://github.com/ollama/ollama).
 
-Then use this command to download any model.
+3.  **Install Python Dependencies:** Navigate to the project directory and install the required Python packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-You can pick which model to use by viewing the official ollama GitHub [page](https://github.com/ollama/ollama).
-    
+4.  **Install Tesseract OCR (Optional, for Image Context):** If you plan to use image files (PNG, JPG, etc.) as context, you must install the Tesseract OCR engine separately. Refer to the [How To Use J.A.R.V.I.S](https://github.com/not10gamer/J.A.R.V.I.S-OFFICIAL/blob/main/HowToUse.md) guide for detailed installation instructions for your operating system.
+
+## Usage
+
+1.  **Configure Models (Optional):** You can customize the AI's behavior and model mappings by editing `vars.py` and `vers.py`.
+
+2.  **Run J.A.R.V.I.S:** Start the application by running `main.py`:
+    ```bash
+    python main.py
+    ```
+    This will open the J.A.R.V.I.S GUI in your web browser.
+
+3.  **Load Context (Optional):** In the GUI, click the "CUSTOMIZE" button, then use the "Context File" section to load text, PDF, or image files as context for the AI.
+
 ## Deployment
 
-once you have installed the required model change the used model in "vars.py".
+Once you have installed the required models and dependencies, you can run `main.py` to start the J.A.R.V.I.S web server.
 
 ```bash
-  JARVIS_MODEL = vers.{WhatEverYouWantBasedOnTheOptions}   # These can be altered vers.py
+  python main.py
 ```
-
-then run the main.py
-```bash
-  main.py
-```
-
 
 ## Run Locally
 
@@ -49,12 +68,12 @@ Go to the project directory
   cd J.A.R.V.I.S-OFFICIAL
 ```
 
-Install dependencies   (Documentation will be added soon)
+Install dependencies (as described in the Installation section above).
 
 Start the AI
 
 ```bash
-  main.py
+  python main.py
 ```
 
 
@@ -70,13 +89,6 @@ Start the AI
 ## Authors
 
 - [@not10gamer](https://github.com/not10gamer)
-
-
-## Features
-
-- Customizable AI
-- Open Source
-- Cross platform
 
 
 ## License

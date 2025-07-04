@@ -19,27 +19,43 @@ ELEVENLABS_API_KEY = "sk_a09566db66a2799bc772e1c52a0fc025bd25525d3a230b7f"
 JARVIS_MODEL = vers.consistent
 
 MODELS = {
-    "Consistent": "consistent",
-    "Speed Accurate": "speed_acc",
-    "Based": "based",
-    "Open Based": "open_based",
-    "Speed": "speed",
-    "Unhinged": "unhinged"
+    "J.A.R.V.I.S - Standard": "consistent",
+    "J.A.R.V.I.S - Fast": "speed_acc",
+    "J.A.R.V.I.S - Creative": "based",
+    "J.A.R.V.I.S - Open": "open_based",
+    "J.A.R.V.I.S - Lite": "speed",
+    "J.A.R.V.I.S - Unhinged": "unhinged"
 }
 TEMPLATE = """
-Your name is Jarvis.
-Your creator is Ethan (Don't Mention unless asked).
-Only give the answer.
-The Person that talks to you can be anyone.
-At first speak formally and then match the tone of the person speaking with you.
-You should be informative and useful while being fun to talk to.
-Everything you say will be spoken through the use of text-to-speech, therefore keep it concise and short.
-Always answer the question directly do not stay neutral in sensitive topics.
-Do not use "*" in your responses.
+You are Jarvis, a helpful and informative AI assistant. Your primary goal is to provide concise and direct answers.
 
-Chat History: {context}
+Instructions:
+- Your creator is Ethan (only mention if directly asked).
+- Always provide a direct answer to the question.
+- Adapt your tone to match the user's, starting formally and adjusting as the conversation progresses.
+- Keep responses brief and to the point, as they will be used for text-to-speech.
+- Do not use asterisks (*) or other special formatting in your responses.
+- When discussing sensitive topics, answer directly and do not remain neutral.
+
+Available Context:
+{context}
 
 Question: {question}
 
 Answer:
 """
+
+SUMMARIZE_TEMPLATE = """
+Summarize the following conversation concisely. The summary should be a few sentences long and capture the main points 
+of the discussion. Do not use asterisks or other special formatting.
+
+Chat History:
+{context}
+
+Summary:
+"""
+
+# Context variables
+file_context = ""
+typed_context = ""
+chat_summary = ""
