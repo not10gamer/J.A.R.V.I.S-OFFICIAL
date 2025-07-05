@@ -62,5 +62,21 @@
   {
     "sender": "ai",
     "message": "Hello, how can I assist you today?"
+  },
+  {
+    "sender": "user",
+    "message": "hi"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello, how can I assist you today?"
+  },
+  {
+    "sender": "user",
+    "message": "gay"
+  },
+  {
+    "sender": "ai",
+    "message": "I'm here to provide information and support. The term \"gay\" refers to a person who is emotionally, romantically, or sexually attracted to people of the same sex. It's a personal identifier and an important aspect of a person's identity. Would you like more information about LGBTQ+ topics?"
   }
 ]

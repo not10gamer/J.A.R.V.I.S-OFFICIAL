@@ -428,70 +428,27 @@
             align-items: flex-start;
         }
 
-        .message-info {
-            display: flex;
-            gap: 10px; /* Space between time and timestamp */
-            font-size: 10px;
+        .message-info-btn {
+            background-color: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.7);
-            margin-top: 8px;
-            align-self: flex-end; /* Align to the right within the AI message */
-        }
-
-        .user-message .message-info {
-            align-self: flex-end;
-        }
-
-        .ai-message .message-info {
-            align-self: flex-start;
-        }
-
-        .message-time {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .message-info {
-            display: flex;
-            gap: 10px; /* Space between time and timestamp */
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 8px;
-            align-self: flex-end; /* Align to the right within the AI message */
-        }
-
-        .user-message .message-info {
-            align-self: flex-end;
-        }
-
-        .ai-message .message-info {
-            align-self: flex-start;
-        }
-
-        .message-time {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .message-meta-container {
-            display: flex;
-            gap: 5px; /* Space between the two frames */
-            margin-top: 5px; /* Space between message content and meta container */
-            align-items: center; /* Align items to the center vertically */
-            justify-content: flex-end; /* Align to the right for user messages */
-        }
-
-        .ai-message .message-meta-container {
-            justify-content: flex-start; /* Align to the left for AI messages */
-        }
-
-        .message-footer-frame {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: none;
             border-radius: 5px;
-            padding: 3px 6px;
-            background-color: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center; /* Vertically center content within frame */
-            justify-content: center; /* Horizontally center content within frame */
-            height: 20px; /* Fixed height for the frames */
+            padding: 3px 8px;
+            font-size: 10px;
+            margin-top: 5px; /* Space between message content and button */
+            cursor: help;
+            align-self: flex-end; /* Align to the right within the AI message */
         }
+
+        .user-message .message-info-btn {
+            align-self: flex-end;
+        }
+
+        .ai-message .message-info-btn {
+            align-self: flex-start;
+        }
+
+        
 
         .input-container {
             display: flex;
@@ -1015,30 +972,28 @@
         const messageContent = document.createElement('p');
         messageContent.textContent = message;
 
-        const messageMetaContainer = document.createElement('div');
-        messageMetaContainer.className = 'message-meta-container';
+        messageDiv.appendChild(messageContent);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.gap = '5px'; /* Adjust gap as needed */
+        buttonContainer.style.marginTop = '5px'; /* Space between message content and buttons */
 
         if (sender === 'ai' && timeTaken !== null) {
-            const timeFrame = document.createElement('div');
-            timeFrame.className = 'message-footer-frame';
-            const timeSpan = document.createElement('span');
-            timeSpan.className = 'message-time';
-            timeSpan.textContent = `${timeTaken.toFixed(2)}s`;
-            timeSpan.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
-            timeFrame.appendChild(timeSpan);
-            messageMetaContainer.appendChild(timeFrame);
+            const timeBtn = document.createElement('button');
+            timeBtn.className = 'message-info-btn';
+            timeBtn.textContent = `${timeTaken.toFixed(2)}s`;
+            timeBtn.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
+            buttonContainer.appendChild(timeBtn);
         }
 
-        const timestampFrame = document.createElement('div');
-        timestampFrame.className = 'message-footer-frame';
-        const timestamp = document.createElement('span');
-        timestamp.className = 'timestamp';
-        timestamp.textContent = new Date().toLocaleTimeString();
-        timestampFrame.appendChild(timestamp);
-        messageMetaContainer.appendChild(timestampFrame);
+        const timestampBtn = document.createElement('button');
+        timestampBtn.className = 'message-info-btn';
+        timestampBtn.textContent = new Date().toLocaleTimeString();
+        buttonContainer.appendChild(timestampBtn);
 
-        messageDiv.appendChild(messageContent);
-        messageDiv.appendChild(messageMetaContainer);
+        messageDiv.appendChild(buttonContainer);
+
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
