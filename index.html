@@ -393,9 +393,9 @@
         }
 
         .chat-message {
-            margin-bottom: 3px;
-            padding: 3px 6px;
-            border-radius: 6px;
+            margin-bottom: 2px;
+            padding: 2px 5px;
+            border-radius: 5px;
             max-width: 85%;
             width: fit-content;
             word-wrap: break-word;
@@ -426,6 +426,27 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             align-items: flex-start;
+        }
+
+        .message-info {
+            display: flex;
+            gap: 10px; /* Space between time and timestamp */
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 8px;
+            align-self: flex-end; /* Align to the right within the AI message */
+        }
+
+        .user-message .message-info {
+            align-self: flex-end;
+        }
+
+        .ai-message .message-info {
+            align-self: flex-start;
+        }
+
+        .message-time {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .message-info {
@@ -1037,7 +1058,7 @@
             },
             body: JSON.stringify({
                 message: message,
-                history: chatHistory.filter(item => item.sender !== 'ai' || item.timeTaken === undefined).slice(0, -1) // Exclude AI messages with timeTaken for history
+                history: chatHistory
             })
         });
 
@@ -1256,16 +1277,33 @@
     }
 
     // --- Initialization ---
-    function loadChatHistory() {
-        const savedHistory = localStorage.getItem('jarvisChatHistory');
-        if (savedHistory && savedHistory.length > 2) { // Check for non-empty array
-            chatHistory = JSON.parse(savedHistory);
-            chatContainer.innerHTML = '';
-            chatHistory.forEach(item => {
-                addMessageToChat(item.message, item.sender, false);
-            });
-        } else {
-            addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai');
+    async function loadChatHistory() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/get_chat_history');
+            if (!response.ok) {
+                console.error('Failed to fetch chat history from backend.');
+                chatHistory = [];
+                addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
+                return;
+            }
+            const backendHistory = await response.json();
+
+            chatHistory = []; // Clear frontend history
+            chatContainer.innerHTML = ''; // Clear chat display
+
+            if (backendHistory.length > 0) {
+                backendHistory.forEach(item => {
+                    // Re-add messages to chat display, preserving timeTaken if available
+                    addMessageToChat(item.message, item.sender, false, item.timeTaken);
+                });
+                // Ensure frontend chatHistory is in sync with backend
+                chatHistory = backendHistory;
+            } else {
+                addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
+            }
+        } catch (error) {
+            console.error("Error loading chat history from backend:", error);
+            addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
         }
     }
 

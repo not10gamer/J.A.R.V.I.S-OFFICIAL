@@ -14,6 +14,7 @@ from langchain_ollama import OllamaLLM
 
 import vars
 import vers
+import os
 
 # import decoder # Removed as web UI handles settings
 
@@ -23,6 +24,28 @@ CORS(app)
 
 # Global variable to store context
 current_context = ""
+
+# Global variable to store chat history
+CHAT_HISTORY_FILE = 'chat_history.json'
+chat_history_backend = []
+
+def load_chat_history_from_file():
+    global chat_history_backend
+    if os.path.exists(CHAT_HISTORY_FILE):
+        try:
+            with open(CHAT_HISTORY_FILE, 'r') as f:
+                chat_history_backend = json.load(f)
+        except json.JSONDecodeError:
+            chat_history_backend = []
+    else:
+        chat_history_backend = []
+
+def save_chat_history_to_file():
+    with open(CHAT_HISTORY_FILE, 'w') as f:
+        json.dump(chat_history_backend, f, indent=2)
+
+# Load history on startup
+load_chat_history_from_file()
 
 # Set ElevenLabs API key
 elevenlabs_client = None
@@ -89,7 +112,9 @@ def load_context():
     try:
         if file_extension == 'json':
             chat_history_data = json.load(file)
-            # We don't set current_context here, instead we return the history
+            chat_history_backend.clear()
+            chat_history_backend.extend(chat_history_data)
+            save_chat_history_to_file()
             return jsonify({'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
         elif file_extension in ['txt', 'md', 'py', 'js', 'html', 'css']:
             extracted_text = file.read().decode('utf-8')
@@ -148,8 +173,16 @@ def clear_all_context():
     global current_context
     current_context = ""
     vars.typed_context = ""
-    vars.chat_summary = ""  # Assuming you might want to clear this too
+    vars.chat_summary = ""
+    chat_history_backend.clear()
+    if os.path.exists(CHAT_HISTORY_FILE):
+        os.remove(CHAT_HISTORY_FILE)
     return jsonify({'success': True, 'message': 'All context has been cleared.'})
+
+
+@app.route('/api/get_chat_history')
+def get_chat_history():
+    return jsonify(chat_history_backend)
 
 
 @app.route('/api/summarize_chat', methods=['POST'])
@@ -188,8 +221,12 @@ def chat():
         if not question:
             return jsonify({'error': 'No message provided.'}), 400
 
+        # Append user message to backend history
+        chat_history_backend.append({'sender': 'user', 'message': question})
+        save_chat_history_to_file()
+
         context_from_history = ""
-        for item in history:
+        for item in chat_history_backend:
             role = "User" if item.get('sender') == 'user' else "J.A.R.V.I.S"
             context_from_history += f"{role}: {item.get('message')}\n"
 
@@ -201,6 +238,11 @@ def chat():
         full_context += context_from_history
 
         result = chain.invoke({"context": full_context, "question": question})
+
+        # Append AI response to backend history
+        chat_history_backend.append({'sender': 'ai', 'message': result})
+        save_chat_history_to_file()
+
         return jsonify({'response': result})
 
     except Exception as e:

@@ -1,0 +1,66 @@
+[
+  {
+    "sender": "user",
+    "message": "hello"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello. How can I assist you today?"
+  },
+  {
+    "sender": "user",
+    "message": "what was the last thing i told you"
+  },
+  {
+    "sender": "ai",
+    "message": "You didn't tell me anything yet, this is our initial conversation. What would you like to know or discuss?"
+  },
+  {
+    "sender": "user",
+    "message": "what is your name"
+  },
+  {
+    "sender": "ai",
+    "message": "I'm J.A.R.V.I.S, your home's AI assistant."
+  },
+  {
+    "sender": "user",
+    "message": "what did i ask you last"
+  },
+  {
+    "sender": "ai",
+    "message": "You didn't tell me anything about what you asked me last. This is our initial conversation. Would you like to share something with me now?"
+  },
+  {
+    "sender": "user",
+    "message": "hgellow"
+  },
+  {
+    "sender": "ai",
+    "message": "I'm not able to understand \"hgellow\" as a clear question or request. Could you please rephrase or provide more context so I can assist you better?"
+  },
+  {
+    "sender": "user",
+    "message": "hello"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello, how can I assist you today?"
+  },
+  {
+    "sender": "user",
+    "message": "what did i ask you last"
+  },
+  {
+    "sender": "ai",
+    "message": "You didn't tell me anything about what you asked me last. This is our initial conversation, and I don't have any previous interactions to recall. Would you like to share something with me now?"
+  },
+  {
+    "sender": "user",
+    "message": "hi"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello, how can I assist you today?"
+  }
+]
