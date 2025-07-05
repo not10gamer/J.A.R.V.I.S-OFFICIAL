@@ -30,6 +30,8 @@ let isListening = false;
     const clearAllContextBtn = document.getElementById('clearAllContextBtn');
     const summarizeChatBtn = document.getElementById('summarizeChatBtn');
 
+    const thinkingAnimation = document.getElementById('thinking-animation');
+
     // --- State Management ---
     function setStatus(status) {
         switch (status) {
@@ -37,17 +39,20 @@ let isListening = false;
                 isListening = true;
                 statusText.textContent = 'Listening...';
                 statusIcon.src = 'img/listening.svg';
+                thinkingAnimation.style.display = 'none';
                 break;
             case 'thinking':
                 isListening = false;
                 statusText.textContent = 'Thinking...';
                 statusIcon.src = 'img/thinking.svg';
+                thinkingAnimation.style.display = 'block';
                 break;
             case 'idle':
             default:
                 isListening = false;
                 statusText.textContent = 'Idle';
                 statusIcon.src = 'img/idle.svg';
+                thinkingAnimation.style.display = 'none';
                 break;
         }
     }

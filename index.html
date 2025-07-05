@@ -450,14 +450,71 @@
 
         
 
+        #thinking-animation {
+            position: absolute;
+            bottom: 100px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        #thinking-animation img {
+            width: 100px; /* Adjust as needed */
+            height: 100px; /* Adjust as needed */
+        }
+
         .input-container {
             display: flex;
-            gap: 15px;
+            gap: 18px;
+            padding: 4px; /* Padding to create space for the border */
+            border-radius: 18px; /* Slightly larger to be circular */
+            position: relative;
+            background: transparent;
+            z-index: 0;
+            overflow: hidden;
+            align-items: center;
+        }
+
+        .input-container::before { /* The rotating gradient */
+            content: '';
+            position: absolute;
+            z-index: -2;
+            left: -50%;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            background-repeat: no-repeat;
+            background-image: conic-gradient(
+                hsl(0, 80%, 70%), hsl(30, 80%, 70%), hsl(60, 80%, 70%),
+                hsl(90, 80%, 70%), hsl(120, 80%, 70%), hsl(150, 80%, 70%),
+                hsl(180, 80%, 70%), hsl(210, 80%, 70%), hsl(240, 80%, 70%),
+                hsl(270, 80%, 70%), hsl(300, 80%, 70%), hsl(330, 80%, 70%),
+                hsl(0, 80%, 70%)
+            );
+            animation: rotate 4s linear infinite;
+            display: none; /* Hide by default */
+        }
+
+        .input-container.thinking::before {
+            display: block; /* Show when thinking */
+        }
+
+        .input-container::after { /* The inner background color */
+            content: '';
+            position: absolute;
+            z-index: -1;
+            left: 2px; /* Border thickness */
+            top: 2px; /* Border thickness */
+            width: calc(100% - 4px);
+            height: calc(100% - 4px);
             background: var(--input-bg);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; /* Slightly smaller than container */
             backdrop-filter: blur(10px);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .input-field {
@@ -466,21 +523,27 @@
             border: none;
             color: white;
             font-family: 'Orbitron', monospace;
-            font-size: 16px;
-            padding: 12px;
+            font-size: 18px; /* Slightly smaller font */
+            padding: 14px; /* Slightly smaller padding */
             outline: none;
+            z-index: 1; /* Ensure input field is above the background */
         }
 
         .input-field::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
+        .input-container .btn, .send-btn {
+            padding: 14px 28px; /* Slightly smaller padding */
+            font-size: 14px; /* Slightly smaller font */
+            border-radius: 14px; /* Slightly smaller radius */
+            z-index: 1; /* Ensure buttons are above the background */
+        }
+
         .send-btn {
             background: linear-gradient(135deg, #00d4ff, #9b59b6);
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
             font-family: 'Orbitron', monospace;
             font-weight: 700;
             cursor: pointer;
@@ -738,7 +801,11 @@
             <!-- Chat messages will be loaded here -->
         </div>
 
-        <div class="input-container">
+        <div id="thinking-animation" style="display: none;">
+            <img src="/img/thinking.svg" alt="Thinking...">
+        </div>
+
+        <div class="input-container" id="inputContainer">
             <input class="input-field" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Ask J.A.R.V.I.S anything..."
                    type="text" title="Type your message here">
             <button class="btn btn-listen" id="listenButton" onclick="listen()" title="Start Listening">LISTEN</button>
@@ -843,6 +910,8 @@
     const clearAllContextBtn = document.getElementById('clearAllContextBtn');
     const summarizeChatBtn = document.getElementById('summarizeChatBtn');
 
+    const inputContainer = document.getElementById('inputContainer');
+
     // --- State Management ---
     function setStatus(status) {
         switch (status) {
@@ -850,17 +919,20 @@
                 isListening = true;
                 statusText.textContent = 'Listening...';
                 statusIcon.src = 'img/listening.svg';
+                inputContainer.classList.remove('thinking');
                 break;
             case 'thinking':
                 isListening = false;
                 statusText.textContent = 'Thinking...';
                 statusIcon.src = 'img/thinking.svg';
+                inputContainer.classList.add('thinking');
                 break;
             case 'idle':
             default:
                 isListening = false;
                 statusText.textContent = 'Idle';
                 statusIcon.src = 'img/idle.svg';
+                inputContainer.classList.remove('thinking');
                 break;
         }
     }

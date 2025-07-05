@@ -13,20 +13,25 @@ unhinged   (3.8 GB) --- In the WORKS
 
 Pick the model that you prefer and replace the JARVIS_MODEL variable with your preferred model
 """
-import vers
+import os
+from dotenv import load_dotenv
 
-ELEVENLABS_API_KEY = "sk_a09566db66a2799bc772e1c52a0fc025bd25525d3a230b7f"
-JARVIS_MODEL = vers.consistent
+load_dotenv()
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
+# The default model to use on startup
+JARVIS_MODEL = "llama3.2"
+
+# The different AI models available to the user
 MODELS = {
-    "J.A.R.V.I.S - Standard": "consistent",
-    "J.A.R.V.I.S - Fast": "speed_acc",
-    "J.A.R.V.I.S - Creative": "based",
-    "J.A.R.V.I.S - Open": "open_based",
-    "J.A.R.V.I.S - Lite": "speed",
-    "J.A.R.V.I.S - Unhinged": "unhinged",
-    "J.A.R.V.I.S - Green": "green"
+    "J.A.R.V.I.S - Standard": "llama3.2",
+    "J.A.R.V.I.S - Fast": "deepseek-r1",
+    "J.A.R.V.I.S - Creative": "phi4-mini",
+    "J.A.R.V.I.S - Open": "mistral",
+    "J.A.R.V.I.S - Lite": "moondream",
+    "J.A.R.V.I.S - Unhinged": "llama2-uncensored",
 }
+
 TEMPLATE = """
 You are Jarvis, a helpful and informative AI assistant. Your primary goal is to provide concise and direct answers.
 

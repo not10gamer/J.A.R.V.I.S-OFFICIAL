@@ -13,7 +13,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
 import vars
-import vers
 import os
 
 # import decoder # Removed as web UI handles settings
@@ -63,7 +62,7 @@ chain = prompt_template | model
 def update_llm_chain(new_model_name):
     global current_model_name, model, chain
     current_model_name = new_model_name
-    model = OllamaLLM(model=getattr(vers, new_model_name))
+    model = OllamaLLM(model=new_model_name)
     chain = prompt_template | model
 # --- API Endpoints ---
 @app.route('/')
@@ -89,6 +88,8 @@ def set_model():
         new_model_key = data.get('model_key')
         if new_model_key and new_model_key in vars.MODELS:
             update_llm_chain(vars.MODELS[new_model_key])
+            if new_model_key and new_model_key in vars.MODELS:
+            update_llm_chain(vars.MODELS[new_model_key])
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
@@ -96,6 +97,35 @@ def set_model():
         print(f"Error setting model: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
+
+def _extract_text_from_text(file):
+    return file.read().decode('utf-8')
+
+def _extract_text_from_pdf(file):
+    reader = PyPDF2.PdfReader(file)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() + "\n"
+    return text
+
+def _extract_text_from_image(file):
+    img = Image.open(file)
+    return pytesseract.image_to_string(img)
+
+FILE_HANDLERS = {
+    'txt': _extract_text_from_text,
+    'md': _extract_text_from_text,
+    'py': _extract_text_from_text,
+    'js': _extract_text_from_text,
+    'html': _extract_text_from_text,
+    'css': _extract_text_from_text,
+    'pdf': _extract_text_from_pdf,
+    'png': _extract_text_from_image,
+    'jpg': _extract_text_from_image,
+    'jpeg': _extract_text_from_image,
+    'gif': _extract_text_from_image,
+    'bmp': _extract_text_from_image,
+}
 
 @app.route('/api/load_context', methods=['POST'])
 def load_context():
@@ -107,27 +137,24 @@ def load_context():
         return jsonify({'success': False, 'error': 'No selected file'}), 400
 
     file_extension = file.filename.split('.')[-1].lower()
-    extracted_text = ""
 
-    try:
-        if file_extension == 'json':
+    if file_extension == 'json':
+        try:
             chat_history_data = json.load(file)
             chat_history_backend.clear()
             chat_history_backend.extend(chat_history_data)
             save_chat_history_to_file()
             return jsonify({'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
-        elif file_extension in ['txt', 'md', 'py', 'js', 'html', 'css']:
-            extracted_text = file.read().decode('utf-8')
-        elif file_extension == 'pdf':
-            reader = PyPDF2.PdfReader(file)
-            for page_num in range(len(reader.pages)):
-                extracted_text += reader.pages[page_num].extract_text() + "\n"
-        elif file_extension in ['png', 'jpg', 'jpeg', 'gif', 'bmp']:
-            img = Image.open(file)
-            extracted_text = pytesseract.image_to_string(img)
-        else:
-            return jsonify({'success': False, 'error': 'Unsupported file type'}), 400
+        except Exception as e:
+            print(f"Error loading chat history: {e}")
+            return jsonify({'success': False, 'error': f'Error processing JSON file: {e}'}), 500
 
+    handler = FILE_HANDLERS.get(file_extension)
+    if not handler:
+        return jsonify({'success': False, 'error': 'Unsupported file type'}), 400
+
+    try:
+        extracted_text = handler(file)
         current_context = extracted_text
         return jsonify({'success': True, 'message': 'Context loaded successfully'})
     except Exception as e:

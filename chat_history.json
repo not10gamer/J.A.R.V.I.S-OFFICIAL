@@ -1,11 +1,95 @@
 [
   {
-    "sender": "user",
-    "message": "hello"
+    "message": "hello",
+    "sender": "user"
   },
   {
+    "message": "Hello. How can I assist you today?",
+    "sender": "ai"
+  },
+  {
+    "message": "what was the last thing i told you",
+    "sender": "user"
+  },
+  {
+    "message": "You didn't tell me anything yet, this is our initial conversation. What would you like to know or discuss?",
+    "sender": "ai"
+  },
+  {
+    "message": "what is your name",
+    "sender": "user"
+  },
+  {
+    "message": "I'm J.A.R.V.I.S, your home's AI assistant.",
+    "sender": "ai"
+  },
+  {
+    "message": "what did i ask you last",
+    "sender": "user"
+  },
+  {
+    "message": "You didn't tell me anything about what you asked me last. This is our initial conversation. Would you like to share something with me now?",
+    "sender": "ai"
+  },
+  {
+    "message": "hgellow",
+    "sender": "user"
+  },
+  {
+    "message": "I'm not able to understand \"hgellow\" as a clear question or request. Could you please rephrase or provide more context so I can assist you better?",
+    "sender": "ai"
+  },
+  {
+    "message": "hello",
+    "sender": "user"
+  },
+  {
+    "message": "Hello, how can I assist you today?",
+    "sender": "ai"
+  },
+  {
+    "message": "what did i ask you last",
+    "sender": "user"
+  },
+  {
+    "message": "You didn't tell me anything about what you asked me last. This is our initial conversation, and I don't have any previous interactions to recall. Would you like to share something with me now?",
+    "sender": "ai"
+  },
+  {
+    "message": "hi",
+    "sender": "user"
+  },
+  {
+    "message": "Hello, how can I assist you today?",
+    "sender": "ai"
+  },
+  {
+    "message": "hi",
+    "sender": "user"
+  },
+  {
+    "message": "Hello, how can I assist you today?",
+    "sender": "ai"
+  },
+  {
+    "message": "gay",
+    "sender": "user"
+  },
+  {
+    "message": "I'm here to provide information and support. The term \"gay\" refers to a person who is emotionally, romantically, or sexually attracted to people of the same sex. It's a personal identifier and an important aspect of a person's identity. Would you like more information about LGBTQ+ topics?",
+    "sender": "ai"
+  },
+  {
+    "message": "hi",
+    "sender": "user",
+    "timestamp": "2025-07-05T09:09:51.436Z",
+    "timeTaken": null
+  },
+  {
+    "message": "Hello, how can I assist you today?",
     "sender": "ai",
-    "message": "Hello. How can I assist you today?"
+    "timestamp": "2025-07-05T09:10:01.369Z",
+    "timeTaken": 9.93039999999106
   },
   {
     "sender": "user",
@@ -13,51 +97,19 @@
   },
   {
     "sender": "ai",
-    "message": "You didn't tell me anything yet, this is our initial conversation. What would you like to know or discuss?"
-  },
-  {
-    "sender": "user",
-    "message": "what is your name"
-  },
-  {
-    "sender": "ai",
-    "message": "I'm J.A.R.V.I.S, your home's AI assistant."
-  },
-  {
-    "sender": "user",
-    "message": "what did i ask you last"
-  },
-  {
-    "sender": "ai",
-    "message": "You didn't tell me anything about what you asked me last. This is our initial conversation. Would you like to share something with me now?"
-  },
-  {
-    "sender": "user",
-    "message": "hgellow"
-  },
-  {
-    "sender": "ai",
-    "message": "I'm not able to understand \"hgellow\" as a clear question or request. Could you please rephrase or provide more context so I can assist you better?"
-  },
-  {
-    "sender": "user",
-    "message": "hello"
-  },
-  {
-    "sender": "ai",
-    "message": "Hello, how can I assist you today?"
-  },
-  {
-    "sender": "user",
-    "message": "what did i ask you last"
-  },
-  {
-    "sender": "ai",
     "message": "You didn't tell me anything about what you asked me last. This is our initial conversation, and I don't have any previous interactions to recall. Would you like to share something with me now?"
   },
   {
     "sender": "user",
-    "message": "hi"
+    "message": "gay"
+  },
+  {
+    "sender": "ai",
+    "message": "The term \"gay\" refers to a person who is emotionally, romantically, or sexually attracted to people of the same sex."
+  },
+  {
+    "sender": "user",
+    "message": "hello"
   },
   {
     "sender": "ai",
@@ -77,6 +129,14 @@
   },
   {
     "sender": "ai",
-    "message": "I'm here to provide information and support. The term \"gay\" refers to a person who is emotionally, romantically, or sexually attracted to people of the same sex. It's a personal identifier and an important aspect of a person's identity. Would you like more information about LGBTQ+ topics?"
+    "message": "The term \"gay\" refers to a person who is emotionally, romantically, or sexually attracted to people of the same sex."
+  },
+  {
+    "sender": "user",
+    "message": "Hi"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello. How can I assist you today?"
   }
 ]
