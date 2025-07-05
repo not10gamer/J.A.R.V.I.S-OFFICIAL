@@ -6,6 +6,48 @@
     <title>J.A.R.V.I.S</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a; /* Match your darkest background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-top: 8px solid #00d4ff; /* Accent color */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            text-shadow: 0 0 5px #00d4ff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @.venv\Lib\site-packages\langchain_core\__pycache__\_import_utils.cpython-312.pyc url('https://fonts.googleapis.com/css2?family=Orbitron:wght @400;700;900&display=swap');
 
         * {
@@ -351,9 +393,9 @@
         }
 
         .chat-message {
-            margin-bottom: 8px;
-            padding: 6px 10px;
-            border-radius: 8px;
+            margin-bottom: 3px;
+            padding: 3px 6px;
+            border-radius: 6px;
             max-width: 85%;
             width: fit-content;
             word-wrap: break-word;
@@ -384,6 +426,50 @@
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             align-items: flex-start;
+        }
+
+        .message-info {
+            display: flex;
+            gap: 10px; /* Space between time and timestamp */
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 8px;
+            align-self: flex-end; /* Align to the right within the AI message */
+        }
+
+        .user-message .message-info {
+            align-self: flex-end;
+        }
+
+        .ai-message .message-info {
+            align-self: flex-start;
+        }
+
+        .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message-meta-container {
+            display: flex;
+            gap: 5px; /* Space between the two frames */
+            margin-top: 5px; /* Space between message content and meta container */
+            align-items: center; /* Align items to the center vertically */
+            justify-content: flex-end; /* Align to the right for user messages */
+        }
+
+        .ai-message .message-meta-container {
+            justify-content: flex-start; /* Align to the left for AI messages */
+        }
+
+        .message-footer-frame {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 3px 6px;
+            background-color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center; /* Vertically center content within frame */
+            justify-content: center; /* Horizontally center content within frame */
+            height: 20px; /* Fixed height for the frames */
         }
 
         .input-container {
@@ -579,6 +665,10 @@
     </style>
 </head>
 <body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading J.A.R.V.I.S...</div>
+    </div>
     <input type="file" id="contextFileInput" style="display: none;">
     <input type="file" id="chatHistoryInput" accept=".json" style="display: none;">
 <div class="container">
@@ -593,41 +683,41 @@
         
 
         <div class="controls">
-            <button class="btn btn-context" onclick="openContext()">CONTEXT</button>
-            <button class="btn btn-small" onclick="addContext()" title="Add Context">
+            <button class="btn btn-context" onclick="openContext()" title="Open Context Menu">CONTEXT</button>
+            <button class="btn btn-small" onclick="addContext()" title="Add Context File">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </button>
-            <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat">
+            <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat History">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round"
                           stroke-linejoin="round"/>
                 </svg>
             </button>
-            <button class="btn btn-small" onclick="saveChat()" title="Save Chat">
+            <button class="btn btn-small" onclick="saveChat()" title="Save Chat History">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round"
                           stroke-linejoin="round"/>
                 </svg>
             </button>
-            <button class="btn btn-small" onclick="loadChat()" title="Load Chat">
+            <button class="btn btn-small" onclick="loadChat()" title="Load Chat History">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                 </svg>
             </button>
-            <button class="btn btn-exit" onclick="exitApp()">EXIT</button>
+            <button class="btn btn-exit" onclick="exitApp()" title="Exit Application">EXIT</button>
         </div>
 
         <div class="status">
             <div class="status-text" id="statusText">Idle</div>
             <img alt="Status" class="status-icon" id="statusIcon" src="img/idle.svg">
-            <button class="btn btn-customize" onclick="customize()">CUSTOMIZE</button>
-            <button class="btn btn-reset" onclick="resetSystem()">RESET</button>
+            <button class="btn btn-customize" onclick="customize()" title="Customize Theme and Model">CUSTOMIZE</button>
+            <button class="btn btn-reset" onclick="resetSystem()" title="Reset Application">RESET</button>
         </div>
     </div>
 
@@ -662,8 +752,8 @@
         <div class="main-header">
             <div class="main-title">Conversation</div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn" id="speakToggle">SPEAK</button>
-                <button class="btn" id="conversationModeToggle">CONVERSATION MODE</button>
+                <button class="btn" id="speakToggle" title="Toggle Text-to-Speech">SPEAK</button>
+                <button class="btn" id="conversationModeToggle" title="Toggle Continuous Listening">CONVERSATION MODE</button>
             </div>
         </div>
         <div class="chat-container scrollbar-custom" id="chatContainer">
@@ -672,9 +762,9 @@
 
         <div class="input-container">
             <input class="input-field" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Ask J.A.R.V.I.S anything..."
-                   type="text">
-            <button class="btn btn-listen" id="listenButton" onclick="listen()">LISTEN</button>
-            <button class="send-btn" onclick="sendMessage()">SEND</button>
+                   type="text" title="Type your message here">
+            <button class="btn btn-listen" id="listenButton" onclick="listen()" title="Start Listening">LISTEN</button>
+            <button class="send-btn" onclick="sendMessage()" title="Send Message">SEND</button>
         </div>
     </div>
 </div>
@@ -884,10 +974,10 @@
         setStatus('thinking');
 
         try {
-            const response = await callYourLLM(message);
-            addMessageToChat(response, 'ai');
+            const responseData = await callYourLLM(message);
+            addMessageToChat(responseData.response, 'ai', true, responseData.timeTaken);
             if (speakEnabled) {
-                speak(response);
+                speak(responseData.response);
             }
         } catch (error) {
             console.error("LLM Error:", error);
@@ -897,30 +987,49 @@
         }
     }
 
-    function addMessageToChat(message, sender, save = true) {
+    function addMessageToChat(message, sender, save = true, timeTaken = null) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
 
         const messageContent = document.createElement('p');
         messageContent.textContent = message;
 
+        const messageMetaContainer = document.createElement('div');
+        messageMetaContainer.className = 'message-meta-container';
+
+        if (sender === 'ai' && timeTaken !== null) {
+            const timeFrame = document.createElement('div');
+            timeFrame.className = 'message-footer-frame';
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = `${timeTaken.toFixed(2)}s`;
+            timeSpan.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
+            timeFrame.appendChild(timeSpan);
+            messageMetaContainer.appendChild(timeFrame);
+        }
+
+        const timestampFrame = document.createElement('div');
+        timestampFrame.className = 'message-footer-frame';
         const timestamp = document.createElement('span');
         timestamp.className = 'timestamp';
         timestamp.textContent = new Date().toLocaleTimeString();
+        timestampFrame.appendChild(timestamp);
+        messageMetaContainer.appendChild(timestampFrame);
 
         messageDiv.appendChild(messageContent);
-        messageDiv.appendChild(timestamp);
+        messageDiv.appendChild(messageMetaContainer);
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
         if (save) {
-            chatHistory.push({ message, sender, timestamp: new Date().toISOString() });
+            chatHistory.push({ message, sender, timestamp: new Date().toISOString(), timeTaken: timeTaken });
             localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
         }
     }
 
     // --- LLM Integration ---
     async function callYourLLM(message) {
+        const startTime = performance.now();
         const response = await fetch('http://127.0.0.1:5000/api/chat', {
             method: 'POST',
             headers: {
@@ -928,7 +1037,7 @@
             },
             body: JSON.stringify({
                 message: message,
-                history: chatHistory.slice(0, -1)
+                history: chatHistory.filter(item => item.sender !== 'ai' || item.timeTaken === undefined).slice(0, -1) // Exclude AI messages with timeTaken for history
             })
         });
 
@@ -939,7 +1048,9 @@
         }
 
         const data = await response.json();
-        return data.response;
+        const endTime = performance.now();
+        const timeTaken = (endTime - startTime) / 1000; // in seconds
+        return { response: data.response, timeTaken: timeTaken };
     }
 
     // --- Speech Recognition and Synthesis ---
@@ -1206,6 +1317,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.classList.add('hidden');
+
         cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
         ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
         gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
