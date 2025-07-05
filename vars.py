@@ -24,7 +24,8 @@ MODELS = {
     "J.A.R.V.I.S - Creative": "based",
     "J.A.R.V.I.S - Open": "open_based",
     "J.A.R.V.I.S - Lite": "speed",
-    "J.A.R.V.I.S - Unhinged": "unhinged"
+    "J.A.R.V.I.S - Unhinged": "unhinged",
+    "J.A.R.V.I.S - Green": "green"
 }
 TEMPLATE = """
 You are Jarvis, a helpful and informative AI assistant. Your primary goal is to provide concise and direct answers.

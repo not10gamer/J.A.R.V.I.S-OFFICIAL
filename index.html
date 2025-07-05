@@ -6,7 +6,7 @@
     <title>J.A.R.V.I.S</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        @.venv\Lib\site-packages\langchain_core\__pycache__\_import_utils.cpython-312.pyc url('https://fonts.googleapis.com/css2?family=Orbitron:wght @400;700;900&display=swap');
 
         * {
             margin: 0;
@@ -537,7 +537,7 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E");
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E');
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 1em;
@@ -714,6 +714,7 @@
     let speakEnabled = false;
     let conversationModeEnabled = false;
 
+    // --- DOM Elements ---
     const statusText = document.getElementById('statusText');
     const statusIcon = document.getElementById('statusIcon');
     const chatContainer = document.getElementById('chatContainer');
@@ -987,36 +988,11 @@
         }
     }
 
-    speakToggle.addEventListener('click', () => {
-        speakEnabled = !speakEnabled;
-        speakToggle.style.backgroundColor = speakEnabled ? '#10b981' : '#6366f1';
-        speakToggle.textContent = speakEnabled ? 'SPEAKING' : 'SPEAK';
-    });
-
-    conversationModeToggle.addEventListener('click', () => {
-        conversationModeEnabled = !conversationModeEnabled;
-        conversationModeToggle.style.backgroundColor = conversationModeEnabled ? '#10b981' : '#6366f1';
-        conversationModeToggle.textContent = conversationModeEnabled ? 'CONVERSATION ON' : 'CONVERSATION OFF';
-
-        if (conversationModeEnabled) {
-            listen(); // Start listening immediately when conversation mode is enabled
-        } else {
-            if (isListening) {
-                recognition.stop();
-            }
-            setStatus('idle');
-        }
-    });
-
     // --- Sidebar Controls ---
     function openContext() {
         contextModal.style.display = 'flex';
         loadContextData();
     }
-
-    closeContextModalBtn.addEventListener('click', () => {
-        contextModal.style.display = 'none';
-    });
 
     async function loadContextData() {
         try {
@@ -1030,100 +1006,6 @@
             showModal("Failed to load context data from the server.", () => {}, true);
         }
     }
-
-    clearFileContextBtn.addEventListener('click', async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/clear_file_context', { method: 'POST' });
-            const data = await response.json();
-            if (data.success) {
-                showModal('File context cleared successfully.', () => {}, true);
-                loadContextData(); // Refresh display
-            } else {
-                showModal(`Failed to clear file context: ${data.error}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error clearing file context:", error);
-            showModal("Error communicating with the server to clear file context.", () => {}, true);
-        }
-    });
-
-    saveTypedContextBtn.addEventListener('click', async () => {
-        const context = typedContextInput.value;
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/save_typed_context', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ context: context })
-            });
-            const data = await response.json();
-            if (data.success) {
-                showModal('Typed context saved successfully.', () => {}, true);
-            } else {
-                showModal(`Failed to save typed context: ${data.error}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error saving typed context:", error);
-            showModal("Error communicating with the server to save typed context.", () => {}, true);
-        }
-    });
-
-    clearTypedContextBtn.addEventListener('click', async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/clear_typed_context', { method: 'POST' });
-            const data = await response.json();
-            if (data.success) {
-                showModal('Typed context cleared successfully.', () => {}, true);
-                typedContextInput.value = ''; // Clear the textarea
-            } else {
-                showModal(`Failed to clear typed context: ${data.error}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error clearing typed context:", error);
-            showModal("Error communicating with the server to clear typed context.", () => {}, true);
-        }
-    });
-
-    clearAllContextBtn.addEventListener('click', async () => {
-        showModal('Are you sure you want to clear all context? This action cannot be undone.', async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
-                const data = await response.json();
-                if (data.success) {
-                    showModal('All context has been cleared.', () => {}, true);
-                    loadContextData(); // Refresh the modal display
-                } else {
-                    showModal(`Failed to clear all context: ${data.error}`, () => {}, true);
-                }
-            } catch (error) {
-                console.error("Error clearing all context:", error);
-                showModal("An error occurred while communicating with the server.", () => {}, true);
-            }
-        });
-    });
-
-    summarizeChatBtn.addEventListener('click', async () => {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/summarize_chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ history: chatHistory })
-            });
-            const data = await response.json();
-            if (data.success) {
-                chatSummaryDisplay.textContent = data.summary;
-                showModal('Chat summary has been updated.', () => {}, true);
-            } else {
-                showModal(`Failed to summarize chat: ${data.error}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error summarizing chat:", error);
-            showModal("An error occurred while communicating with the server.", () => {}, true);
-        }
-    });
 
     function deleteChat() {
         showModal('Are you sure you want to permanently delete the chat history?', () => {
@@ -1230,90 +1112,6 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const contextFileInput = document.getElementById('contextFileInput');
-        const chatHistoryInput = document.getElementById('chatHistoryInput');
-
-        document.addEventListener('DOMContentLoaded', () => {
-        const contextFileInput = document.getElementById('contextFileInput');
-        const chatHistoryInput = document.getElementById('chatHistoryInput');
-
-        cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
-        ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
-        gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
-
-        loadChatHistory();
-        setStatus('idle');
-        setInterval(updateSystemStats, 1000);
-        messageInput.focus();
-
-        loadModels();
-        loadTheme();
-    });
-
-    closeCustomizeModalBtn.addEventListener('click', () => {
-        customizeModal.style.display = 'none';
-    });
-
-    themeButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const theme = event.target.dataset.theme;
-            setTheme(theme);
-        });
-    });
-
-    setModelBtn.addEventListener('click', async () => {
-        const selectedModel = modelSelect.value;
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/set_model', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ model_key: selectedModel })
-            });
-            const data = await response.json();
-            if (data.success) {
-                showModal(`LLM model successfully set to ${selectedModel}.`, () => {}, true);
-                localStorage.setItem('jarvisLLMModel', selectedModel);
-            } else {
-                showModal(`Failed to set LLM model: ${data.error}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error setting LLM model:", error);
-            showModal("Error communicating with the server to set the LLM model.", () => {}, true);
-        }
-    });
-
-    chatHistoryInput.addEventListener('change', async () => {
-        if (chatHistoryInput.files.length === 0) {
-            return; // No file selected
-        }
-        const file = chatHistoryInput.files[0];
-        const formData = new FormData();
-        formData.append('context_file', file);
-
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/load_context', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-            if (data.success && data.history) {
-                chatHistory = data.history;
-                localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
-                loadChatHistory(); // Reload the chat display
-                showModal(`Chat history loaded successfully from ${file.name}.`, () => {}, true);
-            } else {
-                showModal(`Failed to load chat history: ${data.error || 'Invalid file format.'}`, () => {}, true);
-            }
-        } catch (error) {
-            console.error("Error loading chat history:", error);
-            showModal("Error communicating with the server to load the file.", () => {}, true);
-        }
-    });
-
     async function loadModels() {
         try {
             const response = await fetch('http://127.0.0.1:5000/api/models');
@@ -1360,6 +1158,202 @@
             setTheme('dark'); // Default theme
         }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
+        ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
+        gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
+
+        loadChatHistory();
+        setStatus('idle');
+        setInterval(updateSystemStats, 1000);
+        messageInput.focus();
+
+        loadModels();
+        loadTheme();
+
+        speakToggle.addEventListener('click', () => {
+            speakEnabled = !speakEnabled;
+            speakToggle.style.backgroundColor = speakEnabled ? '#10b981' : '#6366f1';
+            speakToggle.textContent = speakEnabled ? 'SPEAKING' : 'SPEAK';
+        });
+
+        conversationModeToggle.addEventListener('click', () => {
+            conversationModeEnabled = !conversationModeEnabled;
+            conversationModeToggle.style.backgroundColor = conversationModeEnabled ? '#10b981' : '#6366f1';
+            conversationModeToggle.textContent = conversationModeEnabled ? 'CONVERSATION ON' : 'CONVERSATION OFF';
+
+            if (conversationModeEnabled) {
+                listen(); // Start listening immediately when conversation mode is enabled
+            } else {
+                if (isListening) {
+                    recognition.stop();
+                }
+                setStatus('idle');
+            }
+        });
+
+        closeContextModalBtn.addEventListener('click', () => {
+            contextModal.style.display = 'none';
+        });
+
+        clearFileContextBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_file_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('File context cleared successfully.', () => {}, true);
+                    loadContextData(); // Refresh display
+                } else {
+                    showModal(`Failed to clear file context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error clearing file context:", error);
+                showModal("Error communicating with the server to clear file context.", () => {}, true);
+            }
+        });
+
+        saveTypedContextBtn.addEventListener('click', async () => {
+            const context = typedContextInput.value;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/save_typed_context', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ context: context })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('Typed context saved successfully.', () => {}, true);
+                } else {
+                    showModal(`Failed to save typed context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error saving typed context:", error);
+                showModal("Error communicating with the server to save typed context.", () => {}, true);
+            }
+        });
+
+        clearTypedContextBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_typed_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('Typed context cleared successfully.', () => {}, true);
+                    typedContextInput.value = ''; // Clear the textarea
+                } else {
+                    showModal(`Failed to clear typed context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error clearing typed context:", error);
+                showModal("Error communicating with the server to clear typed context.", () => {}, true);
+            }
+        });
+
+        clearAllContextBtn.addEventListener('click', async () => {
+            showModal('Are you sure you want to clear all context? This action cannot be undone.', async () => {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
+                    const data = await response.json();
+                    if (data.success) {
+                        showModal('All context has been cleared.', () => {}, true);
+                        loadContextData(); // Refresh the modal display
+                    } else {
+                        showModal(`Failed to clear all context: ${data.error}`, () => {}, true);
+                    }
+                } catch (error) {
+                    console.error("Error clearing all context:", error);
+                    showModal("An error occurred while communicating with the server.", () => {}, true);
+                }
+            });
+        });
+
+        summarizeChatBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/summarize_chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ history: chatHistory })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    chatSummaryDisplay.textContent = data.summary;
+                    showModal('Chat summary has been updated.', () => {}, true);
+                } else {
+                    showModal(`Failed to summarize chat: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error summarizing chat:", error);
+                showModal("An error occurred while communicating with the server.", () => {}, true);
+            }
+        });
+
+        closeCustomizeModalBtn.addEventListener('click', () => {
+            customizeModal.style.display = 'none';
+        });
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const theme = event.target.dataset.theme;
+                setTheme(theme);
+            });
+        });
+
+        setModelBtn.addEventListener('click', async () => {
+            const selectedModel = modelSelect.value;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/set_model', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ model_key: selectedModel })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showModal(`LLM model successfully set to ${selectedModel}.`, () => {}, true);
+                    localStorage.setItem('jarvisLLMModel', selectedModel);
+                } else {
+                    showModal(`Failed to set LLM model: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error setting LLM model:", error);
+                showModal("Error communicating with the server to set the LLM model.", () => {}, true);
+            }
+        });
+
+        chatHistoryInput.addEventListener('change', async () => {
+            if (chatHistoryInput.files.length === 0) {
+                return; // No file selected
+            }
+            const file = chatHistoryInput.files[0];
+            const formData = new FormData();
+            formData.append('context_file', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/load_context', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success && data.history) {
+                    chatHistory = data.history;
+                    localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
+                    loadChatHistory(); // Reload the chat display
+                    showModal(`Chat history loaded successfully from ${file.name}.`, () => {}, true);
+                } else {
+                    showModal(`Failed to load chat history: ${data.error || 'Invalid file format.'}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error loading chat history:", error);
+                showModal("Error communicating with the server to load the file.", () => {}, true);
+            }
+        });
+    });
 </script>
     </body>
 </html>

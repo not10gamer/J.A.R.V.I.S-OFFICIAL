@@ -15,6 +15,8 @@ from langchain_ollama import OllamaLLM
 import vars
 import vers
 
+# import decoder # Removed as web UI handles settings
+
 # --- Initialization ---
 app = Flask(__name__)
 CORS(app)
@@ -40,12 +42,11 @@ def update_llm_chain(new_model_name):
     current_model_name = new_model_name
     model = OllamaLLM(model=getattr(vers, new_model_name))
     chain = prompt_template | model
-
-
 # --- API Endpoints ---
 @app.route('/')
-def serve_gui():
+def serve_index():
     return send_from_directory('.', 'index.html')
+
 
 
 @app.route('/img/<path:filename>')
@@ -89,8 +90,7 @@ def load_context():
         if file_extension == 'json':
             chat_history_data = json.load(file)
             # We don't set current_context here, instead we return the history
-            return jsonify(
-                {'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
+            return jsonify({'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
         elif file_extension in ['txt', 'md', 'py', 'js', 'html', 'css']:
             extracted_text = file.read().decode('utf-8')
         elif file_extension == 'pdf':
@@ -113,7 +113,7 @@ def load_context():
 @app.route('/api/context', methods=['GET'])
 def get_context():
     return jsonify({
-        'file_context': current_context,
+        'file_context': str(current_context),
         'typed_context': vars.typed_context,
         'chat_summary': vars.chat_summary
     })
@@ -233,6 +233,7 @@ def system_stats():
     try:
         cpu_usage = psutil.cpu_percent(interval=None)
         ram_usage = psutil.virtual_memory().percent
+        disk_usage = psutil.disk_usage('/').percent
 
         try:
             gpus = GPUtil.getGPUs()
@@ -246,6 +247,7 @@ def system_stats():
             'cpu': cpu_usage,
             'ram': ram_usage,
             'gpu': gpu_usage,
+            'disk': disk_usage,
             'gpu_error': gpu_error
         })
     except Exception as e:
@@ -259,13 +261,6 @@ def system_stats():
 
 
 # --- Main Execution ---
-def open_browser():
-    webbrowser.open_new("http://127.0.0.1:5000/")
-
-
 if __name__ == '__main__':
     print("Starting J.A.R.V.I.S web server...")
-    from threading import Timer
-
-    Timer(1, open_browser).start()
     app.run(port=5000, debug=False)
