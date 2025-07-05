@@ -168,8 +168,9 @@
 
         .sidebar {
             width: 300px;
-            background: linear-gradient(180deg, var(--sidebar-bg-gradient-start) 0%, var(--sidebar-bg-gradient-end) 100%);
-            border-right: 2px solid var(--sidebar-border-color);
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -213,9 +214,10 @@
             justify-content: space-around;
             margin-bottom: 20px;
             padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .system-stats-horizontal .stat {
@@ -234,9 +236,10 @@
             justify-content: space-around;
             margin-bottom: 20px;
             padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .system-stats-horizontal .stat {
@@ -381,7 +384,7 @@
 
         .chat-container {
             flex: 1;
-            background: var(--chat-bg);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px;
