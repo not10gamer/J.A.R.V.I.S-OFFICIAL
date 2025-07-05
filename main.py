@@ -233,7 +233,7 @@ def system_stats():
     try:
         cpu_usage = psutil.cpu_percent(interval=None)
         ram_usage = psutil.virtual_memory().percent
-        disk_usage = psutil.disk_usage('/').percent
+        disk_usage = psutil.disk_usage('C:\\').percent
 
         try:
             gpus = GPUtil.getGPUs()
@@ -258,6 +258,13 @@ def system_stats():
             'gpu': 0,
             'error': 'Could not retrieve system stats.'
         })
+
+@app.route('/api/shutdown', methods=['POST'])
+def shutdown():
+    shutdown_server = request.environ.get('werkzeug.server.shutdown')
+    if shutdown_server:
+        shutdown_server()
+    return 'Server shutting down...'
 
 
 # --- Main Execution ---

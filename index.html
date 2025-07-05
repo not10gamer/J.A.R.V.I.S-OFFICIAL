@@ -166,19 +166,46 @@
             background-clip: text;
         }
 
-        .system-stats {
+        .system-stats-horizontal {
+            display: flex;
+            justify-content: space-around;
             margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .stat {
-            margin-bottom: 15px;
+        .system-stats-horizontal .stat {
+            flex: 1;
+            text-align: center;
+            margin: 0 5px;
         }
 
-        .stat-label {
-            font-size: 14px;
-            color: var(--text-color);
+        .system-stats-horizontal .stat-label {
+            font-size: 12px;
             margin-bottom: 5px;
-            letter-spacing: 1px;
+        }
+
+        .system-stats-horizontal {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .system-stats-horizontal .stat {
+            flex: 1;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        .system-stats-horizontal .stat-label {
+            font-size: 12px;
+            margin-bottom: 5px;
         }
 
         .chart-container {
@@ -324,9 +351,9 @@
         }
 
         .chat-message {
-            margin-bottom: 15px;
-            padding: 12px 18px;
-            border-radius: 12px;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            border-radius: 8px;
             max-width: 85%;
             width: fit-content;
             word-wrap: break-word;
@@ -563,26 +590,7 @@
             <div class="title">J.A.R.V.I.S</div>
         </div>
 
-        <div class="system-stats">
-            <div class="stat">
-                <div class="stat-label">CPU</div>
-                <div class="chart-container">
-                    <canvas id="cpuChart"></canvas>
-                </div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">RAM</div>
-                <div class="chart-container">
-                    <canvas id="ramChart"></canvas>
-                </div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">GPU</div>
-                <div class="chart-container">
-                    <canvas id="gpuChart"></canvas>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="controls">
             <button class="btn btn-context" onclick="openContext()">CONTEXT</button>
@@ -624,6 +632,33 @@
     </div>
 
     <div class="main-content">
+        <div class="system-stats-horizontal">
+            <div class="stat">
+                <div class="stat-label">CPU <span id="cpu-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">RAM <span id="ram-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="ramChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">GPU <span id="gpu-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="gpuChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">DISK <span id="disk-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="diskChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="main-header">
             <div class="main-title">Conversation</div>
             <div style="display: flex; gap: 10px;">
@@ -709,7 +744,7 @@
 <script>
     let isListening = false;
     let chatHistory = [];
-    let cpuChart, ramChart, gpuChart;
+    let cpuChart, ramChart, gpuChart, diskChart;
     let recognition;
     let speakEnabled = false;
     let conversationModeEnabled = false;
@@ -775,8 +810,13 @@
             }
 
             updateChart(cpuChart, stats.cpu);
+            document.getElementById('cpu-percent').textContent = `${stats.cpu.toFixed(1)}%`;
             updateChart(ramChart, stats.ram);
+            document.getElementById('ram-percent').textContent = `${stats.ram.toFixed(1)}%`;
             updateChart(gpuChart, stats.gpu);
+            document.getElementById('gpu-percent').textContent = `${stats.gpu.toFixed(1)}%`;
+            updateChart(diskChart, stats.disk);
+            document.getElementById('disk-percent').textContent = `${stats.disk.toFixed(1)}%`;
 
         } catch (error) {
             console.error("Error fetching system stats:", error);
@@ -1055,8 +1095,14 @@
     }
 
     function exitApp() {
-        showModal('Are you sure you want to exit J.A.R.V.I.S?', () => {
-            window.close();
+        showModal('Are you sure you want to exit J.A.R.V.I.S?', async () => {
+            try {
+                await fetch('http://127.0.0.1:5000/api/shutdown', { method: 'POST' });
+                window.close();
+            } catch (error) {
+                console.error("Error shutting down server:", error);
+                showModal("Could not shut down the server. Please close the console manually.", () => {}, true);
+            }
         });
     }
 
@@ -1163,6 +1209,7 @@
         cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
         ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
         gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
+        diskChart = createChart(document.getElementById('diskChart').getContext('2d'), 'DISK', '#ff6384');
 
         loadChatHistory();
         setStatus('idle');
