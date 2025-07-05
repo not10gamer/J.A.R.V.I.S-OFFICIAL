@@ -89,7 +89,7 @@ def set_model():
         if new_model_key and new_model_key in vars.MODELS:
             update_llm_chain(vars.MODELS[new_model_key])
             if new_model_key and new_model_key in vars.MODELS:
-            update_llm_chain(vars.MODELS[new_model_key])
+                update_llm_chain(vars.MODELS[new_model_key])
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
