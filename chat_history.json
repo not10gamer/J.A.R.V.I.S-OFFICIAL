@@ -22,5 +22,21 @@
   {
     "sender": "ai",
     "message": "I'm here to help, how can I assist you?"
+  },
+  {
+    "sender": "user",
+    "message": "Hello."
+  },
+  {
+    "sender": "ai",
+    "message": "I'm here to provide information and assistance. What's on your mind?"
+  },
+  {
+    "sender": "user",
+    "message": "Hello."
+  },
+  {
+    "sender": "ai",
+    "message": "I'm here to help."
   }
 ]
