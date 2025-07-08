@@ -199,7 +199,7 @@
             margin-right: 10px; /* Reduced margin */
             animation: pulse 2s infinite;
         }
-        
+
         .logo img {
             width: 100%;
             height: 100%;
@@ -399,7 +399,7 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .chat-message .timestamp {
             font-size: 9px; /* Reduced font size */
             color: rgba(255, 255, 255, 0.7);
@@ -444,7 +444,7 @@
             align-self: flex-start;
         }
 
-        
+
 
         #thinking-animation {
             position: absolute;
@@ -603,12 +603,12 @@
             justify-content: center;
             gap: 10px; /* Reduced gap */
         }
-        
+
         #modalConfirm {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
         }
-        
+
         #modalCancel {
             background: linear-gradient(135deg, #6366f1, #4338ca);
             color: white;
@@ -718,12 +718,12 @@
             <div class="title">J.A.R.V.I.S</div>
         </div>
 
-        
+
 
         <div class="controls">
             <button class="btn btn-context" onclick="openContext()" title="Open Context Menu">CONTEXT</button>
             <button class="btn btn-small" onclick="addContext()" title="Add Context File">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -743,7 +743,7 @@
                 </svg>
             </button>
             <button class="btn btn-small" onclick="loadChat()" title="Load Chat History">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" 
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                 </svg>
@@ -791,6 +791,7 @@
             <div class="main-title">Conversation</div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn" id="speakToggle" title="Toggle Text-to-Speech">SPEAK</button>
+                <button class="btn" id="muteButton" title="Mute Speech">MUTE</button>
                 <button class="btn" id="conversationModeToggle" title="Toggle Continuous Listening">CONVERSATION MODE</button>
             </div>
         </div>
@@ -894,8 +895,12 @@
         </div>
         <div class="customization-section">
             <h3>File for Context</h3>
-            <input type="file" id="customModelFileInput" class="input-field">
-            <button class="btn" id="summarizeFileBtn">Summarize & Add to Prompt</button>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn" id="chooseCustomModelFileBtn">Choose File</button>
+                <span id="customModelFileName" style="color: var(--text-color); font-size: 14px;">No file chosen</span>
+            </div>
+            <input type="file" id="customModelFileInput" style="display: none;">
+            <button class="btn" id="summarizeFileBtn" style="margin-top: 10px;">Summarize & Add to Prompt</button>
             <div class="loading-spinner" id="summarizeSpinner" style="display: none;"></div>
         </div>
         <div class="modal-buttons">
@@ -913,6 +918,7 @@
     let speakEnabled = false;
     let conversationModeEnabled = false;
     let allModels = {};
+    let currentAudio = null; // Global variable to hold the current audio object
 
     // --- DOM Elements ---
     const statusText = document.getElementById('statusText');
@@ -929,6 +935,20 @@
     const contextFileInput = document.getElementById('contextFileInput');
     const chatHistoryInput = document.getElementById('chatHistoryInput');
     const customModelFileInput = document.getElementById('customModelFileInput');
+    const chooseCustomModelFileBtn = document.getElementById('chooseCustomModelFileBtn');
+    const customModelFileName = document.getElementById('customModelFileName');
+
+    chooseCustomModelFileBtn.addEventListener('click', () => {
+        customModelFileInput.click();
+    });
+
+    customModelFileInput.addEventListener('change', () => {
+        if (customModelFileInput.files.length > 0) {
+            customModelFileName.textContent = customModelFileInput.files[0].name;
+        } else {
+            customModelFileName.textContent = 'No file chosen';
+        }
+    });
 
     const contextModal = document.getElementById('contextModal');
     const closeContextModalBtn = document.getElementById('closeContextModal');
@@ -1068,7 +1088,7 @@
 
         try {
             const responseData = await callYourLLM(message);
-            addMessageToChat(responseData.response, 'ai', true, responseData.timeTaken);
+            addMessageToChat(responseData.response, 'ai', true, responseData.timeTaken, responseData.model);
             if (speakEnabled) {
                 speak(responseData.response);
             }
@@ -1080,7 +1100,7 @@
         }
     }
 
-    function addMessageToChat(message, sender, save = true, timeTaken = null) {
+    function addMessageToChat(message, sender, save = true, timeTaken = null, modelName = null) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
 
@@ -1094,12 +1114,21 @@
         buttonContainer.style.gap = '5px'; /* Adjust gap as needed */
         buttonContainer.style.marginTop = '5px'; /* Space between message content and buttons */
 
-        if (sender === 'ai' && timeTaken !== null) {
-            const timeBtn = document.createElement('button');
-            timeBtn.className = 'message-info-btn';
-            timeBtn.textContent = `${timeTaken.toFixed(2)}s`;
-            timeBtn.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
-            buttonContainer.appendChild(timeBtn);
+        if (sender === 'ai') {
+            if (timeTaken !== null) {
+                const timeBtn = document.createElement('button');
+                timeBtn.className = 'message-info-btn';
+                timeBtn.textContent = `${timeTaken.toFixed(2)}s`;
+                timeBtn.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
+                buttonContainer.appendChild(timeBtn);
+            }
+            if (modelName !== null) {
+                const modelBtn = document.createElement('button');
+                modelBtn.className = 'message-info-btn';
+                modelBtn.textContent = modelName;
+                modelBtn.title = `Model: ${modelName}`;
+                buttonContainer.appendChild(modelBtn);
+            }
         }
 
         const timestampBtn = document.createElement('button');
@@ -1113,7 +1142,7 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
         if (save) {
-            chatHistory.push({ message, sender, timestamp: new Date().toISOString(), timeTaken: timeTaken });
+            chatHistory.push({ message, sender, timestamp: new Date().toISOString(), timeTaken: timeTaken, model: modelName });
             localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
         }
     }
@@ -1139,18 +1168,19 @@
         }
 
         const data = await response.json();
+
+        // Fetch current model name
+        const modelResponse = await fetch('http://127.0.0.1:5000/api/current_model');
+        const modelData = await modelResponse.json();
+        const currentModel = modelData.current_model;
+
         const endTime = performance.now();
         const timeTaken = (endTime - startTime) / 1000; // in seconds
-        return { response: data.response, timeTaken: timeTaken };
+        return { response: data.response, timeTaken: timeTaken, model: currentModel };
     }
 
     // --- Speech Recognition and Synthesis ---
     function listen() {
-        if (isListening && !conversationModeEnabled) {
-            recognition.stop();
-            return;
-        }
-
         try {
             recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'en-US';
@@ -1167,15 +1197,7 @@
             };
 
             recognition.onspeechend = () => {
-                if (conversationModeEnabled) {
-                    // If in conversation mode, restart listening after a short delay
-                    setStatus('idle'); // Briefly show idle before restarting listen
-                    setTimeout(() => {
-                        if (conversationModeEnabled) { // Check again in case mode was toggled off
-                            listen();
-                        }
-                    }, 500); 
-                } else {
+                if (!conversationModeEnabled) {
                     setStatus('idle');
                 }
             };
@@ -1217,16 +1239,27 @@
 
             const audioBlob = await response.blob();
             const audioUrl = URL.createObjectURL(audioBlob);
-            const audio = new Audio(audioUrl);
-            audio.play();
+            currentAudio = new Audio(audioUrl); // Assign to global variable
+            currentAudio.play();
 
             return new Promise(resolve => {
-                audio.onended = resolve;
+                currentAudio.onended = () => {
+                    currentAudio = null; // Clear when finished
+                    resolve();
+                };
             });
 
         } catch (error) {
             console.error("Error speaking text:", error);
             showModal(`Error playing audio: ${error.message}`, () => {}, true);
+        }
+    }
+
+    function muteSpeech() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0; // Reset playback to start
+            currentAudio = null; // Clear the reference
         }
     }
 
@@ -1589,6 +1622,9 @@
                 setStatus('idle');
             }
         });
+
+        const muteButton = document.getElementById('muteButton');
+        muteButton.addEventListener('click', muteSpeech);
 
         closeContextModalBtn.addEventListener('click', () => {
             contextModal.style.display = 'none';

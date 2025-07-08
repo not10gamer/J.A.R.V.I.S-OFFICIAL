@@ -1,5 +1,5 @@
 import json
-import webbrowser
+import os
 
 import GPUtil
 import PyPDF2
@@ -13,7 +13,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
 import vars
-import os
 
 # import decoder # Removed as web UI handles settings
 
@@ -28,6 +27,7 @@ current_context = ""
 CHAT_HISTORY_FILE = 'chat_history.json'
 chat_history_backend = []
 
+
 def load_chat_history_from_file():
     global chat_history_backend
     if os.path.exists(CHAT_HISTORY_FILE):
@@ -39,9 +39,11 @@ def load_chat_history_from_file():
     else:
         chat_history_backend = []
 
+
 def save_chat_history_to_file():
     with open(CHAT_HISTORY_FILE, 'w') as f:
         json.dump(chat_history_backend, f, indent=2)
+
 
 # Load history on startup
 load_chat_history_from_file()
@@ -53,8 +55,13 @@ if hasattr(vars, 'ELEVENLABS_API_KEY') and vars.ELEVENLABS_API_KEY:
 else:
     print("Warning: ELEVENLABS_API_KEY not found in vars.py. Voice output will not work.")
 
-current_model_name = vars.JARVIS_MODEL
-model = OllamaLLM(model=current_model_name)
+current_model_name = "Unknown Model"
+for name, model_info in vars.MODELS.items():
+    if isinstance(model_info, str) and model_info == vars.JARVIS_MODEL:
+        current_model_name = name
+        break
+
+model = OllamaLLM(model=vars.JARVIS_MODEL)
 prompt_template = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt_template | model
 
@@ -64,16 +71,22 @@ def update_llm_chain(new_model_name):
     current_model_name = new_model_name
     model = OllamaLLM(model=new_model_name)
     chain = prompt_template | model
+
+
 # --- API Endpoints ---
 @app.route('/')
 def serve_index():
     return send_from_directory('.', 'index.html')
 
 
-
 @app.route('/img/<path:filename>')
 def serve_img(filename):
     return send_from_directory('img', filename)
+
+
+@app.route('/api/current_model')
+def get_current_model():
+    return jsonify({'current_model': current_model_name})
 
 
 @app.route('/api/models')
@@ -89,7 +102,9 @@ def set_model():
         new_model_key = data.get('model_key')
         all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
         if new_model_key and new_model_key in all_models:
-            update_llm_chain(all_models[new_model_key]["prompt"] if isinstance(all_models[new_model_key], dict) else all_models[new_model_key])
+            update_llm_chain(
+                all_models[new_model_key]["prompt"] if isinstance(all_models[new_model_key], dict) else all_models[
+                    new_model_key])
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
@@ -115,6 +130,7 @@ def save_custom_jarvis():
         print(f"Error saving custom JARVIS: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
+
 @app.route('/api/delete_custom_jarvis', methods=['POST'])
 def delete_custom_jarvis():
     try:
@@ -129,6 +145,7 @@ def delete_custom_jarvis():
     except Exception as e:
         print(f"Error deleting custom JARVIS: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
+
 
 @app.route('/api/summarize_file', methods=['POST'])
 def summarize_file():
@@ -153,8 +170,10 @@ def summarize_file():
         print(f"Error summarizing file: {e}")
         return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
 
+
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
+
 
 def _extract_text_from_pdf(file):
     reader = PyPDF2.PdfReader(file)
@@ -163,9 +182,11 @@ def _extract_text_from_pdf(file):
         text += page.extract_text() + "\n"
     return text
 
+
 def _extract_text_from_image(file):
     img = Image.open(file)
     return pytesseract.image_to_string(img)
+
 
 FILE_HANDLERS = {
     'txt': _extract_text_from_text,
@@ -181,6 +202,7 @@ FILE_HANDLERS = {
     'gif': _extract_text_from_image,
     'bmp': _extract_text_from_image,
 }
+
 
 @app.route('/api/load_context', methods=['POST'])
 def load_context():
@@ -199,7 +221,8 @@ def load_context():
             chat_history_backend.clear()
             chat_history_backend.extend(chat_history_data)
             save_chat_history_to_file()
-            return jsonify({'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
+            return jsonify(
+                {'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
         except Exception as e:
             print(f"Error loading chat history: {e}")
             return jsonify({'success': False, 'error': f'Error processing JSON file: {e}'}), 500
@@ -340,7 +363,8 @@ def speak_text():
             return jsonify({'error': 'No text provided for speech synthesis.'}), 400
 
         if elevenlabs_client:
-            audio_stream = elevenlabs_client.text_to_speech.stream(text=text, voice_id="pNInz6obpgDQGXGNn6iq",
+            audio_stream = elevenlabs_client.text_to_speech.stream(text=text,
+                                                                   voice_id="6xPz2opT0y5qtoRh1U1Y",
                                                                    model_id="eleven_multilingual_v2")
         else:
             return jsonify({'error': 'ElevenLabs client not initialized. API key might be missing.'}), 500
@@ -382,6 +406,7 @@ def system_stats():
             'gpu': 0,
             'error': 'Could not retrieve system stats.'
         })
+
 
 @app.route('/api/shutdown', methods=['POST'])
 def shutdown():
