@@ -673,24 +673,24 @@
             transform: translateY(-2px); /* Adjusted transform */
         }
 
-        #modelSelect {
+        #modelSelect, #baseModelSelect {
             width: calc(100% - 20px); /* Adjusted for padding */
             margin-top: 8px; /* Reduced margin */
             margin-bottom: 8px; /* Reduced margin */
-            background: rgba(255, 255, 255, 0.08); /* Adjusted opacity */
-            border: 1px solid rgba(255, 255, 255, 0.15); /* Adjusted opacity */
+            background: var(--input-bg); /* Use theme variable */
+            border: 1px solid var(--input-border); /* Use theme variable */
             border-radius: 6px; /* Reduced border-radius */
-            color: white;
-            padding: 8px; /* Reduced padding */
+            color: var(--text-color); /* Use theme variable */
+            padding: 8px;
             font-family: 'Orbitron', monospace;
-            font-size: 12px; /* Reduced font size */
+            font-size: 12px;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E");
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E"); /* Use currentColor for fill */
             background-repeat: no-repeat;
-            background-position: right 8px center; /* Adjusted position */
-            background-size: 0.9em; /* Reduced size */
+            background-position: right 8px center;
+            background-size: 0.9em;
         }
 
         #setModelBtn {
@@ -891,6 +891,8 @@
         <div class="customization-section">
             <h3>Prompt</h3>
             <textarea id="customJarvisPrompt" class="input-field" rows="6" placeholder="Enter the custom prompt for your JARVIS..."></textarea>
+            <button class="btn" id="optimizePromptBtn" style="margin-top: 10px;">Optimize Prompt</button>
+            <div class="loading-spinner" id="optimizeSpinner" style="display: none;"></div>
         </div>
         <div class="customization-section">
             <h3>File for Context</h3>
@@ -972,6 +974,8 @@
     const customJarvisPrompt = document.getElementById('customJarvisPrompt');
     const summarizeFileBtn = document.getElementById('summarizeFileBtn');
     const summarizeSpinner = document.getElementById('summarizeSpinner');
+    const optimizePromptBtn = document.getElementById('optimizePromptBtn');
+    const optimizeSpinner = document.getElementById('optimizeSpinner');
 
     // --- State Management ---
     function setStatus(status) {
@@ -1579,6 +1583,39 @@
         }
     }
 
+    async function optimizePrompt() {
+        const originalPrompt = customJarvisPrompt.value.trim();
+        if (!originalPrompt) {
+            showModal("Please enter a prompt to optimize.", () => {}, true);
+            return;
+        }
+
+        optimizeSpinner.style.display = 'block';
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/optimize_prompt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: originalPrompt })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                customJarvisPrompt.value = data.optimized_prompt;
+                showModal("Prompt optimized successfully!", () => {}, true);
+            } else {
+                showModal(`Failed to optimize prompt: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error optimizing prompt:", error);
+            showModal("Error communicating with the server to optimize the prompt.", () => {}, true);
+        } finally {
+            optimizeSpinner.style.display = 'none';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const loadingScreen = document.getElementById('loadingScreen');
         loadingScreen.classList.add('hidden');
@@ -1766,6 +1803,7 @@
         saveCustomJarvisBtn.addEventListener('click', saveCustomJarvis);
 
         summarizeFileBtn.addEventListener('click', summarizeFile);
+        optimizePromptBtn.addEventListener('click', optimizePrompt);
 
         chatHistoryInput.addEventListener('change', async () => {
             if (chatHistoryInput.files.length === 0) {

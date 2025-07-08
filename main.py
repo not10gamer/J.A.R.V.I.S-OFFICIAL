@@ -376,6 +376,26 @@ def speak_text():
         return jsonify({'error': f'ElevenLabs API error: {e}'}), 500
 
 
+@app.route('/api/optimize_prompt', methods=['POST'])
+def optimize_prompt():
+    try:
+        data = request.json
+        prompt_to_optimize = data.get('prompt')
+
+        if not prompt_to_optimize:
+            return jsonify({'success': False, 'error': 'No prompt provided for optimization.'}), 400
+
+        optimize_template = ChatPromptTemplate.from_template(vars.OPTIMIZE_PROMPT_TEMPLATE)
+        optimize_chain = optimize_template | model
+        optimized_prompt = optimize_chain.invoke({"prompt": prompt_to_optimize})
+
+        return jsonify({'success': True, 'optimized_prompt': optimized_prompt})
+
+    except Exception as e:
+        print(f"Error optimizing prompt: {e}")
+        return jsonify({'success': False, 'error': 'Internal server error during prompt optimization.'}), 500
+
+
 @app.route('/api/system_stats')
 def system_stats():
     try:
