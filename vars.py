@@ -32,6 +32,8 @@ MODELS = {
     "J.A.R.V.I.S - Unhinged": "llama2-uncensored",
 }
 
+CUSTOM_MODELS = {}
+
 TEMPLATE = """
 You are Jarvis, a helpful and informative AI assistant. Your primary goal is to provide concise and direct answers.
 

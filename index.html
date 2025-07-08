@@ -30,17 +30,17 @@
             border: 8px solid rgba(255, 255, 255, 0.1);
             border-top: 8px solid #00d4ff; /* Accent color */
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px; /* Reduced */
+            height: 50px; /* Reduced */
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced */
         }
 
         .loading-text {
             color: #e0e0e0;
             font-family: 'Orbitron', monospace;
-            font-size: 20px;
-            text-shadow: 0 0 5px #00d4ff;
+            font-size: 18px; /* Reduced */
+            text-shadow: 0 0 4px #00d4ff; /* Reduced */
         }
 
         @keyframes spin {
@@ -48,7 +48,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        @.venv\Lib\site-packages\langchain_core\__pycache__\_import_utils.cpython-312.pyc url('https://fonts.googleapis.com/css2?family=Orbitron:wght @400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
         * {
             margin: 0;
@@ -157,40 +157,46 @@
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
             color: var(--text-color);
             height: 100vh;
-            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .container {
             display: flex;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
+            max-width: 1800px; /* A sensible max-width */
             background: var(--chat-bg);
+            padding: 15px;
+            gap: 15px;
+            border-radius: 15px;
         }
 
         .sidebar {
-            width: 320px; /* Slightly wider for better spacing */
+            width: 18vw;
+            max-width: 250px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-
-            /* Floating and Curved Edge Styles */
+            padding: 15px;
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            margin: 20px; /* Adds space to create the "floating" effect */
-            border-radius: 20px; /* Curves all corners */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Full border instead of just on the right */
-            height: calc(100vh - 40px); /* Adjusts height to account for top/bottom margins */
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* Reduced margin */
         }
 
         .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
+            width: 40px; /* Reduced size */
+            height: 40px; /* Reduced size */
+            margin-right: 10px; /* Reduced margin */
             animation: pulse 2s infinite;
         }
         
@@ -200,14 +206,14 @@
         }
 
         @keyframes pulse {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
-            50% { filter: drop-shadow(0 0 20px rgba(155, 89, 182, 0.8)); }
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5)); } /* Adjusted shadow */
+            50% { filter: drop-shadow(0 0 16px rgba(155, 89, 182, 0.8)); } /* Adjusted shadow */
         }
 
         .title {
-            font-size: 28px;
+            font-size: 24px; /* Reduced font size */
             font-weight: 900;
-            letter-spacing: 3px;
+            letter-spacing: 2px; /* Reduced letter spacing */
             background: linear-gradient(45deg, var(--main-title-color), #9b59b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -217,10 +223,10 @@
         .system-stats-horizontal {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
-            padding: 10px;
+            margin-bottom: 15px; /* Reduced margin */
+            padding: 8px; /* Reduced padding */
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 8px; /* Reduced border-radius */
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
         }
@@ -228,54 +234,32 @@
         .system-stats-horizontal .stat {
             flex: 1;
             text-align: center;
-            margin: 0 5px;
+            margin: 0 4px; /* Reduced margin */
         }
 
         .system-stats-horizontal .stat-label {
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .system-stats-horizontal {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .system-stats-horizontal .stat {
-            flex: 1;
-            text-align: center;
-            margin: 0 5px;
-        }
-
-        .system-stats-horizontal .stat-label {
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 11px; /* Reduced font size */
+            margin-bottom: 4px; /* Reduced margin */
         }
 
         .chart-container {
-            height: 60px;
+            height: 50px; /* Reduced height */
         }
 
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 8px; /* Reduced gap */
+            margin-bottom: 15px; /* Reduced margin */
         }
 
         .btn {
-            padding: 12px;
+            padding: 10px; /* Reduced padding */
             border: none;
-            border-radius: 8px;
+            border-radius: 6px; /* Reduced border-radius */
             font-family: 'Orbitron', monospace;
             font-weight: 700;
-            font-size: 12px;
+            font-size: 11px; /* Reduced font size */
             letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -285,12 +269,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px; /* Reduced gap */
         }
 
         .btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px; /* Reduced size */
+            height: 18px; /* Reduced size */
         }
 
         .btn::before {
@@ -337,23 +321,23 @@
         }
 
         .status-text {
-            font-size: 18px;
+            font-size: 16px; /* Reduced font size */
             font-weight: 700;
             color: #00d4ff;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            margin-bottom: 10px; /* Reduced margin */
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.5); /* Adjusted shadow */
         }
 
         .status-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 15px;
+            width: 100px; /* Reduced size */
+            height: 100px; /* Reduced size */
+            margin: 0 auto 10px; /* Reduced margin */
             transition: transform 0.3s ease;
         }
 
         .btn-customize, .btn-reset {
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Reduced margin */
         }
 
         .btn-customize {
@@ -370,38 +354,34 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-
-            /* Floating and Curved Edge Styles */
+            padding: 15px;
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            margin: 20px 20px 20px 0; /* Matches sidebar margins (T, R, B, L) */
-            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            height: calc(100vh - 40px);
         }
 
         .main-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced margin */
         }
 
         .main-title {
-            font-size: 24px;
+            font-size: 20px; /* Reduced font size */
             font-weight: 700;
             color: #00d4ff;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.5); /* Adjusted shadow */
         }
 
         .chat-container {
             flex: 1;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            border-radius: 12px; /* Reduced border-radius */
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px; /* Reduced padding */
+            margin-bottom: 15px; /* Reduced margin */
             overflow-y: auto;
             backdrop-filter: blur(10px);
             display: flex;
@@ -409,9 +389,9 @@
         }
 
         .chat-message {
-            margin-bottom: 2px;
-            padding: 2px 5px;
-            border-radius: 5px;
+            margin-bottom: 1px; /* Reduced margin */
+            padding: 1px 4px; /* Reduced padding */
+            border-radius: 4px; /* Reduced border-radius */
             max-width: 85%;
             width: fit-content;
             word-wrap: break-word;
@@ -421,13 +401,13 @@
         }
         
         .chat-message .timestamp {
-            font-size: 10px;
+            font-size: 9px; /* Reduced font size */
             color: rgba(255, 255, 255, 0.7);
-            margin-top: 8px;
+            margin-top: 6px; /* Reduced margin */
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); } /* Adjusted transform */
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -448,10 +428,10 @@
             background-color: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.7);
             border: none;
-            border-radius: 5px;
-            padding: 3px 8px;
-            font-size: 10px;
-            margin-top: 5px; /* Space between message content and button */
+            border-radius: 4px; /* Reduced border-radius */
+            padding: 2px 6px; /* Reduced padding */
+            font-size: 9px; /* Reduced font size */
+            margin-top: 4px; /* Reduced margin */
             cursor: help;
             align-self: flex-end; /* Align to the right within the AI message */
         }
@@ -468,22 +448,22 @@
 
         #thinking-animation {
             position: absolute;
-            bottom: 100px; /* Adjust as needed */
+            bottom: 80px; /* Adjusted position */
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
         }
 
         #thinking-animation img {
-            width: 100px; /* Adjust as needed */
-            height: 100px; /* Adjust as needed */
+            width: 80px; /* Reduced size */
+            height: 80px; /* Reduced size */
         }
 
         .input-container {
             display: flex;
-            gap: 18px;
-            padding: 4px; /* Padding to create space for the border */
-            border-radius: 18px; /* Slightly larger to be circular */
+            gap: 15px; /* Reduced gap */
+            padding: 3px; /* Reduced padding */
+            border-radius: 15px; /* Reduced border-radius */
             position: relative;
             background: transparent;
             z-index: 0;
@@ -519,12 +499,12 @@
             content: '';
             position: absolute;
             z-index: -1;
-            left: 2px; /* Border thickness */
-            top: 2px; /* Border thickness */
-            width: calc(100% - 4px);
-            height: calc(100% - 4px);
+            left: 1.5px; /* Reduced border thickness */
+            top: 1.5px; /* Reduced border thickness */
+            width: calc(100% - 3px); /* Adjusted width */
+            height: calc(100% - 3px); /* Adjusted height */
             background: var(--input-bg);
-            border-radius: 16px; /* Slightly smaller than container */
+            border-radius: 13px; /* Reduced border-radius */
             backdrop-filter: blur(10px);
         }
 
@@ -539,10 +519,10 @@
             border: none;
             color: white;
             font-family: 'Orbitron', monospace;
-            font-size: 18px; /* Slightly smaller font */
-            padding: 14px; /* Slightly smaller padding */
+            font-size: 16px; /* Reduced font size */
+            padding: 12px; /* Reduced padding */
             outline: none;
-            z-index: 1; /* Ensure input field is above the background */
+            z-index: 1;
         }
 
         .input-field::placeholder {
@@ -550,10 +530,10 @@
         }
 
         .input-container .btn, .send-btn {
-            padding: 14px 28px; /* Slightly smaller padding */
-            font-size: 14px; /* Slightly smaller font */
-            border-radius: 14px; /* Slightly smaller radius */
-            z-index: 1; /* Ensure buttons are above the background */
+            padding: 12px 24px; /* Reduced padding */
+            font-size: 12px; /* Reduced font size */
+            border-radius: 12px; /* Reduced border-radius */
+            z-index: 1;
         }
 
         .send-btn {
@@ -568,21 +548,21 @@
 
         .send-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4); /* Adjusted shadow */
         }
 
         .scrollbar-custom::-webkit-scrollbar {
-            width: 8px;
+            width: 6px; /* Reduced width */
         }
 
         .scrollbar-custom::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08); /* Adjusted opacity */
+            border-radius: 3px; /* Reduced border-radius */
         }
 
         .scrollbar-custom::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #00d4ff, #9b59b6);
-            border-radius: 4px;
+            border-radius: 3px; /* Reduced border-radius */
         }
 
         /* Modal Styles */
@@ -593,8 +573,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6); /* Adjusted opacity */
+            backdrop-filter: blur(4px); /* Reduced blur */
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -603,25 +583,25 @@
 
         .modal-content {
             background: linear-gradient(135deg, #1e1e2e, #2a2a3e);
-            padding: 30px;
-            border-radius: 15px;
+            padding: 25px; /* Reduced padding */
+            border-radius: 12px; /* Reduced border-radius */
             border: 1px solid #4a4a6a;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* Adjusted shadow */
             width: 90%;
-            max-width: 400px;
+            max-width: 350px; /* Reduced max-width */
         }
 
         .modal-content p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            line-height: 1.5;
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 14px; /* Reduced font size */
+            line-height: 1.4; /* Adjusted line height */
         }
 
         .modal-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 10px; /* Reduced gap */
         }
         
         #modalConfirm {
@@ -636,13 +616,13 @@
 
         /* Customization Modal Styles */
         #customizeModal .modal-content {
-            max-width: 500px;
+            max-width: 450px; /* Reduced max-width */
         }
 
         .customization-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px; /* Reduced margin */
+            padding-bottom: 15px; /* Reduced padding */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Adjusted opacity */
         }
 
         .customization-section:last-child {
@@ -652,21 +632,21 @@
         }
 
         .customization-section h3 {
-            font-size: 18px;
+            font-size: 16px; /* Reduced font size */
             color: #00d4ff;
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Reduced margin */
         }
 
         .theme-options {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px; /* Reduced gap */
         }
 
         .theme-btn {
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
+            padding: 8px 12px; /* Reduced padding */
+            border-radius: 4px; /* Reduced border-radius */
+            font-size: 12px; /* Reduced font size */
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -689,28 +669,28 @@
         }
 
         .theme-btn.active {
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.7);
-            transform: translateY(-3px);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.7); /* Adjusted shadow */
+            transform: translateY(-2px); /* Adjusted transform */
         }
 
         #modelSelect {
-            width: calc(100% - 24px); /* Adjust for padding */
-            margin-top: 10px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            width: calc(100% - 20px); /* Adjusted for padding */
+            margin-top: 8px; /* Reduced margin */
+            margin-bottom: 8px; /* Reduced margin */
+            background: rgba(255, 255, 255, 0.08); /* Adjusted opacity */
+            border: 1px solid rgba(255, 255, 255, 0.15); /* Adjusted opacity */
+            border-radius: 6px; /* Reduced border-radius */
             color: white;
-            padding: 10px;
+            padding: 8px; /* Reduced padding */
             font-family: 'Orbitron', monospace;
-            font-size: 14px;
+            font-size: 12px; /* Reduced font size */
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E');
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 1em;
+            background-position: right 8px center; /* Adjusted position */
+            background-size: 0.9em; /* Reduced size */
         }
 
         #setModelBtn {
@@ -885,9 +865,29 @@
             <h3>LLM Model</h3>
             <select id="modelSelect" class="input-field"></select>
             <button class="btn" id="setModelBtn">Set Model</button>
+            <button class="btn" id="createCustomJarvisBtn">Create Custom</button>
         </div>
         <div class="modal-buttons">
             <button class="btn" id="closeCustomizeModal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom JARVIS Modal -->
+<div class="modal-container" id="customJarvisModal">
+    <div class="modal-content">
+        <h2>Create Custom JARVIS</h2>
+        <div class="customization-section">
+            <h3>Name</h3>
+            <input type="text" id="customJarvisName" class="input-field" placeholder="Enter a name for your JARVIS">
+        </div>
+        <div class="customization-section">
+            <h3>Prompt</h3>
+            <textarea id="customJarvisPrompt" class="input-field" rows="6" placeholder="Enter the custom prompt for your JARVIS..."></textarea>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="saveCustomJarvisBtn">Save</button>
+            <button class="btn" id="closeCustomJarvisModal">Cancel</button>
         </div>
     </div>
 </div>
@@ -927,6 +927,12 @@
     const summarizeChatBtn = document.getElementById('summarizeChatBtn');
 
     const inputContainer = document.getElementById('inputContainer');
+    const createCustomJarvisBtn = document.getElementById('createCustomJarvisBtn');
+    const customJarvisModal = document.getElementById('customJarvisModal');
+    const closeCustomJarvisModalBtn = document.getElementById('closeCustomJarvisModal');
+    const saveCustomJarvisBtn = document.getElementById('saveCustomJarvisBtn');
+    const customJarvisName = document.getElementById('customJarvisName');
+    const customJarvisPrompt = document.getElementById('customJarvisPrompt');
 
     // --- State Management ---
     function setStatus(status) {
@@ -1319,7 +1325,7 @@
         cancelBtn.addEventListener('click', cancelHandler);
     }
 
-    // --- Initialization ---
+    // --- Initialization --
     async function loadChatHistory() {
         try {
             const response = await fetch('http://127.0.0.1:5000/api/get_chat_history');
@@ -1394,6 +1400,38 @@
             setTheme(savedTheme);
         } else {
             setTheme('dark'); // Default theme
+        }
+    }
+
+    async function saveCustomJarvis() {
+        const name = customJarvisName.value.trim();
+        const prompt = customJarvisPrompt.value.trim();
+
+        if (!name || !prompt) {
+            showModal("Please enter both a name and a prompt for your custom JARVIS.", () => {}, true);
+            return;
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/save_custom_jarvis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, prompt })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showModal(`Custom JARVIS "${name}" saved successfully.`, () => {}, true);
+                customJarvisModal.style.display = 'none';
+                loadModels(); // Reload models to include the new one
+            } else {
+                showModal(`Failed to save custom JARVIS: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error saving custom JARVIS:", error);
+            showModal("Error communicating with the server to save the custom JARVIS.", () => {}, true);
         }
     }
 
@@ -1566,6 +1604,16 @@
                 showModal("Error communicating with the server to set the LLM model.", () => {}, true);
             }
         });
+
+        createCustomJarvisBtn.addEventListener('click', () => {
+            customJarvisModal.style.display = 'flex';
+        });
+
+        closeCustomJarvisModalBtn.addEventListener('click', () => {
+            customJarvisModal.style.display = 'none';
+        });
+
+        saveCustomJarvisBtn.addEventListener('click', saveCustomJarvis);
 
         chatHistoryInput.addEventListener('change', async () => {
             if (chatHistoryInput.files.length === 0) {

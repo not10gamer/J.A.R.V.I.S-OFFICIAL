@@ -78,7 +78,8 @@ def serve_img(filename):
 
 @app.route('/api/models')
 def get_models():
-    return jsonify(vars.MODELS)
+    all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
+    return jsonify(all_models)
 
 
 @app.route('/api/set_model', methods=['POST'])
@@ -86,10 +87,9 @@ def set_model():
     try:
         data = request.json
         new_model_key = data.get('model_key')
-        if new_model_key and new_model_key in vars.MODELS:
-            update_llm_chain(vars.MODELS[new_model_key])
-            if new_model_key and new_model_key in vars.MODELS:
-                update_llm_chain(vars.MODELS[new_model_key])
+        all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
+        if new_model_key and new_model_key in all_models:
+            update_llm_chain(all_models[new_model_key])
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
@@ -97,6 +97,21 @@ def set_model():
         print(f"Error setting model: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
+
+@app.route('/api/save_custom_jarvis', methods=['POST'])
+def save_custom_jarvis():
+    try:
+        data = request.json
+        name = data.get('name')
+        prompt = data.get('prompt')
+        if not name or not prompt:
+            return jsonify({'success': False, 'error': 'Name and prompt are required.'}), 400
+
+        vars.CUSTOM_MODELS[name] = prompt
+        return jsonify({'success': True, 'message': f'Custom JARVIS "{name}" saved successfully.'})
+    except Exception as e:
+        print(f"Error saving custom JARVIS: {e}")
+        return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
