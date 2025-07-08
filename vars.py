@@ -14,6 +14,7 @@ unhinged   (3.8 GB) --- In the WORKS
 Pick the model that you prefer and replace the JARVIS_MODEL variable with your preferred model
 """
 import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,7 +33,23 @@ MODELS = {
     "J.A.R.V.I.S - Unhinged": "llama2-uncensored",
 }
 
-CUSTOM_MODELS = {}
+# Load custom models from file
+CUSTOM_MODELS_FILE = 'custom_models.json'
+
+def load_custom_models():
+    if os.path.exists(CUSTOM_MODELS_FILE):
+        try:
+            with open(CUSTOM_MODELS_FILE, 'r') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+def save_custom_models(models):
+    with open(CUSTOM_MODELS_FILE, 'w') as f:
+        json.dump(models, f, indent=2)
+
+CUSTOM_MODELS = load_custom_models()
 
 TEMPLATE = """
 You are Jarvis, a helpful and informative AI assistant. Your primary goal is to provide concise and direct answers.

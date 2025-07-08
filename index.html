@@ -708,6 +708,7 @@
     </div>
     <input type="file" id="contextFileInput" style="display: none;">
     <input type="file" id="chatHistoryInput" accept=".json" style="display: none;">
+    <input type="file" id="customModelFileInput" style="display: none;">
 <div class="container">
     <div class="sidebar">
         <div class="header">
@@ -866,6 +867,8 @@
             <select id="modelSelect" class="input-field"></select>
             <button class="btn" id="setModelBtn">Set Model</button>
             <button class="btn" id="createCustomJarvisBtn">Create Custom</button>
+            <button class="btn" id="editCustomJarvisBtn" style="display: none;">Edit</button>
+            <button class="btn" id="deleteCustomJarvisBtn" style="display: none;">Delete</button>
         </div>
         <div class="modal-buttons">
             <button class="btn" id="closeCustomizeModal">Close</button>
@@ -876,14 +879,24 @@
 <!-- Custom JARVIS Modal -->
 <div class="modal-container" id="customJarvisModal">
     <div class="modal-content">
-        <h2>Create Custom JARVIS</h2>
+        <h2 id="customJarvisModalTitle">Create Custom JARVIS</h2>
         <div class="customization-section">
             <h3>Name</h3>
             <input type="text" id="customJarvisName" class="input-field" placeholder="Enter a name for your JARVIS">
         </div>
         <div class="customization-section">
+            <h3>Base Model</h3>
+            <select id="baseModelSelect" class="input-field"></select>
+        </div>
+        <div class="customization-section">
             <h3>Prompt</h3>
             <textarea id="customJarvisPrompt" class="input-field" rows="6" placeholder="Enter the custom prompt for your JARVIS..."></textarea>
+        </div>
+        <div class="customization-section">
+            <h3>File for Context</h3>
+            <input type="file" id="customModelFileInput" class="input-field">
+            <button class="btn" id="summarizeFileBtn">Summarize & Add to Prompt</button>
+            <div class="loading-spinner" id="summarizeSpinner" style="display: none;"></div>
         </div>
         <div class="modal-buttons">
             <button class="btn" id="saveCustomJarvisBtn">Save</button>
@@ -899,6 +912,7 @@
     let recognition;
     let speakEnabled = false;
     let conversationModeEnabled = false;
+    let allModels = {};
 
     // --- DOM Elements ---
     const statusText = document.getElementById('statusText');
@@ -914,6 +928,7 @@
     const setModelBtn = document.getElementById('setModelBtn');
     const contextFileInput = document.getElementById('contextFileInput');
     const chatHistoryInput = document.getElementById('chatHistoryInput');
+    const customModelFileInput = document.getElementById('customModelFileInput');
 
     const contextModal = document.getElementById('contextModal');
     const closeContextModalBtn = document.getElementById('closeContextModal');
@@ -928,11 +943,17 @@
 
     const inputContainer = document.getElementById('inputContainer');
     const createCustomJarvisBtn = document.getElementById('createCustomJarvisBtn');
+    const editCustomJarvisBtn = document.getElementById('editCustomJarvisBtn');
+    const deleteCustomJarvisBtn = document.getElementById('deleteCustomJarvisBtn');
     const customJarvisModal = document.getElementById('customJarvisModal');
+    const customJarvisModalTitle = document.getElementById('customJarvisModalTitle');
     const closeCustomJarvisModalBtn = document.getElementById('closeCustomJarvisModal');
     const saveCustomJarvisBtn = document.getElementById('saveCustomJarvisBtn');
     const customJarvisName = document.getElementById('customJarvisName');
+    const baseModelSelect = document.getElementById('baseModelSelect');
     const customJarvisPrompt = document.getElementById('customJarvisPrompt');
+    const summarizeFileBtn = document.getElementById('summarizeFileBtn');
+    const summarizeSpinner = document.getElementById('summarizeSpinner');
 
     // --- State Management ---
     function setStatus(status) {
@@ -1269,9 +1290,20 @@
     }
 
     function resetSystem() {
-        showModal('Are you sure you want to reset the system? This will clear the chat and reload the application.', () => {
-            localStorage.removeItem('jarvisChatHistory');
-            location.reload();
+        showModal('Are you sure you want to reset the system? This will clear the chat and reload the application.', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.removeItem('jarvisChatHistory');
+                    location.reload();
+                } else {
+                    showModal(`Failed to reset the system: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error resetting the system:", error);
+                showModal("An error occurred while communicating with the server.", () => {}, true);
+            }
         });
     }
 
@@ -1325,7 +1357,7 @@
         cancelBtn.addEventListener('click', cancelHandler);
     }
 
-    // --- Initialization --
+    // --- Initialization ---
     async function loadChatHistory() {
         try {
             const response = await fetch('http://127.0.0.1:5000/api/get_chat_history');
@@ -1363,21 +1395,45 @@
                 showModal("Failed to load LLM models from the server.", () => {}, true);
                 return;
             }
-            const models = await response.json();
+            allModels = await response.json();
             modelSelect.innerHTML = '';
-            for (const key in models) {
+            baseModelSelect.innerHTML = '';
+
+            for (const key in allModels) {
                 const option = document.createElement('option');
                 option.value = key;
                 option.textContent = key;
                 modelSelect.appendChild(option);
+
+                if (typeof allModels[key] === 'string') { // Only base models can be used as a base
+                    const baseOption = document.createElement('option');
+                    baseOption.value = key;
+                    baseOption.textContent = key;
+                    baseModelSelect.appendChild(baseOption);
+                }
             }
+
             const savedModel = localStorage.getItem('jarvisLLMModel');
             if (savedModel) {
                 modelSelect.value = savedModel;
             }
+            handleModelSelection();
         } catch (error) {
             console.error("Error loading LLM models:", error);
             showModal("Error fetching LLM models from the server.", () => {}, true);
+        }
+    }
+
+    function handleModelSelection() {
+        const selectedModelName = modelSelect.value;
+        const model = allModels[selectedModelName];
+
+        if (typeof model === 'object') { // It's a custom model
+            editCustomJarvisBtn.style.display = 'inline-flex';
+            deleteCustomJarvisBtn.style.display = 'inline-flex';
+        } else { // It's a base model
+            editCustomJarvisBtn.style.display = 'none';
+            deleteCustomJarvisBtn.style.display = 'none';
         }
     }
 
@@ -1406,9 +1462,10 @@
     async function saveCustomJarvis() {
         const name = customJarvisName.value.trim();
         const prompt = customJarvisPrompt.value.trim();
+        const base_model = baseModelSelect.value;
 
-        if (!name || !prompt) {
-            showModal("Please enter both a name and a prompt for your custom JARVIS.", () => {}, true);
+        if (!name || !prompt || !base_model) {
+            showModal("Please enter a name, prompt, and select a base model for your custom JARVIS.", () => {}, true);
             return;
         }
 
@@ -1418,7 +1475,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, prompt })
+                body: JSON.stringify({ name, prompt, base_model })
             });
 
             const data = await response.json();
@@ -1432,6 +1489,64 @@
         } catch (error) {
             console.error("Error saving custom JARVIS:", error);
             showModal("Error communicating with the server to save the custom JARVIS.", () => {}, true);
+        }
+    }
+
+    async function deleteCustomJarvis() {
+        const selectedModelName = modelSelect.value;
+        showModal(`Are you sure you want to delete the custom JARVIS "${selectedModelName}"?`, async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/delete_custom_jarvis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: selectedModelName })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showModal(`Custom JARVIS "${selectedModelName}" deleted successfully.`, () => {}, true);
+                    loadModels(); // Reload models to remove the deleted one
+                } else {
+                    showModal(`Failed to delete custom JARVIS: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error deleting custom JARVIS:", error);
+                showModal("Error communicating with the server to delete the custom JARVIS.", () => {}, true);
+            }
+        });
+    }
+
+    async function summarizeFile() {
+        const file = customModelFileInput.files[0];
+        if (!file) {
+            showModal("Please select a file to summarize.", () => {}, true);
+            return;
+        }
+
+        summarizeSpinner.style.display = 'block';
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/summarize_file', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                customJarvisPrompt.value += `\n\n--- Summary of ${file.name} ---\n${data.summary}`;
+            } else {
+                showModal(`Failed to summarize file: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error summarizing file:", error);
+            showModal("Error communicating with the server to summarize the file.", () => {}, true);
+        } finally {
+            summarizeSpinner.style.display = 'none';
         }
     }
 
@@ -1451,6 +1566,8 @@
 
         loadModels();
         loadTheme();
+
+        modelSelect.addEventListener('change', handleModelSelection);
 
         speakToggle.addEventListener('click', () => {
             speakEnabled = !speakEnabled;
@@ -1606,14 +1723,32 @@
         });
 
         createCustomJarvisBtn.addEventListener('click', () => {
+            customJarvisModalTitle.textContent = 'Create Custom JARVIS';
+            customJarvisName.value = '';
+            customJarvisPrompt.value = '';
             customJarvisModal.style.display = 'flex';
         });
+
+        editCustomJarvisBtn.addEventListener('click', () => {
+            const selectedModelName = modelSelect.value;
+            const model = allModels[selectedModelName];
+
+            customJarvisModalTitle.textContent = 'Edit Custom JARVIS';
+            customJarvisName.value = selectedModelName;
+            customJarvisPrompt.value = model.prompt;
+            baseModelSelect.value = model.base_model;
+            customJarvisModal.style.display = 'flex';
+        });
+
+        deleteCustomJarvisBtn.addEventListener('click', deleteCustomJarvis);
 
         closeCustomJarvisModalBtn.addEventListener('click', () => {
             customJarvisModal.style.display = 'none';
         });
 
         saveCustomJarvisBtn.addEventListener('click', saveCustomJarvis);
+
+        summarizeFileBtn.addEventListener('click', summarizeFile);
 
         chatHistoryInput.addEventListener('change', async () => {
             if (chatHistoryInput.files.length === 0) {

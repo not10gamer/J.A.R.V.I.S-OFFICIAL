@@ -89,7 +89,7 @@ def set_model():
         new_model_key = data.get('model_key')
         all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
         if new_model_key and new_model_key in all_models:
-            update_llm_chain(all_models[new_model_key])
+            update_llm_chain(all_models[new_model_key]["prompt"] if isinstance(all_models[new_model_key], dict) else all_models[new_model_key])
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
@@ -104,14 +104,54 @@ def save_custom_jarvis():
         data = request.json
         name = data.get('name')
         prompt = data.get('prompt')
-        if not name or not prompt:
-            return jsonify({'success': False, 'error': 'Name and prompt are required.'}), 400
+        base_model = data.get('base_model')
+        if not name or not prompt or not base_model:
+            return jsonify({'success': False, 'error': 'Name, prompt, and base model are required.'}), 400
 
-        vars.CUSTOM_MODELS[name] = prompt
+        vars.CUSTOM_MODELS[name] = {"prompt": prompt, "base_model": base_model}
+        vars.save_custom_models(vars.CUSTOM_MODELS)
         return jsonify({'success': True, 'message': f'Custom JARVIS "{name}" saved successfully.'})
     except Exception as e:
         print(f"Error saving custom JARVIS: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
+
+@app.route('/api/delete_custom_jarvis', methods=['POST'])
+def delete_custom_jarvis():
+    try:
+        data = request.json
+        name = data.get('name')
+        if not name or name not in vars.CUSTOM_MODELS:
+            return jsonify({'success': False, 'error': 'Invalid custom model name.'}), 400
+
+        del vars.CUSTOM_MODELS[name]
+        vars.save_custom_models(vars.CUSTOM_MODELS)
+        return jsonify({'success': True, 'message': f'Custom JARVIS "{name}" deleted successfully.'})
+    except Exception as e:
+        print(f"Error deleting custom JARVIS: {e}")
+        return jsonify({'success': False, 'error': 'Internal server error'}), 500
+
+@app.route('/api/summarize_file', methods=['POST'])
+def summarize_file():
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'No selected file'}), 400
+
+    file_extension = file.filename.split('.')[-1].lower()
+    handler = FILE_HANDLERS.get(file_extension)
+    if not handler:
+        return jsonify({'success': False, 'error': 'Unsupported file type'}), 400
+
+    try:
+        extracted_text = handler(file)
+        summarize_prompt = ChatPromptTemplate.from_template(vars.SUMMARIZE_TEMPLATE)
+        summarize_chain = summarize_prompt | model
+        summary = summarize_chain.invoke({"context": extracted_text})
+        return jsonify({'success': True, 'summary': summary})
+    except Exception as e:
+        print(f"Error summarizing file: {e}")
+        return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
 
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
