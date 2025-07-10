@@ -5,12 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Jarvis 4 Final changes">
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/CODE_OF_CONDUCT.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/CONTRIBUTING.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/HowToUse.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/SECURITY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/chat_history.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/custom_models.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/vars.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chat_history.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/basic.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/basic.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/idle.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/idle.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/img_install.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/img_install.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/listening.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/listening.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/logo.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/thinking.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/thinking.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/waitlist.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Beta (Ignore)/img/waitlist.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/vars.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,8 +86,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Main\JARVIS-v.3.0+\img" />
       <recent name="C:\Main\JARVIS-v.3.0+" />
+      <recent name="C:\Main\JARVIS-v.3.0+\Beta" />
+      <recent name="C:\Main\JARVIS-v.3.0+\img" />
     </key>
   </component>
   <component name="RunManager">
@@ -457,7 +475,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751989580498</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Jarvis 4 Final changes">
+      <option name="closed" value="true" />
+      <created>1752060274331</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1752060274331</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="UnknownFeatures">

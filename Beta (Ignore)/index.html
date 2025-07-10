@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>J.A.R.V.I.S</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a; /* Match your darkest background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-top: 8px solid #00d4ff; /* Accent color */
+            border-radius: 50%;
+            width: 50px; /* Reduced */
+            height: 50px; /* Reduced */
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px; /* Reduced */
+        }
+
+        .loading-text {
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            font-size: 18px; /* Reduced */
+            text-shadow: 0 0 4px #00d4ff; /* Reduced */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient-start: #0a0a0a;
+            --bg-gradient-mid: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --text-color: #ffffff;
+            --sidebar-bg-gradient-start: #1e1e2e;
+            --sidebar-bg-gradient-end: #2a2a3e;
+            --sidebar-border-color: #4a4a6a;
+            --chat-bg: rgba(0, 0, 0, 0.3);
+            --chat-border: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --input-placeholder-color: rgba(255, 255, 255, 0.5);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.1);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00d4ff, #9b59b6);
+            --modal-bg-gradient-start: #1e1e2e;
+            --modal-bg-gradient-end: #2a2a3e;
+            --modal-border: #4a4a6a;
+            --main-title-color: #00d4ff;
+            --main-title-shadow: rgba(0, 212, 255, 0.5);
+            --status-text-color: #00d4ff;
+            --status-text-shadow: rgba(0, 212, 255, 0.5);
+        }
+
+        body.light {
+            --bg-gradient-start: #ffffff;
+            --bg-gradient-mid: #ffffff;
+            --bg-gradient-end: #ffffff;
+            --text-color: #000000;
+            --sidebar-bg-gradient-start: #ffffff;
+            --sidebar-bg-gradient-end: #ffffff;
+            --sidebar-border-color: #cccccc;
+            --chat-bg: rgba(255, 255, 255, 0.9);
+            --chat-border: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --input-border: rgba(0, 0, 0, 0.1);
+            --input-placeholder-color: rgba(0, 0, 0, 0.5);
+            --scrollbar-track-bg: rgba(0, 0, 0, 0.1);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #007bff, #0056b3);
+            --modal-bg-gradient-start: #ffffff;
+            --modal-bg-gradient-end: #ffffff;
+            --modal-border: #cccccc;
+            --main-title-color: #007bff;
+            --main-title-shadow: rgba(0, 123, 255, 0.3);
+            --status-text-color: #007bff;
+            --status-text-shadow: rgba(0, 123, 255, 0.3);
+        }
+
+        body.blue {
+            --bg-gradient-start: #0000ff;
+            --bg-gradient-mid: #0000ff;
+            --bg-gradient-end: #0000ff;
+            --text-color: #ffffff;
+            --sidebar-bg-gradient-start: #0000ff;
+            --sidebar-bg-gradient-end: #0000ff;
+            --sidebar-border-color: #5a6a8a;
+            --chat-bg: rgba(0, 0, 255, 0.7);
+            --chat-border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-placeholder-color: rgba(255, 255, 255, 0.6);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.15);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00aaff, #0077cc);
+            --modal-bg-gradient-start: #0000ff;
+            --modal-bg-gradient-end: #0000ff;
+            --modal-border: #5a6a8a;
+            --main-title-color: #00aaff;
+            --main-title-shadow: rgba(0, 170, 255, 0.4);
+            --status-text-color: #00aaff;
+            --status-text-shadow: rgba(0, 170, 255, 0.4);
+        }
+
+        body.green {
+            --bg-gradient-start: #1a3a1a;
+            --bg-gradient-mid: #2a4a2a;
+            --bg-gradient-end: #3a5a3a;
+            --text-color: #e0e0e0;
+            --sidebar-bg-gradient-start: #2a4a2a;
+            --sidebar-bg-gradient-end: #3a5a3a;
+            --sidebar-border-color: #5a8a5a;
+            --chat-bg: rgba(42, 74, 42, 0.7);
+            --chat-border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(255, 255, 255, 0.2);
+            --input-placeholder-color: rgba(255, 255, 255, 0.6);
+            --scrollbar-track-bg: rgba(255, 255, 255, 0.15);
+            --scrollbar-thumb-bg: linear-gradient(135deg, #00cc00, #009900);
+            --modal-bg-gradient-start: #2a4a2a;
+            --modal-bg-gradient-end: #3a5a3a;
+            --modal-border: #5a8a5a;
+            --main-title-color: #00cc00;
+            --main-title-shadow: rgba(0, 204, 0, 0.4);
+            --status-text-color: #00cc00;
+            --status-text-shadow: rgba(0, 204, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            max-width: 1800px; /* A sensible max-width */
+            background: var(--chat-bg);
+            padding: 15px;
+            gap: 15px;
+            border-radius: 15px;
+        }
+
+        .sidebar {
+            width: 18vw;
+            max-width: 250px;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px; /* Reduced margin */
+        }
+
+        .logo {
+            width: 40px; /* Reduced size */
+            height: 40px; /* Reduced size */
+            margin-right: 10px; /* Reduced margin */
+            animation: pulse 2s infinite;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5)); } /* Adjusted shadow */
+            50% { filter: drop-shadow(0 0 16px rgba(155, 89, 182, 0.8)); } /* Adjusted shadow */
+        }
+
+        .title {
+            font-size: 24px; /* Reduced font size */
+            font-weight: 900;
+            letter-spacing: 2px; /* Reduced letter spacing */
+            background: linear-gradient(45deg, var(--main-title-color), #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .system-stats-horizontal {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px; /* Reduced margin */
+            padding: 8px; /* Reduced padding */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; /* Reduced border-radius */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .system-stats-horizontal .stat {
+            flex: 1;
+            text-align: center;
+            margin: 0 4px; /* Reduced margin */
+        }
+
+        .system-stats-horizontal .stat-label {
+            font-size: 11px; /* Reduced font size */
+            margin-bottom: 4px; /* Reduced margin */
+        }
+
+        .chart-container {
+            height: 50px; /* Reduced height */
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px; /* Reduced gap */
+            margin-bottom: 15px; /* Reduced margin */
+        }
+
+        .btn {
+            padding: 10px; /* Reduced padding */
+            border: none;
+            border-radius: 6px; /* Reduced border-radius */
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 11px; /* Reduced font size */
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px; /* Reduced gap */
+        }
+
+        .btn svg {
+            width: 18px; /* Reduced size */
+            height: 18px; /* Reduced size */
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-listen {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-context {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-small {
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            color: white;
+        }
+
+        .btn-exit {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .status {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .status-text {
+            font-size: 16px; /* Reduced font size */
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px; /* Reduced margin */
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.5); /* Adjusted shadow */
+        }
+
+        .status-icon {
+            width: 100px; /* Reduced size */
+            height: 100px; /* Reduced size */
+            margin: 0 auto 10px; /* Reduced margin */
+            transition: transform 0.3s ease;
+        }
+
+        .btn-customize, .btn-reset {
+            width: 100%;
+            margin-bottom: 8px; /* Reduced margin */
+        }
+
+        .btn-customize {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px; /* Reduced margin */
+        }
+
+        .main-title {
+            font-size: 20px; /* Reduced font size */
+            font-weight: 700;
+            color: #00d4ff;
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.5); /* Adjusted shadow */
+        }
+
+        .chat-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px; /* Reduced border-radius */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px; /* Reduced padding */
+            margin-bottom: 15px; /* Reduced margin */
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message {
+            margin-bottom: 1px; /* Reduced margin */
+            padding: 1px 4px; /* Reduced padding */
+            border-radius: 4px; /* Reduced border-radius */
+            max-width: 85%;
+            width: fit-content;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message .timestamp {
+            font-size: 9px; /* Reduced font size */
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 6px; /* Reduced margin */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); } /* Adjusted transform */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            margin-left: auto;
+            align-items: flex-end;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            align-items: flex-start;
+        }
+
+        .message-info-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 4px; /* Reduced border-radius */
+            padding: 2px 6px; /* Reduced padding */
+            font-size: 9px; /* Reduced font size */
+            margin-top: 4px; /* Reduced margin */
+            cursor: help;
+            align-self: flex-end; /* Align to the right within the AI message */
+        }
+
+        .user-message .message-info-btn {
+            align-self: flex-end;
+        }
+
+        .ai-message .message-info-btn {
+            align-self: flex-start;
+        }
+
+
+
+        #thinking-animation {
+            position: absolute;
+            bottom: 80px; /* Adjusted position */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        #thinking-animation img {
+            width: 80px; /* Reduced size */
+            height: 80px; /* Reduced size */
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px; /* Reduced gap */
+            padding: 3px; /* Reduced padding */
+            border-radius: 15px; /* Reduced border-radius */
+            position: relative;
+            background: transparent;
+            z-index: 0;
+            overflow: hidden;
+            align-items: center;
+        }
+
+        .input-container::before { /* The rotating gradient */
+            content: '';
+            position: absolute;
+            z-index: -2;
+            left: -50%;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            background-repeat: no-repeat;
+            background-image: conic-gradient(
+                hsl(0, 80%, 70%), hsl(30, 80%, 70%), hsl(60, 80%, 70%),
+                hsl(90, 80%, 70%), hsl(120, 80%, 70%), hsl(150, 80%, 70%),
+                hsl(180, 80%, 70%), hsl(210, 80%, 70%), hsl(240, 80%, 70%),
+                hsl(270, 80%, 70%), hsl(300, 80%, 70%), hsl(330, 80%, 70%),
+                hsl(0, 80%, 70%)
+            );
+            animation: rotate 4s linear infinite;
+            display: none; /* Hide by default */
+        }
+
+        .input-container.thinking::before {
+            display: block; /* Show when thinking */
+        }
+
+        .input-container::after { /* The inner background color */
+            content: '';
+            position: absolute;
+            z-index: -1;
+            left: 1.5px; /* Reduced border thickness */
+            top: 1.5px; /* Reduced border thickness */
+            width: calc(100% - 3px); /* Adjusted width */
+            height: calc(100% - 3px); /* Adjusted height */
+            background: var(--input-bg);
+            border-radius: 13px; /* Reduced border-radius */
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .input-field {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px; /* Reduced font size */
+            padding: 12px; /* Reduced padding */
+            outline: none;
+            z-index: 1;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-container .btn, .send-btn {
+            padding: 12px 24px; /* Reduced padding */
+            font-size: 12px; /* Reduced font size */
+            border-radius: 12px; /* Reduced border-radius */
+            z-index: 1;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #00d4ff, #9b59b6);
+            color: white;
+            border: none;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4); /* Adjusted shadow */
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 6px; /* Reduced width */
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.08); /* Adjusted opacity */
+            border-radius: 3px; /* Reduced border-radius */
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4ff, #9b59b6);
+            border-radius: 3px; /* Reduced border-radius */
+        }
+
+        /* Modal Styles */
+        .modal-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Adjusted opacity */
+            backdrop-filter: blur(4px); /* Reduced blur */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e1e2e, #2a2a3e);
+            padding: 25px; /* Reduced padding */
+            border-radius: 12px; /* Reduced border-radius */
+            border: 1px solid #4a4a6a;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* Adjusted shadow */
+            width: 90%;
+            max-width: 350px; /* Reduced max-width */
+        }
+
+        .modal-content p {
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 14px; /* Reduced font size */
+            line-height: 1.4; /* Adjusted line height */
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Reduced gap */
+        }
+
+        #modalConfirm {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        #modalCancel {
+            background: linear-gradient(135deg, #6366f1, #4338ca);
+            color: white;
+        }
+
+        /* Customization Modal Styles */
+        #customizeModal .modal-content {
+            max-width: 450px; /* Reduced max-width */
+        }
+
+        .customization-section {
+            margin-bottom: 15px; /* Reduced margin */
+            padding-bottom: 15px; /* Reduced padding */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* Adjusted opacity */
+        }
+
+        .customization-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .customization-section h3 {
+            font-size: 16px; /* Reduced font size */
+            color: #00d4ff;
+            margin-bottom: 10px; /* Reduced margin */
+        }
+
+        .theme-options {
+            display: flex;
+            justify-content: center;
+            gap: 8px; /* Reduced gap */
+        }
+
+        .theme-btn {
+            padding: 8px 12px; /* Reduced padding */
+            border-radius: 4px; /* Reduced border-radius */
+            font-size: 12px; /* Reduced font size */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn[data-theme="dark"] {
+            background: #1a1a2e;
+            color: #ffffff;
+            border: 1px solid #4a4a6a;
+        }
+
+        .theme-btn[data-theme="light"] {
+            background: #e0e0e0;
+            color: #1a1a2e;
+            border: 1px solid #cccccc;
+        }
+
+        .theme-btn[data-theme="blue"] {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+        }
+
+        .theme-btn.active {
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.7); /* Adjusted shadow */
+            transform: translateY(-2px); /* Adjusted transform */
+        }
+
+        #modelSelect, #baseModelSelect {
+            width: calc(100% - 20px); /* Adjusted for padding */
+            margin-top: 8px; /* Reduced margin */
+            margin-bottom: 8px; /* Reduced margin */
+            background: var(--input-bg); /* Use theme variable */
+            border: 1px solid var(--input-border); /* Use theme variable */
+            border-radius: 6px; /* Reduced border-radius */
+            color: var(--text-color); /* Use theme variable */
+            padding: 8px;
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M208%2096L128%20176%2048%2096z%22%2F%3E%3C%2Fsvg%3E"); /* Use currentColor for fill */
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 0.9em;
+        }
+
+        #setModelBtn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading J.A.R.V.I.S...</div>
+    </div>
+    <input type="file" id="contextFileInput" style="display: none;">
+    <input type="file" id="chatHistoryInput" accept=".json" style="display: none;">
+    <input type="file" id="customModelFileInput" style="display: none;">
+<div class="container">
+    <div class="sidebar">
+        <div class="header">
+            <div class="logo">
+                <img alt="J.A.R.V.I.S Logo" src="img/logo.svg">
+            </div>
+            <div class="title">J.A.R.V.I.S</div>
+        </div>
+
+
+
+        <div class="controls">
+            <button class="btn btn-context" onclick="openContext()" title="Open Context Menu">CONTEXT</button>
+            <button class="btn btn-small" onclick="addContext()" title="Add Context File">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </button>
+            <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat History">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="btn btn-small" onclick="saveChat()" title="Save Chat History">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <button class="btn btn-small" onclick="loadChat()" title="Load Chat History">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+            </button>
+            <button class="btn btn-exit" onclick="exitApp()" title="Exit Application">EXIT</button>
+        </div>
+
+        <div class="status">
+            <div class="status-text" id="statusText">Idle</div>
+            <img alt="Status" class="status-icon" id="statusIcon" src="img/idle.svg">
+            <button class="btn btn-customize" onclick="customize()" title="Customize Theme and Model">CUSTOMIZE</button>
+            <button class="btn btn-reset" onclick="resetSystem()" title="Reset Application">RESET</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="system-stats-horizontal">
+            <div class="stat">
+                <div class="stat-label">CPU <span id="cpu-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">RAM <span id="ram-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="ramChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">GPU <span id="gpu-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="gpuChart"></canvas>
+                </div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">DISK <span id="disk-percent"></span></div>
+                <div class="chart-container">
+                    <canvas id="diskChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-header">
+            <div class="main-title">Conversation</div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" id="speakToggle" title="Toggle Text-to-Speech">SPEAK</button>
+                <button class="btn" id="muteButton" title="Mute Speech">MUTE</button>
+            </div>
+        </div>
+        <div class="chat-container scrollbar-custom" id="chatContainer">
+            <!-- Chat messages will be loaded here -->
+        </div>
+
+        <div id="thinking-animation" style="display: none;">
+            <img src="/img/thinking.svg" alt="Thinking...">
+        </div>
+
+        <div class="input-container" id="inputContainer">
+            <input class="input-field" id="messageInput" onkeypress="handleKeyPress(event)" placeholder="Ask J.A.R.V.I.S anything..."
+                   type="text" title="Type your message here">
+            <button class="btn btn-listen" id="listenButton" onclick="listen()" title="Start Listening">LISTEN</button>
+            <button class="send-btn" onclick="sendMessage()" title="Send Message">SEND</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-container" id="infoModal">
+    <div class="modal-content">
+        <p id="modalText"></p>
+        <div class="modal-buttons">
+            <button class="btn" id="modalConfirm">Confirm</button>
+            <button class="btn" id="modalCancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Context Modal -->
+<div class="modal-container" id="contextModal">
+    <div class="modal-content" style="max-width: 600px; text-align: left;">
+        <h2>Context Management</h2>
+        <div class="customization-section">
+            <h3>Loaded File Context</h3>
+            <p id="contextFileDisplay" style="font-size: 14px; margin-bottom: 10px; word-wrap: break-word; max-height: 150px; overflow-y: auto;"></p>
+            <button class="btn" id="clearFileContextBtn" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white;">Clear File Context</button>
+        </div>
+        <div class="customization-section">
+            <h3>Typed Context</h3>
+            <textarea id="typedContextInput" class="input-field" rows="6" placeholder="Add any additional context here..." style="width: 100%; margin-bottom: 10px;"></textarea>
+            <button class="btn" id="saveTypedContextBtn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">Save Typed Context</button>
+            <button class="btn" id="clearTypedContextBtn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; margin-left: 10px;">Clear Typed Context</button>
+        </div>
+        <div class="customization-section">
+            <h3>Chat Summary</h3>
+            <p id="chatSummaryDisplay" style="font-size: 14px; word-wrap: break-word; max-height: 150px; overflow-y: auto;"></p>
+            <button class="btn" id="summarizeChatBtn" style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; margin-top: 10px;">Summarize</button>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="clearAllContextBtn" style="background: linear-gradient(135deg, #e53e3e, #9b2c2c); color: white;">Clear All Context</button>
+            <button class="btn" id="closeContextModal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Customization Modal -->
+<div class="modal-container" id="customizeModal">
+    <div class="modal-content">
+        <h2>Customization</h2>
+        <div class="customization-section">
+            <h3>Theme</h3>
+            <div class="theme-options">
+                <button class="btn theme-btn" data-theme="dark">Dark</button>
+                <button class="btn theme-btn" data-theme="light">Light</button>
+                <button class="btn theme-btn" data-theme="blue">Blue</button>
+                <button class="btn theme-btn" data-theme="green">Green</button>
+            </div>
+        </div>
+        <div class="customization-section">
+            <h3>LLM Model</h3>
+            <select id="modelSelect" class="input-field"></select>
+            <button class="btn" id="setModelBtn">Set Model</button>
+            <button class="btn" id="createCustomJarvisBtn">Create Custom</button>
+            <button class="btn" id="editCustomJarvisBtn" style="display: none;">Edit</button>
+            <button class="btn" id="deleteCustomJarvisBtn" style="display: none;">Delete</button>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="closeCustomizeModal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom JARVIS Modal -->
+<div class="modal-container" id="customJarvisModal">
+    <div class="modal-content">
+        <h2 id="customJarvisModalTitle">Create Custom JARVIS</h2>
+        <div class="customization-section">
+            <h3>Name</h3>
+            <input type="text" id="customJarvisName" class="input-field" placeholder="Enter a name for your JARVIS">
+        </div>
+        <div class="customization-section">
+            <h3>Base Model</h3>
+            <select id="baseModelSelect" class="input-field"></select>
+        </div>
+        <div class="customization-section">
+            <h3>Prompt</h3>
+            <textarea id="customJarvisPrompt" class="input-field" rows="6" placeholder="Enter the custom prompt for your JARVIS..."></textarea>
+            <button class="btn" id="optimizePromptBtn" style="margin-top: 10px;">Optimize Prompt</button>
+            <div class="loading-spinner" id="optimizeSpinner" style="display: none;"></div>
+        </div>
+        <div class="customization-section">
+            <h3>File for Context</h3>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn" id="chooseCustomModelFileBtn">Choose File</button>
+                <span id="customModelFileName" style="color: var(--text-color); font-size: 14px;">No file chosen</span>
+            </div>
+            <input type="file" id="customModelFileInput" style="display: none;">
+            <button class="btn" id="summarizeFileBtn" style="margin-top: 10px;">Summarize & Add to Prompt</button>
+            <div class="loading-spinner" id="summarizeSpinner" style="display: none;"></div>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn" id="saveCustomJarvisBtn">Save</button>
+            <button class="btn" id="closeCustomJarvisModal">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isListening = false;
+    let chatHistory = [];
+    let cpuChart, ramChart, gpuChart, diskChart;
+    let recognition;
+    let speakEnabled = false;
+    let allModels = {};
+    let currentAudio = null; // Global variable to hold the current audio object
+
+    // --- DOM Elements ---
+    const statusText = document.getElementById('statusText');
+    const statusIcon = document.getElementById('statusIcon');
+    const chatContainer = document.getElementById('chatContainer');
+    const messageInput = document.getElementById('messageInput');
+    const speakToggle = document.getElementById('speakToggle');
+    const conversationModeToggle = document.getElementById('conversationModeToggle');
+    const customizeModal = document.getElementById('customizeModal');
+    const closeCustomizeModalBtn = document.getElementById('closeCustomizeModal');
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const modelSelect = document.getElementById('modelSelect');
+    const setModelBtn = document.getElementById('setModelBtn');
+    const contextFileInput = document.getElementById('contextFileInput');
+    const chatHistoryInput = document.getElementById('chatHistoryInput');
+    const customModelFileInput = document.getElementById('customModelFileInput');
+    const chooseCustomModelFileBtn = document.getElementById('chooseCustomModelFileBtn');
+    const customModelFileName = document.getElementById('customModelFileName');
+
+    chooseCustomModelFileBtn.addEventListener('click', () => {
+        customModelFileInput.click();
+    });
+
+    customModelFileInput.addEventListener('change', () => {
+        if (customModelFileInput.files.length > 0) {
+            customModelFileName.textContent = customModelFileInput.files[0].name;
+        } else {
+            customModelFileName.textContent = 'No file chosen';
+        }
+    });
+
+    const contextModal = document.getElementById('contextModal');
+    const closeContextModalBtn = document.getElementById('closeContextModal');
+    const contextFileDisplay = document.getElementById('contextFileDisplay');
+    const typedContextInput = document.getElementById('typedContextInput');
+    const chatSummaryDisplay = document.getElementById('chatSummaryDisplay');
+    const saveTypedContextBtn = document.getElementById('saveTypedContextBtn');
+    const clearTypedContextBtn = document.getElementById('clearTypedContextBtn');
+    const clearFileContextBtn = document.getElementById('clearFileContextBtn');
+    const clearAllContextBtn = document.getElementById('clearAllContextBtn');
+    const summarizeChatBtn = document.getElementById('summarizeChatBtn');
+
+    const inputContainer = document.getElementById('inputContainer');
+    const createCustomJarvisBtn = document.getElementById('createCustomJarvisBtn');
+    const editCustomJarvisBtn = document.getElementById('editCustomJarvisBtn');
+    const deleteCustomJarvisBtn = document.getElementById('deleteCustomJarvisBtn');
+    const customJarvisModal = document.getElementById('customJarvisModal');
+    const customJarvisModalTitle = document.getElementById('customJarvisModalTitle');
+    const closeCustomJarvisModalBtn = document.getElementById('closeCustomJarvisModal');
+    const saveCustomJarvisBtn = document.getElementById('saveCustomJarvisBtn');
+    const customJarvisName = document.getElementById('customJarvisName');
+    const baseModelSelect = document.getElementById('baseModelSelect');
+    const customJarvisPrompt = document.getElementById('customJarvisPrompt');
+    const summarizeFileBtn = document.getElementById('summarizeFileBtn');
+    const summarizeSpinner = document.getElementById('summarizeSpinner');
+    const optimizePromptBtn = document.getElementById('optimizePromptBtn');
+    const optimizeSpinner = document.getElementById('optimizeSpinner');
+
+    // --- State Management ---
+    function setStatus(status) {
+        switch (status) {
+            case 'listening':
+                isListening = true;
+                statusText.textContent = 'Listening...';
+                statusIcon.src = 'img/listening.svg';
+                inputContainer.classList.remove('thinking');
+                break;
+            case 'thinking':
+                isListening = false;
+                statusText.textContent = 'Thinking...';
+                statusIcon.src = 'img/thinking.svg';
+                inputContainer.classList.add('thinking');
+                break;
+            case 'speaking':
+                isListening = false;
+                statusText.textContent = 'Speaking...';
+                statusIcon.src = 'img/thinking.svg';
+                inputContainer.classList.remove('thinking');
+                break;
+            case 'idle':
+            default:
+                isListening = false;
+                statusText.textContent = 'Idle';
+                statusIcon.src = 'img/idle.svg';
+                inputContainer.classList.remove('thinking');
+                break;
+        }
+    }
+
+    // --- System Stats ---
+    async function updateSystemStats() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/system_stats');
+            if (!response.ok) return;
+
+            const stats = await response.json();
+
+            if (stats.gpu_error) {
+                showModal(stats.gpu_error, () => {}, true);
+            }
+
+            updateChart(cpuChart, stats.cpu);
+            document.getElementById('cpu-percent').textContent = `${stats.cpu.toFixed(1)}%`;
+            updateChart(ramChart, stats.ram);
+            document.getElementById('ram-percent').textContent = `${stats.ram.toFixed(1)}%`;
+            updateChart(gpuChart, stats.gpu);
+            document.getElementById('gpu-percent').textContent = `${stats.gpu.toFixed(1)}%`;
+            updateChart(diskChart, stats.disk);
+            document.getElementById('disk-percent').textContent = `${stats.disk.toFixed(1)}%`;
+
+        } catch (error) {
+            console.error("Error fetching system stats:", error);
+        }
+    }
+
+    // --- Charting ---
+    function createChart(ctx, label, color) {
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    label: label,
+                    data: Array(20).fill(0),
+                    borderColor: color,
+                    backgroundColor: color + '33',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        display: false
+                    },
+                    x: {
+                        display: false
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    function updateChart(chart, value) {
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[0].data.push(value);
+        chart.update('none');
+    }
+
+    // --- Chat Functionality ---
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    async function sendMessage(messageOverride) {
+        const message = messageOverride || messageInput.value.trim();
+        if (!message) return;
+
+        addMessageToChat(message, 'user');
+        messageInput.value = '';
+        setStatus('thinking');
+
+        try {
+            const responseData = await callYourLLM(message);
+            addMessageToChat(responseData.response, 'ai', true, responseData.timeTaken, responseData.model);
+            if (speakEnabled) {
+                setStatus('speaking');
+                await speak(responseData.response);
+            }
+        } catch (error) {
+            console.error("LLM Error:", error);
+            addMessageToChat('Sorry, I encountered an error. Please try again.', 'ai');
+        } finally {
+            setStatus(isListening ? 'listening' : 'idle');
+        }
+    }
+
+    function addMessageToChat(message, sender, save = true, timeTaken = null, modelName = null) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
+
+        const messageContent = document.createElement('p');
+        messageContent.textContent = message;
+
+        messageDiv.appendChild(messageContent);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.display = 'flex';
+        buttonContainer.style.gap = '5px'; /* Adjust gap as needed */
+        buttonContainer.style.marginTop = '5px'; /* Space between message content and buttons */
+
+        if (sender === 'ai') {
+            if (timeTaken !== null) {
+                const timeBtn = document.createElement('button');
+                timeBtn.className = 'message-info-btn';
+                timeBtn.textContent = `${timeTaken.toFixed(2)}s`;
+                timeBtn.title = `Time taken: ${timeTaken.toFixed(2)} seconds`;
+                buttonContainer.appendChild(timeBtn);
+            }
+            if (modelName !== null) {
+                const modelBtn = document.createElement('button');
+                modelBtn.className = 'message-info-btn';
+                modelBtn.textContent = modelName;
+                modelBtn.title = `Model: ${modelName}`;
+                buttonContainer.appendChild(modelBtn);
+            }
+        }
+
+        const timestampBtn = document.createElement('button');
+        timestampBtn.className = 'message-info-btn';
+        timestampBtn.textContent = new Date().toLocaleTimeString();
+        buttonContainer.appendChild(timestampBtn);
+
+        messageDiv.appendChild(buttonContainer);
+
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        if (save) {
+            chatHistory.push({ message, sender, timestamp: new Date().toISOString(), timeTaken: timeTaken, model: modelName });
+            localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
+        }
+    }
+
+    // --- LLM Integration ---
+    async function callYourLLM(message) {
+        const startTime = performance.now();
+        const response = await fetch('http://127.0.0.1:5000/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                history: chatHistory
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server.' }));
+            console.error('API Error:', errorData);
+            throw new Error(errorData.error || 'An unknown network error occurred.');
+        }
+
+        const data = await response.json();
+
+        // Fetch current model name
+        const modelResponse = await fetch('http://127.0.0.1:5000/api/current_model');
+        const modelData = await modelResponse.json();
+        const currentModel = modelData.current_model;
+
+        const endTime = performance.now();
+        const timeTaken = (endTime - startTime) / 1000; // in seconds
+        return { response: data.response, timeTaken: timeTaken, model: currentModel };
+    }
+
+    // --- Speech Recognition and Synthesis ---
+    function listen() {
+        try {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = () => {
+                setStatus('listening');
+            };
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                sendMessage(speechResult);
+            };
+
+            recognition.onspeechend = () => {
+                setStatus('idle');
+            };
+
+            recognition.onerror = (event) => {
+                showModal(`Error occurred in recognition: ${event.error}`, () => {}, true);
+                setStatus('idle');
+            };
+
+            recognition.start();
+        } catch (e) {
+            showModal("Speech recognition is not supported by your browser. Please use Chrome or another supported browser.", () => {}, true);
+        }
+    }
+
+    async function speak(text) {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/speak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response from server.' }));
+                showModal(`ElevenLabs API Error: ${errorData.error || response.statusText}`, () => {}, true);
+                return;
+            }
+
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+            currentAudio = new Audio(audioUrl); // Assign to global variable
+            currentAudio.play();
+
+            return new Promise(resolve => {
+                currentAudio.onended = () => {
+                    currentAudio = null; // Clear when finished
+                    setStatus('idle');
+                    resolve();
+                };
+            });
+
+        } catch (error) {
+            console.error("Error speaking text:", error);
+            showModal(`Error playing audio: ${error.message}`, () => {}, true);
+        }
+    }
+
+    function muteSpeech() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0; // Reset playback to start
+            currentAudio = null; // Clear the reference
+        }
+    }
+
+    // --- Sidebar Controls ---
+    function openContext() {
+        contextModal.style.display = 'flex';
+        loadContextData();
+    }
+
+    async function loadContextData() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/context');
+            const data = await response.json();
+            contextFileDisplay.textContent = data.file_context || 'No file context loaded.';
+            typedContextInput.value = data.typed_context || '';
+            chatSummaryDisplay.textContent = data.chat_summary || 'Chat summary not yet available.';
+        } catch (error) {
+            console.error("Error loading context data:", error);
+            showModal("Failed to load context data from the server.", () => {}, true);
+        }
+    }
+
+    function deleteChat() {
+        showModal('Are you sure you want to permanently delete the chat history?', () => {
+            chatContainer.innerHTML = '';
+            chatHistory = [];
+            localStorage.removeItem('jarvisChatHistory');
+            addMessageToChat("Chat cleared. How can I assist you?", 'ai', true);
+        });
+    }
+
+    function saveChat() {
+        if (chatHistory.length === 0) {
+            showModal("There is no chat history to save.", () => {}, true);
+            return;
+        }
+        const dataStr = JSON.stringify(chatHistory, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileDefaultName = `jarvis_chat_${new Date().getTime()}.json`;
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+    }
+
+    function loadChat() {
+        console.log('loadChat called');
+        chatHistoryInput.click();
+    }
+
+    function addContext() {
+        console.log('addContext called');
+        contextFileInput.click();
+    }
+
+    function customize() {
+        customizeModal.style.display = 'flex';
+        loadModels();
+        loadTheme();
+    }
+
+    function resetSystem() {
+        showModal('Are you sure you want to reset the system? This will clear the chat and reload the application.', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    localStorage.removeItem('jarvisChatHistory');
+                    location.reload();
+                } else {
+                    showModal(`Failed to reset the system: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error resetting the system:", error);
+                showModal("An error occurred while communicating with the server.", () => {}, true);
+            }
+        });
+    }
+
+    function exitApp() {
+        showModal('Are you sure you want to exit J.A.R.V.I.S?', async () => {
+            try {
+                await fetch('http://127.0.0.1:5000/api/shutdown', { method: 'POST' });
+                window.close();
+            } catch (error) {
+                console.error("Error shutting down server:", error);
+                showModal("Could not shut down the server. Please close the console manually.", () => {}, true);
+            }
+        });
+    }
+
+    // --- Modal ---
+    function showModal(text, onConfirm, isAlert = false) {
+        const modal = document.getElementById('infoModal');
+        const modalText = document.getElementById('modalText');
+        const confirmBtn = document.getElementById('modalConfirm');
+        const cancelBtn = document.getElementById('modalCancel');
+
+        modalText.textContent = text;
+
+        if (isAlert) {
+            confirmBtn.style.display = 'none';
+            cancelBtn.textContent = 'Close';
+        } else {
+            confirmBtn.style.display = 'inline-flex';
+            cancelBtn.textContent = 'Cancel';
+        }
+
+        modal.style.display = 'flex';
+
+        const confirmHandler = () => {
+            onConfirm();
+            closeModal();
+        };
+
+        const cancelHandler = () => {
+            closeModal();
+        };
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            confirmBtn.removeEventListener('click', confirmHandler);
+            cancelBtn.removeEventListener('click', cancelHandler);
+        }
+
+        confirmBtn.addEventListener('click', confirmHandler);
+        cancelBtn.addEventListener('click', cancelHandler);
+    }
+
+    // --- Initialization ---
+    async function loadChatHistory() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/get_chat_history');
+            if (!response.ok) {
+                console.error('Failed to fetch chat history from backend.');
+                chatHistory = [];
+                addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
+                return;
+            }
+            const backendHistory = await response.json();
+
+            chatHistory = []; // Clear frontend history
+            chatContainer.innerHTML = ''; // Clear chat display
+
+            if (backendHistory.length > 0) {
+                backendHistory.forEach(item => {
+                    // Re-add messages to chat display, preserving timeTaken if available
+                    addMessageToChat(item.message, item.sender, false, item.timeTaken);
+                });
+                // Ensure frontend chatHistory is in sync with backend
+                chatHistory = backendHistory;
+            } else {
+                addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
+            }
+        } catch (error) {
+            console.error("Error loading chat history from backend:", error);
+            addMessageToChat("Hello! I'm J.A.R.V.I.S, your AI assistant. How can I help you today?", 'ai', false);
+        }
+    }
+
+    async function loadModels() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/models');
+            if (!response.ok) {
+                showModal("Failed to load LLM models from the server.", () => {}, true);
+                return;
+            }
+            allModels = await response.json();
+            modelSelect.innerHTML = '';
+            baseModelSelect.innerHTML = '';
+
+            for (const key in allModels) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                modelSelect.appendChild(option);
+
+                if (typeof allModels[key] === 'string') { // Only base models can be used as a base
+                    const baseOption = document.createElement('option');
+                    baseOption.value = key;
+                    baseOption.textContent = key;
+                    baseModelSelect.appendChild(baseOption);
+                }
+            }
+
+            const savedModel = localStorage.getItem('jarvisLLMModel');
+            if (savedModel) {
+                modelSelect.value = savedModel;
+            }
+            handleModelSelection();
+        } catch (error) {
+            console.error("Error loading LLM models:", error);
+            showModal("Error fetching LLM models from the server.", () => {}, true);
+        }
+    }
+
+    function handleModelSelection() {
+        const selectedModelName = modelSelect.value;
+        const model = allModels[selectedModelName];
+
+        if (typeof model === 'object') { // It's a custom model
+            editCustomJarvisBtn.style.display = 'inline-flex';
+            deleteCustomJarvisBtn.style.display = 'inline-flex';
+        } else { // It's a base model
+            editCustomJarvisBtn.style.display = 'none';
+            deleteCustomJarvisBtn.style.display = 'none';
+        }
+    }
+
+    function setTheme(theme) {
+        document.body.className = ''; // Clear existing themes
+        document.body.classList.add(theme);
+        localStorage.setItem('jarvisTheme', theme);
+        themeButtons.forEach(btn => {
+            if (btn.dataset.theme === theme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('jarvisTheme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme('dark'); // Default theme
+        }
+    }
+
+    async function saveCustomJarvis() {
+        const name = customJarvisName.value.trim();
+        const prompt = customJarvisPrompt.value.trim();
+        const base_model = baseModelSelect.value;
+
+        if (!name || !prompt || !base_model) {
+            showModal("Please enter a name, prompt, and select a base model for your custom JARVIS.", () => {}, true);
+            return;
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/save_custom_jarvis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, prompt, base_model })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showModal(`Custom JARVIS "${name}" saved successfully.`, () => {}, true);
+                customJarvisModal.style.display = 'none';
+                loadModels(); // Reload models to include the new one
+            } else {
+                showModal(`Failed to save custom JARVIS: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error saving custom JARVIS:", error);
+            showModal("Error communicating with the server to save the custom JARVIS.", () => {}, true);
+        }
+    }
+
+    async function deleteCustomJarvis() {
+        const selectedModelName = modelSelect.value;
+        showModal(`Are you sure you want to delete the custom JARVIS "${selectedModelName}"?`, async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/delete_custom_jarvis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: selectedModelName })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showModal(`Custom JARVIS "${selectedModelName}" deleted successfully.`, () => {}, true);
+                    loadModels(); // Reload models to remove the deleted one
+                } else {
+                    showModal(`Failed to delete custom JARVIS: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error deleting custom JARVIS:", error);
+                showModal("Error communicating with the server to delete the custom JARVIS.", () => {}, true);
+            }
+        });
+    }
+
+    async function summarizeFile() {
+        const file = customModelFileInput.files[0];
+        if (!file) {
+            showModal("Please select a file to summarize.", () => {}, true);
+            return;
+        }
+
+        summarizeSpinner.style.display = 'block';
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/summarize_file', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                customJarvisPrompt.value += `\n\n--- Summary of ${file.name} ---\n${data.summary}`;
+            } else {
+                showModal(`Failed to summarize file: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error summarizing file:", error);
+            showModal("Error communicating with the server to summarize the file.", () => {}, true);
+        } finally {
+            summarizeSpinner.style.display = 'none';
+        }
+    }
+
+    async function optimizePrompt() {
+        const originalPrompt = customJarvisPrompt.value.trim();
+        if (!originalPrompt) {
+            showModal("Please enter a prompt to optimize.", () => {}, true);
+            return;
+        }
+
+        optimizeSpinner.style.display = 'block';
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/optimize_prompt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: originalPrompt })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                customJarvisPrompt.value = data.optimized_prompt;
+                showModal("Prompt optimized successfully!", () => {}, true);
+            } else {
+                showModal(`Failed to optimize prompt: ${data.error}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error optimizing prompt:", error);
+            showModal("Error communicating with the server to optimize the prompt.", () => {}, true);
+        } finally {
+            optimizeSpinner.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.classList.add('hidden');
+
+        cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
+        ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');
+        gpuChart = createChart(document.getElementById('gpuChart').getContext('2d'), 'GPU', '#10b981');
+        diskChart = createChart(document.getElementById('diskChart').getContext('2d'), 'DISK', '#ff6384');
+
+        loadChatHistory();
+        setStatus('idle');
+        setInterval(updateSystemStats, 1000);
+        messageInput.focus();
+
+        loadModels();
+        loadTheme();
+
+        modelSelect.addEventListener('change', handleModelSelection);
+
+        speakToggle.addEventListener('click', () => {
+            speakEnabled = !speakEnabled;
+            speakToggle.style.backgroundColor = speakEnabled ? '#10b981' : '#6366f1';
+            speakToggle.textContent = speakEnabled ? 'SPEAKING' : 'SPEAK';
+        });
+
+        const muteButton = document.getElementById('muteButton');
+        muteButton.addEventListener('click', muteSpeech);
+
+        closeContextModalBtn.addEventListener('click', () => {
+            contextModal.style.display = 'none';
+        });
+
+        clearFileContextBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_file_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('File context cleared successfully.', () => {}, true);
+                    loadContextData(); // Refresh display
+                } else {
+                    showModal(`Failed to clear file context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error clearing file context:", error);
+                showModal("Error communicating with the server to clear file context.", () => {}, true);
+            }
+        });
+
+        saveTypedContextBtn.addEventListener('click', async () => {
+            const context = typedContextInput.value;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/save_typed_context', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ context: context })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('Typed context saved successfully.', () => {}, true);
+                } else {
+                    showModal(`Failed to save typed context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error saving typed context:", error);
+                showModal("Error communicating with the server to save typed context.", () => {}, true);
+            }
+        });
+
+        clearTypedContextBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/clear_typed_context', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showModal('Typed context cleared successfully.', () => {}, true);
+                    typedContextInput.value = ''; // Clear the textarea
+                } else {
+                    showModal(`Failed to clear typed context: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error clearing typed context:", error);
+                showModal("Error communicating with the server to clear typed context.", () => {}, true);
+            }
+        });
+
+        clearAllContextBtn.addEventListener('click', async () => {
+            showModal('Are you sure you want to clear all context? This action cannot be undone.', async () => {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/api/clear_all_context', { method: 'POST' });
+                    const data = await response.json();
+                    if (data.success) {
+                        showModal('All context has been cleared.', () => {}, true);
+                        loadContextData(); // Refresh the modal display
+                    } else {
+                        showModal(`Failed to clear all context: ${data.error}`, () => {}, true);
+                    }
+                } catch (error) {
+                    console.error("Error clearing all context:", error);
+                    showModal("An error occurred while communicating with the server.", () => {}, true);
+                }
+            });
+        });
+
+        summarizeChatBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/summarize_chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ history: chatHistory })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    chatSummaryDisplay.textContent = data.summary;
+                    showModal('Chat summary has been updated.', () => {}, true);
+                } else {
+                    showModal(`Failed to summarize chat: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error summarizing chat:", error);
+                showModal("An error occurred while communicating with the server.", () => {}, true);
+            }
+        });
+
+        closeCustomizeModalBtn.addEventListener('click', () => {
+            customizeModal.style.display = 'none';
+        });
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const theme = event.target.dataset.theme;
+                setTheme(theme);
+            });
+        });
+
+        setModelBtn.addEventListener('click', async () => {
+            const selectedModel = modelSelect.value;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/set_model', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ model_key: selectedModel })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showModal(`LLM model successfully set to ${selectedModel}.`, () => {}, true);
+                    localStorage.setItem('jarvisLLMModel', selectedModel);
+                } else {
+                    showModal(`Failed to set LLM model: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error setting LLM model:", error);
+                showModal("Error communicating with the server to set the LLM model.", () => {}, true);
+            }
+        });
+
+        createCustomJarvisBtn.addEventListener('click', () => {
+            customJarvisModalTitle.textContent = 'Create Custom JARVIS';
+            customJarvisName.value = '';
+            customJarvisPrompt.value = '';
+            customJarvisModal.style.display = 'flex';
+        });
+
+        editCustomJarvisBtn.addEventListener('click', () => {
+            const selectedModelName = modelSelect.value;
+            const model = allModels[selectedModelName];
+
+            customJarvisModalTitle.textContent = 'Edit Custom JARVIS';
+            customJarvisName.value = selectedModelName;
+            customJarvisPrompt.value = model.prompt;
+            baseModelSelect.value = model.base_model;
+            customJarvisModal.style.display = 'flex';
+        });
+
+        deleteCustomJarvisBtn.addEventListener('click', deleteCustomJarvis);
+
+        closeCustomJarvisModalBtn.addEventListener('click', () => {
+            customJarvisModal.style.display = 'none';
+        });
+
+        saveCustomJarvisBtn.addEventListener('click', saveCustomJarvis);
+
+        summarizeFileBtn.addEventListener('click', summarizeFile);
+        optimizePromptBtn.addEventListener('click', optimizePrompt);
+
+        chatHistoryInput.addEventListener('change', async () => {
+            if (chatHistoryInput.files.length === 0) {
+                return; // No file selected
+            }
+            const file = chatHistoryInput.files[0];
+            const formData = new FormData();
+            formData.append('context_file', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/load_context', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success && data.history) {
+                    chatHistory = data.history;
+                    localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
+                    loadChatHistory(); // Reload the chat display
+                    showModal(`Chat history loaded successfully from ${file.name}.`, () => {}, true);
+                } else {
+                    showModal(`Failed to load chat history: ${data.error || 'Invalid file format.'}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error loading chat history:", error);
+                showModal("Error communicating with the server to load the file.", () => {}, true);
+            }
+        });
+    });
+</script>
+    </body>
+</html>

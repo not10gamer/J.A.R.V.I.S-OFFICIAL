@@ -6,7 +6,7 @@ import PyPDF2
 import psutil
 import pytesseract
 from PIL import Image
-from elevenlabs import ElevenLabs
+from elevenlabs.client import ElevenLabs
 from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from langchain_core.prompts import ChatPromptTemplate

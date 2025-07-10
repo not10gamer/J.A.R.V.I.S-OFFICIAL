@@ -1,0 +1,15 @@
+Flask
+Flask-Cors
+langchain-ollama
+langchain-core
+elevenlabs
+GPUtil
+psutil
+PyPDF2
+Pillow
+pytesseract
+python-dotenv
+SQLAlchemy
+fastapi
+uvicorn
+pydantic-settings
