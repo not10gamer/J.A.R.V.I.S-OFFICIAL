@@ -1,0 +1,56 @@
+[
+  {
+    "sender": "user",
+    "message": "hi"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello, how can I assist you today?",
+    "timeTaken": 4.108412742614746
+  },
+  {
+    "sender": "user",
+    "message": "what can you do"
+  },
+  {
+    "sender": "ai",
+    "message": "I can provide information on a wide range of topics, answer questions, control smart home devices, set reminders and calendar events, play music and videos, and more.",
+    "timeTaken": 1.1249489784240723
+  },
+  {
+    "sender": "user",
+    "message": "hi"
+  },
+  {
+    "sender": "ai",
+    "message": "Hello, how can I assist you today?",
+    "timeTaken": 0.7569870948791504
+  },
+  {
+    "sender": "user",
+    "message": "what was out last conversation"
+  },
+  {
+    "sender": "ai",
+    "message": "Our last conversation started with your greeting of \"hi\" and an inquiry about my capabilities. You then asked what I could do, which I explained includes providing information, answering questions, controlling smart home devices, setting reminders, and more.",
+    "timeTaken": 1.438178300857544
+  },
+  {
+    "sender": "user",
+    "message": "ok"
+  },
+  {
+    "sender": "ai",
+    "message": "You can start again by asking a specific question or stating your needs.",
+    "timeTaken": 0.8489603996276855
+  },
+  {
+    "sender": "user",
+    "message": "can you write a 100 word essay on the edexcel grade 8 syllabus"
+  },
+  {
+    "sender": "ai",
+    "message": "Here is a 100-word essay on the EdExcel Grade 8 Syllabus:\n\nThe EdExcel Grade 8 Syllabus provides students with a comprehensive framework for learning various subjects, including English Language and Literature, Mathematics, Science, Humanities, and Arts. The syllabus emphasizes critical thinking, problem-solving, and communication skills, preparing students for A-Level studies or vocational training. It covers core topics in each subject area, with an emphasis on depth over breadth. By following this syllabus, students will develop a strong foundation in essential skills and knowledge, setting them up for success in their future academic and professional pursuits. The EdExcel Grade 8 Syllabus is designed to support student growth and development.",
+    "timeTaken": 4.053438186645508
+  }
+]

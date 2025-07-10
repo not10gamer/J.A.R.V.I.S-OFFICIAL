@@ -5,34 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Jarvis 4 Final changes">
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/CODE_OF_CONDUCT.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/CONTRIBUTING.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/HowToUse.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/SECURITY.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/chat_history.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/chat_history.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/custom_models.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/basic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/idle.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/img_install.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/listening.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/thinking.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/img/waitlist.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/main_fastapi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/vars.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Beta (Ignore)/web_search_tool.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat_history.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/vars.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +51,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.WSGI.executor&quot;: &quot;Run&quot;,
     &quot;Python.decoder.executor&quot;: &quot;Run&quot;,
     &quot;Python.gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -86,6 +63,7 @@
     &quot;com.codeium.enabled&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Main/JARVIS-v.3.0+/wsgi.py&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
 }</component>
@@ -96,7 +74,30 @@
       <recent name="C:\Main\JARVIS-v.3.0+\img" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.WSGI">
+    <configuration name="WSGI" type="PythonConfigurationType" factoryName="Python">
+      <module name="JARVIS-v.3.0+" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (JARVIS-v.3.0+)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wsgi.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="JARVIS-v.3.0+" />
       <option name="ENV_FILES" value="" />
@@ -119,6 +120,10 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.WSGI" />
+      <item itemvalue="Python.main" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -496,7 +501,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752125066601</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Jarvis 4 Final changes">
+      <option name="closed" value="true" />
+      <created>1752125107083</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1752125107083</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="UnknownFeatures">

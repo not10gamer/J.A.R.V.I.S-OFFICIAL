@@ -1,18 +1,16 @@
 import json
 import os
+import time
 
-import GPUtil
-import PyPDF2
+
 import psutil
-import pytesseract
-from PIL import Image
-from elevenlabs.client import ElevenLabs
 from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
 import vars
+from elevenlabs.client import ElevenLabs
 
 # import decoder # Removed as web UI handles settings
 
@@ -61,9 +59,17 @@ for name, model_info in vars.MODELS.items():
         current_model_name = name
         break
 
-model = OllamaLLM(model=vars.JARVIS_MODEL)
+model = OllamaLLM(model=vars.JARVIS_MODEL, base_url="http://192.168.1.4:11434")
 prompt_template = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt_template | model
+
+# Warm up the LLM model on startup
+print("Warming up LLM model...")
+try:
+    chain.invoke({"context": "", "question": "Hello"})
+    print("LLM model warmed up.")
+except Exception as e:
+    print(f"Error warming up LLM model: {e}")
 
 
 def update_llm_chain(new_model_name):
@@ -164,8 +170,11 @@ def summarize_file():
         extracted_text = handler(file)
         summarize_prompt = ChatPromptTemplate.from_template(vars.SUMMARIZE_TEMPLATE)
         summarize_chain = summarize_prompt | model
+        start_time = time.time()
         summary = summarize_chain.invoke({"context": extracted_text})
-        return jsonify({'success': True, 'summary': summary})
+        end_time = time.time()
+        time_taken = end_time - start_time
+        return jsonify({'success': True, 'summary': summary, 'timeTaken': time_taken})
     except Exception as e:
         print(f"Error summarizing file: {e}")
         return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
@@ -174,18 +183,17 @@ def summarize_file():
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
 
-
 def _extract_text_from_pdf(file):
-    reader = PyPDF2.PdfReader(file)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
-
+    raise NotImplementedError("PDF extraction not yet implemented.")
 
 def _extract_text_from_image(file):
-    img = Image.open(file)
-    return pytesseract.image_to_string(img)
+    raise NotImplementedError("Image extraction not yet implemented.")
+
+
+
+
+
+
 
 
 FILE_HANDLERS = {
@@ -342,13 +350,16 @@ def chat():
             full_context += f"Typed Context: {vars.typed_context}\n\n"
         full_context += context_from_history
 
+        start_time = time.time()
         result = chain.invoke({"context": full_context, "question": question})
+        end_time = time.time()
+        time_taken = end_time - start_time
 
         # Append AI response to backend history
-        chat_history_backend.append({'sender': 'ai', 'message': result})
+        chat_history_backend.append({'sender': 'ai', 'message': result, 'timeTaken': time_taken})
         save_chat_history_to_file()
 
-        return jsonify({'response': result})
+        return jsonify({'response': result, 'timeTaken': time_taken})
 
     except Exception as e:
         print(f"Error in /api/chat: {e}")
@@ -387,9 +398,12 @@ def optimize_prompt():
 
         optimize_template = ChatPromptTemplate.from_template(vars.OPTIMIZE_PROMPT_TEMPLATE)
         optimize_chain = optimize_template | model
+        start_time = time.time()
         optimized_prompt = optimize_chain.invoke({"prompt": prompt_to_optimize})
+        end_time = time.time()
+        time_taken = end_time - start_time
 
-        return jsonify({'success': True, 'optimized_prompt': optimized_prompt})
+        return jsonify({'success': True, 'optimized_prompt': optimized_prompt, 'timeTaken': time_taken})
 
     except Exception as e:
         print(f"Error optimizing prompt: {e}")
