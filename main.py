@@ -1,22 +1,48 @@
 import json
 import os
-import time
 
-
+import GPUtil
+import PyPDF2
 import psutil
+import pytesseract
+from PIL import Image
+from elevenlabs.client import ElevenLabs
 from flask import Flask, request, jsonify, send_from_directory, Response
 from flask_cors import CORS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import OllamaLLM
 
 import vars
-from elevenlabs.client import ElevenLabs
 
 # import decoder # Removed as web UI handles settings
+
+import subprocess
 
 # --- Initialization ---
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/api/ollama_status')
+def ollama_status():
+    try:
+        # Check if ollama.exe is running
+        output = subprocess.check_output('tasklist', shell=True).decode('utf-8')
+        if 'ollama.exe' in output:
+            return jsonify({'status': 'running'})
+        else:
+            return jsonify({'status': 'not running'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'error': str(e)})
+
+@app.route('/api/start_ollama', methods=['POST'])
+def start_ollama():
+    try:
+        # Attempt to start ollama.exe
+        subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_CONSOLE)
+        return jsonify({'success': True, 'message': 'Ollama is starting...'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
 
 # Global variable to store context
 current_context = ""
@@ -59,17 +85,9 @@ for name, model_info in vars.MODELS.items():
         current_model_name = name
         break
 
-model = OllamaLLM(model=vars.JARVIS_MODEL, base_url="http://192.168.1.4:11434")
+model = OllamaLLM(model=vars.JARVIS_MODEL)
 prompt_template = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt_template | model
-
-# Warm up the LLM model on startup
-print("Warming up LLM model...")
-try:
-    chain.invoke({"context": "", "question": "Hello"})
-    print("LLM model warmed up.")
-except Exception as e:
-    print(f"Error warming up LLM model: {e}")
 
 
 def update_llm_chain(new_model_name):
@@ -82,7 +100,8 @@ def update_llm_chain(new_model_name):
 # --- API Endpoints ---
 @app.route('/')
 def serve_index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(
+        'C:\\Main\\JARVIS-v.3.0+', 'index.html')
 
 
 @app.route('/img/<path:filename>')
@@ -170,11 +189,8 @@ def summarize_file():
         extracted_text = handler(file)
         summarize_prompt = ChatPromptTemplate.from_template(vars.SUMMARIZE_TEMPLATE)
         summarize_chain = summarize_prompt | model
-        start_time = time.time()
         summary = summarize_chain.invoke({"context": extracted_text})
-        end_time = time.time()
-        time_taken = end_time - start_time
-        return jsonify({'success': True, 'summary': summary, 'timeTaken': time_taken})
+        return jsonify({'success': True, 'summary': summary})
     except Exception as e:
         print(f"Error summarizing file: {e}")
         return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
@@ -183,17 +199,18 @@ def summarize_file():
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
 
+
 def _extract_text_from_pdf(file):
-    raise NotImplementedError("PDF extraction not yet implemented.")
+    reader = PyPDF2.PdfReader(file)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() + "\n"
+    return text
+
 
 def _extract_text_from_image(file):
-    raise NotImplementedError("Image extraction not yet implemented.")
-
-
-
-
-
-
+    img = Image.open(file)
+    return pytesseract.image_to_string(img)
 
 
 FILE_HANDLERS = {
@@ -350,19 +367,33 @@ def chat():
             full_context += f"Typed Context: {vars.typed_context}\n\n"
         full_context += context_from_history
 
-        start_time = time.time()
         result = chain.invoke({"context": full_context, "question": question})
-        end_time = time.time()
-        time_taken = end_time - start_time
 
         # Append AI response to backend history
-        chat_history_backend.append({'sender': 'ai', 'message': result, 'timeTaken': time_taken})
+        chat_history_backend.append({'sender': 'ai', 'message': result})
         save_chat_history_to_file()
 
-        return jsonify({'response': result, 'timeTaken': time_taken})
+        return jsonify({'response': result})
 
     except Exception as e:
         print(f"Error in /api/chat: {e}")
+        return jsonify({'error': 'An internal server error occurred.'}), 500
+
+@app.route('/api/analyze_sentiment', methods=['POST'])
+def analyze_sentiment():
+    try:
+        data = request.json
+        text = data.get('text', '').lower()
+
+        if any(keyword in text for keyword in ['happy', 'joy', 'excited', 'wonderful', 'fantastic']):
+            return jsonify({'sentiment': 'happy'})
+        elif any(keyword in text for keyword in ['sad', 'sorry', 'unfortunate', 'apologize']):
+            return jsonify({'sentiment': 'sad'})
+        else:
+            return jsonify({'sentiment': 'neutral'})
+
+    except Exception as e:
+        print(f"Error in /api/analyze_sentiment: {e}")
         return jsonify({'error': 'An internal server error occurred.'}), 500
 
 
@@ -398,12 +429,9 @@ def optimize_prompt():
 
         optimize_template = ChatPromptTemplate.from_template(vars.OPTIMIZE_PROMPT_TEMPLATE)
         optimize_chain = optimize_template | model
-        start_time = time.time()
         optimized_prompt = optimize_chain.invoke({"prompt": prompt_to_optimize})
-        end_time = time.time()
-        time_taken = end_time - start_time
 
-        return jsonify({'success': True, 'optimized_prompt': optimized_prompt, 'timeTaken': time_taken})
+        return jsonify({'success': True, 'optimized_prompt': optimized_prompt})
 
     except Exception as e:
         print(f"Error optimizing prompt: {e}")
@@ -451,6 +479,37 @@ def shutdown():
 
 
 # --- Main Execution ---
+@app.route('/api/warmup', methods=['POST'])
+def warmup():
+    """Warms up the AI and starts Ollama if necessary."""
+    try:
+        print("Warming up the AI...")
+        chain.invoke({"context": "Initial warm-up call.", "question": "Hello."})
+        print("AI is warmed up and ready.")
+        return jsonify({'success': True, 'message': 'AI is warmed up.'})
+    except Exception as e:
+        print(f"AI warm-up failed: {e}")
+        print("Checking Ollama status and attempting to start if not running.")
+        try:
+            output = subprocess.check_output('tasklist', shell=True).decode('utf-8')
+            if 'ollama.exe' not in output:
+                print("Ollama not running. Starting it now...")
+                subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_CONSOLE)
+                # Give Ollama a moment to start up before trying again.
+                import time
+                time.sleep(5)
+                print("Retrying AI warm-up...")
+                chain.invoke({"context": "Initial warm-up call.", "question": "Hello."})
+                print("AI is warmed up after starting Ollama.")
+                return jsonify({'success': True, 'message': 'Ollama started and AI is warmed up.'})
+            else:
+                print("Ollama is running, but the warm-up failed. The model may be misconfigured or unavailable.")
+                return jsonify({'success': False, 'error': 'Ollama is running, but the AI model is not responding.'})
+        except Exception as start_error:
+            error_message = f"Failed to start Ollama or warm up the AI: {start_error}"
+            print(error_message)
+            return jsonify({'success': False, 'error': error_message})
+
 if __name__ == '__main__':
     print("Starting J.A.R.V.I.S web server...")
     app.run(port=5000, debug=False)

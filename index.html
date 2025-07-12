@@ -169,10 +169,13 @@
             width: 100%;
             height: 100%;
             max-width: 1800px; /* A sensible max-width */
-            background: var(--chat-bg);
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
             padding: 15px;
             gap: 15px;
-            border-radius: 15px;
         }
 
         .sidebar {
@@ -203,6 +206,22 @@
         .logo img {
             width: 100%;
             height: 100%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
+            }
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.8));
+            }
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
+            }
         }
 
         @keyframes pulse {
@@ -407,7 +426,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); } /* Adjusted transform */
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -1109,7 +1128,7 @@
         }
     }
 
-    function addMessageToChat(message, sender, save = true, timeTaken = null, modelName = null) {
+    async function addMessageToChat(message, sender, save = true, timeTaken = null, modelName = null) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${sender === 'user' ? 'user-message' : 'ai-message'}`;
 
@@ -1138,6 +1157,20 @@
                 modelBtn.title = `Model: ${modelName}`;
                 buttonContainer.appendChild(modelBtn);
             }
+
+            try {
+                const sentimentResponse = await fetch('http://127.0.0.1:5000/api/analyze_sentiment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: message })
+                });
+                const sentimentData = await sentimentResponse.json();
+                updateUIAccordingToSentiment(sentimentData.sentiment);
+            } catch (error) {
+                console.error("Error analyzing sentiment:", error);
+            }
         }
 
         const timestampBtn = document.createElement('button');
@@ -1154,6 +1187,22 @@
             chatHistory.push({ message, sender, timestamp: new Date().toISOString(), timeTaken: timeTaken, model: modelName });
             localStorage.setItem('jarvisChatHistory', JSON.stringify(chatHistory));
         }
+    }
+
+    function updateUIAccordingToSentiment(sentiment) {
+        const chatContainer = document.getElementById('chatContainer');
+        const aiMessages = chatContainer.querySelectorAll('.ai-message');
+
+        let color = '#667eea'; // Default color
+        if (sentiment === 'happy') {
+            color = '#10b981'; // Green for happy
+        } else if (sentiment === 'sad') {
+            color = '#ef4444'; // Red for sad
+        }
+
+        aiMessages.forEach(msg => {
+            msg.style.backgroundColor = color;
+        });
     }
 
     // --- LLM Integration ---
@@ -1390,6 +1439,33 @@
         cancelBtn.addEventListener('click', cancelHandler);
     }
 
+    async function checkOllamaStatus() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/ollama_status');
+            const data = await response.json();
+
+            if (data.status !== 'running') {
+                showModal('Ollama is not running. Would you like to start it?', async () => {
+                    try {
+                        const startResponse = await fetch('http://127.0.0.1:5000/api/start_ollama', { method: 'POST' });
+                        const startData = await startResponse.json();
+                        if (startData.success) {
+                            showModal('Ollama is starting...', () => {}, true);
+                        } else {
+                            showModal(`Failed to start Ollama: ${startData.error}`, () => {}, true);
+                        }
+                    } catch (error) {
+                        console.error("Error starting Ollama:", error);
+                        showModal("An error occurred while trying to start Ollama.", () => {}, true);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error checking Ollama status:", error);
+            showModal("Could not connect to the server to check Ollama status. Please ensure the server is running.", () => {}, true);
+        }
+    }
+
     // --- Initialization ---
     async function loadChatHistory() {
         try {
@@ -1513,7 +1589,7 @@
 
             const data = await response.json();
             if (data.success) {
-                showModal(`Custom JARVIS "${name}" saved successfully.`, () => {}, true);
+                showModal(`Custom JARVIS \"${name}\" saved successfully.`, () => {}, true);
                 customJarvisModal.style.display = 'none';
                 loadModels(); // Reload models to include the new one
             } else {
@@ -1527,7 +1603,7 @@
 
     async function deleteCustomJarvis() {
         const selectedModelName = modelSelect.value;
-        showModal(`Are you sure you want to delete the custom JARVIS "${selectedModelName}"?`, async () => {
+        showModal(`Are you sure you want to delete the custom JARVIS \"${selectedModelName}\"?`, async () => {
             try {
                 const response = await fetch('http://127.0.0.1:5000/api/delete_custom_jarvis', {
                     method: 'POST',
@@ -1539,7 +1615,7 @@
 
                 const data = await response.json();
                 if (data.success) {
-                    showModal(`Custom JARVIS "${selectedModelName}" deleted successfully.`, () => {}, true);
+                    showModal(`Custom JARVIS \"${selectedModelName}\" deleted successfully.`, () => {}, true);
                     loadModels(); // Reload models to remove the deleted one
                 } else {
                     showModal(`Failed to delete custom JARVIS: ${data.error}`, () => {}, true);
@@ -1618,7 +1694,23 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const loadingScreen = document.getElementById('loadingScreen');
-        loadingScreen.classList.add('hidden');
+        
+        async function warmUpAI() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/warmup', { method: 'POST' });
+                const data = await response.json();
+                if (!data.success) {
+                    showModal(`AI warm-up failed: ${data.error}`, () => {}, true);
+                }
+            } catch (error) {
+                console.error("Error during AI warm-up:", error);
+                showModal("An error occurred while warming up the AI.", () => {}, true);
+            } finally {
+                loadingScreen.classList.add('hidden');
+            }
+        }
+
+        warmUpAI();
 
         cpuChart = createChart(document.getElementById('cpuChart').getContext('2d'), 'CPU', '#4facfe');
         ramChart = createChart(document.getElementById('ramChart').getContext('2d'), 'RAM', '#a855f7');

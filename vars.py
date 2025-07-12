@@ -74,7 +74,7 @@ Question: {question}
 
 Answer:
 """,
-    "base_model": "llama3.2"  # You can choose any base model here
+    "base_model": "llama3.2" # You can choose any base model here
 }
 
 TEMPLATE = """
