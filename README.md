@@ -55,7 +55,7 @@ For an in-depth guide on how to use J.A.R.V.I.S, please check out the
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 ![Static Badge](https://img.shields.io/badge/Certification--B)
-![Static Badge](https://img.shields.io/badge/Grade-A-green)
+![Static Badge](https://img.shields.io/badge/Grade-AA-green)
 
 
 ## Authors
