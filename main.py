@@ -1,9 +1,9 @@
 import json
 import os
-
+import subprocess
+import psutil
 import GPUtil
 import PyPDF2
-import psutil
 import pytesseract
 from PIL import Image
 from elevenlabs.client import ElevenLabs
@@ -14,35 +14,33 @@ from langchain_ollama import OllamaLLM
 
 import vars
 
-# import decoder # Removed as web UI handles settings
-
-import subprocess
-
 # --- Initialization ---
 app = Flask(__name__)
 CORS(app)
 
+# --- Utility Functions ---
+def is_ollama_running():
+    """Checks if the Ollama process is running."""
+    for proc in psutil.process_iter(['name']):
+        if proc.info['name'] == 'ollama.exe':
+            return True
+    return False
+
+# --- API Endpoints ---
 @app.route('/api/ollama_status')
 def ollama_status():
-    try:
-        # Check if ollama.exe is running
-        output = subprocess.check_output('tasklist', shell=True).decode('utf-8')
-        if 'ollama.exe' in output:
-            return jsonify({'status': 'running'})
-        else:
-            return jsonify({'status': 'not running'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'error': str(e)})
+    if is_ollama_running():
+        return jsonify({'status': 'running'})
+    else:
+        return jsonify({'status': 'not running'})
 
 @app.route('/api/start_ollama', methods=['POST'])
 def start_ollama():
     try:
-        # Attempt to start ollama.exe
         subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_CONSOLE)
         return jsonify({'success': True, 'message': 'Ollama is starting...'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
-
 
 # Global variable to store context
 current_context = ""
@@ -50,7 +48,6 @@ current_context = ""
 # Global variable to store chat history
 CHAT_HISTORY_FILE = 'chat_history.json'
 chat_history_backend = []
-
 
 def load_chat_history_from_file():
     global chat_history_backend
@@ -63,11 +60,9 @@ def load_chat_history_from_file():
     else:
         chat_history_backend = []
 
-
 def save_chat_history_to_file():
     with open(CHAT_HISTORY_FILE, 'w') as f:
         json.dump(chat_history_backend, f, indent=2)
-
 
 # Load history on startup
 load_chat_history_from_file()
@@ -89,36 +84,29 @@ model = OllamaLLM(model=vars.JARVIS_MODEL)
 prompt_template = ChatPromptTemplate.from_template(vars.TEMPLATE)
 chain = prompt_template | model
 
-
 def update_llm_chain(new_model_name):
     global current_model_name, model, chain
     current_model_name = new_model_name
     model = OllamaLLM(model=new_model_name)
     chain = prompt_template | model
 
-
 # --- API Endpoints ---
 @app.route('/')
 def serve_index():
-    return send_from_directory(
-        'C:\\Main\\JARVIS-v.3.0+', 'index.html')
-
+    return send_from_directory('.', 'index.html')
 
 @app.route('/img/<path:filename>')
 def serve_img(filename):
     return send_from_directory('img', filename)
 
-
 @app.route('/api/current_model')
 def get_current_model():
     return jsonify({'current_model': current_model_name})
-
 
 @app.route('/api/models')
 def get_models():
     all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
     return jsonify(all_models)
-
 
 @app.route('/api/set_model', methods=['POST'])
 def set_model():
@@ -127,9 +115,13 @@ def set_model():
         new_model_key = data.get('model_key')
         all_models = {**vars.MODELS, **vars.CUSTOM_MODELS}
         if new_model_key and new_model_key in all_models:
-            update_llm_chain(
-                all_models[new_model_key]["prompt"] if isinstance(all_models[new_model_key], dict) else all_models[
-                    new_model_key])
+            model_details = all_models[new_model_key]
+            if isinstance(model_details, dict):
+                # It's a custom model, use the base_model for the LLM
+                update_llm_chain(model_details["base_model"])
+            else:
+                # It's a standard model
+                update_llm_chain(model_details)
             return jsonify({'success': True, 'message': f'Model set to {new_model_key}'})
         else:
             return jsonify({'success': False, 'error': 'Invalid model key'}), 400
@@ -137,9 +129,8 @@ def set_model():
         print(f"Error setting model: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
-
 @app.route('/api/save_custom_jarvis', methods=['POST'])
-def save_custom_jarvis():
+def save__jarvis():
     try:
         data = request.json
         name = data.get('name')
@@ -155,7 +146,6 @@ def save_custom_jarvis():
         print(f"Error saving custom JARVIS: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
-
 @app.route('/api/delete_custom_jarvis', methods=['POST'])
 def delete_custom_jarvis():
     try:
@@ -170,7 +160,6 @@ def delete_custom_jarvis():
     except Exception as e:
         print(f"Error deleting custom JARVIS: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
-
 
 @app.route('/api/summarize_file', methods=['POST'])
 def summarize_file():
@@ -195,10 +184,8 @@ def summarize_file():
         print(f"Error summarizing file: {e}")
         return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
 
-
 def _extract_text_from_text(file):
     return file.read().decode('utf-8')
-
 
 def _extract_text_from_pdf(file):
     reader = PyPDF2.PdfReader(file)
@@ -207,11 +194,9 @@ def _extract_text_from_pdf(file):
         text += page.extract_text() + "\n"
     return text
 
-
 def _extract_text_from_image(file):
     img = Image.open(file)
     return pytesseract.image_to_string(img)
-
 
 FILE_HANDLERS = {
     'txt': _extract_text_from_text,
@@ -228,7 +213,6 @@ FILE_HANDLERS = {
     'bmp': _extract_text_from_image,
 }
 
-
 @app.route('/api/load_context', methods=['POST'])
 def load_context():
     global current_context
@@ -239,19 +223,6 @@ def load_context():
         return jsonify({'success': False, 'error': 'No selected file'}), 400
 
     file_extension = file.filename.split('.')[-1].lower()
-
-    if file_extension == 'json':
-        try:
-            chat_history_data = json.load(file)
-            chat_history_backend.clear()
-            chat_history_backend.extend(chat_history_data)
-            save_chat_history_to_file()
-            return jsonify(
-                {'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
-        except Exception as e:
-            print(f"Error loading chat history: {e}")
-            return jsonify({'success': False, 'error': f'Error processing JSON file: {e}'}), 500
-
     handler = FILE_HANDLERS.get(file_extension)
     if not handler:
         return jsonify({'success': False, 'error': 'Unsupported file type'}), 400
@@ -264,6 +235,28 @@ def load_context():
         print(f"Error loading context: {e}")
         return jsonify({'success': False, 'error': f'Error processing file: {e}'}), 500
 
+@app.route('/api/load_chat_history', methods=['POST'])
+def load_chat_history():
+    """Loads chat history from a JSON file."""
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'No selected file'}), 400
+
+    if file.filename.split('.')[-1].lower() != 'json':
+        return jsonify({'success': False, 'error': 'Invalid file type, expected .json'}), 400
+
+    try:
+        chat_history_data = json.load(file)
+        chat_history_backend.clear()
+        chat_history_backend.extend(chat_history_data)
+        save_chat_history_to_file()
+        return jsonify(
+            {'success': True, 'history': chat_history_data, 'message': 'Chat history loaded successfully'})
+    except Exception as e:
+        print(f"Error loading chat history: {e}")
+        return jsonify({'success': False, 'error': f'Error processing JSON file: {e}'}), 500
 
 @app.route('/api/context', methods=['GET'])
 def get_context():
@@ -273,13 +266,11 @@ def get_context():
         'chat_summary': vars.chat_summary
     })
 
-
 @app.route('/api/clear_file_context', methods=['POST'])
 def clear_file_context():
     global current_context
     current_context = ""
     return jsonify({'success': True, 'message': 'File context cleared.'})
-
 
 @app.route('/api/save_typed_context', methods=['POST'])
 def save_typed_context():
@@ -291,12 +282,10 @@ def save_typed_context():
         print(f"Error saving typed context: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
-
 @app.route('/api/clear_typed_context', methods=['POST'])
 def clear_typed_context():
     vars.typed_context = ""
     return jsonify({'success': True, 'message': 'Typed context cleared.'})
-
 
 @app.route('/api/clear_all_context', methods=['POST'])
 def clear_all_context():
@@ -309,11 +298,9 @@ def clear_all_context():
         os.remove(CHAT_HISTORY_FILE)
     return jsonify({'success': True, 'message': 'All context has been cleared.'})
 
-
 @app.route('/api/get_chat_history')
 def get_chat_history():
     return jsonify(chat_history_backend)
-
 
 @app.route('/api/summarize_chat', methods=['POST'])
 def summarize_chat():
@@ -340,7 +327,6 @@ def summarize_chat():
         print(f"Error in /api/summarize_chat: {e}")
         return jsonify({'success': False, 'error': 'An internal server error occurred.'}), 500
 
-
 @app.route('/api/chat', methods=['POST'])
 def chat():
     try:
@@ -351,7 +337,7 @@ def chat():
         if not question:
             return jsonify({'error': 'No message provided.'}), 400
 
-        # Append user message to backend history
+        # Append a user message to backend history
         chat_history_backend.append({'sender': 'user', 'message': question})
         save_chat_history_to_file()
 
@@ -396,7 +382,6 @@ def analyze_sentiment():
         print(f"Error in /api/analyze_sentiment: {e}")
         return jsonify({'error': 'An internal server error occurred.'}), 500
 
-
 @app.route('/api/speak', methods=['POST'])
 def speak_text():
     try:
@@ -417,7 +402,6 @@ def speak_text():
         print(f"Error in /api/speak: {e}")
         return jsonify({'error': f'ElevenLabs API error: {e}'}), 500
 
-
 @app.route('/api/optimize_prompt', methods=['POST'])
 def optimize_prompt():
     try:
@@ -437,13 +421,12 @@ def optimize_prompt():
         print(f"Error optimizing prompt: {e}")
         return jsonify({'success': False, 'error': 'Internal server error during prompt optimization.'}), 500
 
-
 @app.route('/api/system_stats')
 def system_stats():
     try:
         cpu_usage = psutil.cpu_percent(interval=None)
         ram_usage = psutil.virtual_memory().percent
-        disk_usage = psutil.disk_usage('C:\\').percent
+        disk_usage = psutil.disk_usage('/').percent
 
         try:
             gpus = GPUtil.getGPUs()
@@ -469,14 +452,12 @@ def system_stats():
             'error': 'Could not retrieve system stats.'
         })
 
-
 @app.route('/api/shutdown', methods=['POST'])
 def shutdown():
     shutdown_server = request.environ.get('werkzeug.server.shutdown')
     if shutdown_server:
         shutdown_server()
     return 'Server shutting down...'
-
 
 # --- Main Execution ---
 @app.route('/api/warmup', methods=['POST'])
@@ -491,8 +472,7 @@ def warmup():
         print(f"AI warm-up failed: {e}")
         print("Checking Ollama status and attempting to start if not running.")
         try:
-            output = subprocess.check_output('tasklist', shell=True).decode('utf-8')
-            if 'ollama.exe' not in output:
+            if not is_ollama_running():
                 print("Ollama not running. Starting it now...")
                 subprocess.Popen(["ollama", "serve"], creationflags=subprocess.CREATE_NEW_CONSOLE)
                 # Give Ollama a moment to start up before trying again.

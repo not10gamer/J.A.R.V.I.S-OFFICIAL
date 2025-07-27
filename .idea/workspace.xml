@@ -6,45 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Jarvis 4 Final changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/CODE_OF_CONDUCT.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/CONTRIBUTING.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/HowToUse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/SECURITY.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/chat_history.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/chat_history.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/custom_models.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/basic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/idle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/img_install.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/listening.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/thinking.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/img/waitlist.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/main_fastapi.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/vars.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Beta (Ignore)/web_search_tool.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat_history.json" beforeDir="false" afterPath="$PROJECT_DIR$/chat_history.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/basic.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/idle.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/img_install.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/listening.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/thinking.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/waitlist.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat_history.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/vars.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wsgi.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -88,6 +52,7 @@
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Python.WSGI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.beta.executor&quot;: &quot;Run&quot;,
     &quot;Python.decoder.executor&quot;: &quot;Run&quot;,
     &quot;Python.gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -99,7 +64,7 @@
     &quot;com.codeium.enabled&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Main/JARVIS-v.3.0+/wsgi.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Main/JARVIS-v.3.0+/J.A.R.V.I.S-OFFICIAL-v.4o-beta/main.py&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
 }</component>
@@ -134,6 +99,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="beta" type="PythonConfigurationType" factoryName="Python">
+      <module name="JARVIS-v.3.0+" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (JARVIS-v.3.0+)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/J.A.R.V.I.S-OFFICIAL-v.4o-beta/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="JARVIS-v.3.0+" />
       <option name="ENV_FILES" value="" />
@@ -159,6 +147,7 @@
     <list>
       <item itemvalue="Python.WSGI" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.beta" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -553,7 +542,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752141737328</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Jarvis 4 Final changes">
+      <option name="closed" value="true" />
+      <created>1752331319516</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1752331319516</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="UnknownFeatures">

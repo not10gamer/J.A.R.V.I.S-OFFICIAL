@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>J.A.R.V.I.S</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         .loading-screen {
             position: fixed;
@@ -222,11 +222,6 @@
                 transform: scale(1);
                 filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.5));
             }
-        }
-
-        @keyframes pulse {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5)); } /* Adjusted shadow */
-            50% { filter: drop-shadow(0 0 16px rgba(155, 89, 182, 0.8)); } /* Adjusted shadow */
         }
 
         .title {
@@ -750,15 +745,13 @@
             <button class="btn btn-small" onclick="deleteChat()" title="Delete Chat History">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" stroke-linecap="round"
-                          stroke-linejoin="round"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
                 </svg>
             </button>
             <button class="btn btn-small" onclick="saveChat()" title="Save Chat History">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                      xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" stroke-linecap="round"
-                          stroke-linejoin="round"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"/>
                 </svg>
             </button>
             <button class="btn btn-small" onclick="loadChat()" title="Load Chat History">
@@ -919,7 +912,7 @@
                 <button class="btn" id="chooseCustomModelFileBtn">Choose File</button>
                 <span id="customModelFileName" style="color: var(--text-color); font-size: 14px;">No file chosen</span>
             </div>
-            <input type="file" id="customModelFileInput" style="display: none;">
+            <input type="file" id="customModelFileInput2" style="display: none;">
             <button class="btn" id="summarizeFileBtn" style="margin-top: 10px;">Summarize & Add to Prompt</button>
             <div class="loading-spinner" id="summarizeSpinner" style="display: none;"></div>
         </div>
@@ -945,13 +938,39 @@
     const chatContainer = document.getElementById('chatContainer');
     const messageInput = document.getElementById('messageInput');
     const speakToggle = document.getElementById('speakToggle');
-    const conversationModeToggle = document.getElementById('conversationModeToggle');
+    
     const customizeModal = document.getElementById('customizeModal');
     const closeCustomizeModalBtn = document.getElementById('closeCustomizeModal');
     const themeButtons = document.querySelectorAll('.theme-btn');
     const modelSelect = document.getElementById('modelSelect');
     const setModelBtn = document.getElementById('setModelBtn');
     const contextFileInput = document.getElementById('contextFileInput');
+
+    contextFileInput.addEventListener('change', async () => {
+        if (contextFileInput.files.length === 0) {
+            return; // No file selected
+        }
+        const file = contextFileInput.files[0];
+        const formData = new FormData();
+        formData.append('context_file', file);
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/load_context', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showModal(`Context loaded successfully from ${file.name}.`, () => {}, true);
+            } else {
+                showModal(`Failed to load context: ${data.error || 'Invalid file format.'}`, () => {}, true);
+            }
+        } catch (error) {
+            console.error("Error loading context file:", error);
+            showModal("Error communicating with the server to load the file.", () => {}, true);
+        }
+    });
     const chatHistoryInput = document.getElementById('chatHistoryInput');
     const customModelFileInput = document.getElementById('customModelFileInput');
     const chooseCustomModelFileBtn = document.getElementById('chooseCustomModelFileBtn');
@@ -1095,7 +1114,7 @@
     function updateChart(chart, value) {
         chart.data.datasets[0].data.shift();
         chart.data.datasets[0].data.push(value);
-        chart.update('none');
+        chart.update();
     }
 
     // --- Chat Functionality ---
@@ -1191,7 +1210,7 @@
 
     function updateUIAccordingToSentiment(sentiment) {
         const chatContainer = document.getElementById('chatContainer');
-        const aiMessages = chatContainer.querySelectorAll('.ai-message');
+        const aiMessages = chatContainer.querySelectorAll('.ai-message:last-child');
 
         let color = '#667eea'; // Default color
         if (sentiment === 'happy') {
@@ -1893,6 +1912,9 @@
         });
 
         saveCustomJarvisBtn.addEventListener('click', saveCustomJarvis);
+        closeCustomJarvisModalBtn.addEventListener('click', () => {
+            customJarvisModal.style.display = 'none';
+        });
 
         summarizeFileBtn.addEventListener('click', summarizeFile);
         optimizePromptBtn.addEventListener('click', optimizePrompt);
@@ -1903,10 +1925,11 @@
             }
             const file = chatHistoryInput.files[0];
             const formData = new FormData();
-            formData.append('context_file', file);
+            formData.append('file', file); // Corrected form data key
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/load_context', {
+                // Corrected endpoint
+                const response = await fetch('http://127.0.0.1:5000/api/load_chat_history', {
                     method: 'POST',
                     body: formData
                 });
