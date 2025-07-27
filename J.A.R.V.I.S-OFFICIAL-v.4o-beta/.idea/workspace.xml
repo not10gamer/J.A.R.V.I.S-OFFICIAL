@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="Jarvis 4 Final changes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat_history.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/vars.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;not10gamer&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/not10gamer/J.A.R.V.I.S-OFFICIAL.git&quot;,
+    &quot;accountId&quot;: &quot;5bbd172c-4681-40b6-a1a0-18a263ef49d9&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2yUpQxguRMm5sOta8B4ZSyowvqL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.decoder.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.receptionist_teacher_cli.executor&quot;: &quot;Run&quot;,
+    &quot;Python.settings_modifier.executor&quot;: &quot;Run&quot;,
+    &quot;Python.start.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Main\JARVIS-v.3.0+\img" />
+      <recent name="C:\Main\JARVIS-v.3.0+" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="JARVIS-v.3.0+" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b5ec8e31-ece6-46bb-9a48-384acb70037b" name="Changes" comment="" />
+      <created>1749898994217</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1749898994217</updated>
+    </task>
+    <task id="LOCAL-00001" summary="The starting point">
+      <option name="closed" value="true" />
+      <created>1749900801809</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1749900801809</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changes due to TOS">
+      <option name="closed" value="true" />
+      <created>1749901139848</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1749901139848</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Security Changes And a change to the README">
+      <option name="closed" value="true" />
+      <created>1749901581014</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1749901581014</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Security Changes And a change to the README">
+      <option name="closed" value="true" />
+      <created>1749901741615</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749901741615</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Quality of life updates">
+      <option name="closed" value="true" />
+      <created>1750088146434</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750088146434</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Quality of life updates and Major Changes to Model Functionality and Flexibility">
+      <option name="closed" value="true" />
+      <created>1750089753722</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750089753722</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Extra Info">
+      <option name="closed" value="true" />
+      <created>1750091707655</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750091707655</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Quality of life updates">
+      <option name="closed" value="true" />
+      <created>1750243834907</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750243834907</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Structure for future updates added">
+      <option name="closed" value="true" />
+      <created>1750246790296</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1750246790296</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added The Ability to change Settings. (Further documentation will be added)">
+      <option name="closed" value="true" />
+      <created>1750273779316</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1750273779316</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Changes to documentation">
+      <option name="closed" value="true" />
+      <created>1750273934042</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1750273934042</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Addition Plus Changes to documentation.">
+      <option name="closed" value="true" />
+      <created>1750274643799</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1750274643799</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Addition Plus Changes to documentation.">
+      <option name="closed" value="true" />
+      <created>1750274929190</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1750274929190</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Updates To Maintenance and Support Systems.">
+      <option name="closed" value="true" />
+      <created>1750275213254</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1750275213254</updated>
+    </task>
+    <task id="LOCAL-00015" summary="A massive change to security and Documentation.">
+      <option name="closed" value="true" />
+      <created>1750331030523</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1750331030523</updated>
+    </task>
+    <task id="LOCAL-00016" summary="A tiny Update">
+      <option name="closed" value="true" />
+      <created>1750331175044</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1750331175044</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu">
+      <option name="closed" value="true" />
+      <created>1750446474550</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1750446474550</updated>
+    </task>
+    <task id="LOCAL-00018" summary="The Setup for the GUI">
+      <option name="closed" value="true" />
+      <created>1750450342884</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1750450342884</updated>
+    </task>
+    <task id="LOCAL-00019" summary="The Setup for the GUI">
+      <option name="closed" value="true" />
+      <created>1750450742000</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1750450742000</updated>
+    </task>
+    <task id="LOCAL-00020" summary="The Setup for the GUI">
+      <option name="closed" value="true" />
+      <created>1750486431410</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1750486431410</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Improved workflow for future updates. Preparation for GUI.">
+      <option name="closed" value="true" />
+      <created>1750490573795</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1750490573795</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Improved workflow for future updates. Preparation for GUI.">
+      <option name="closed" value="true" />
+      <created>1751017567628</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1751017567628</updated>
+    </task>
+    <task id="LOCAL-00023" summary="GUI">
+      <option name="closed" value="true" />
+      <created>1751019309918</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1751019309918</updated>
+    </task>
+    <task id="LOCAL-00024" summary="GUI">
+      <option name="closed" value="true" />
+      <created>1751020809299</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1751020809299</updated>
+    </task>
+    <task id="LOCAL-00025" summary="GUI">
+      <option name="closed" value="true" />
+      <created>1751022252040</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1751022252040</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Bug Fixes, Better Documentation and GUI Setup.">
+      <option name="closed" value="true" />
+      <created>1751120025582</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1751120025582</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Addition of Crash Dump">
+      <option name="closed" value="true" />
+      <created>1751121097454</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1751121097454</updated>
+    </task>
+    <task id="LOCAL-00028" summary="GUI">
+      <option name="closed" value="true" />
+      <created>1751471907599</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1751471907599</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Web Interface">
+      <option name="closed" value="true" />
+      <created>1751555017609</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1751555017609</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751632738249</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1751632738249</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751693782714</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1751693782714</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751695941337</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1751695941337</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751702507754</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1751702507754</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751705542208</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1751705542208</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751706426542</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1751706426542</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751708743360</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1751708743360</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751708768883</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1751708768883</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751709051935</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1751709051935</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751709900354</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1751709900354</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751969006034</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1751969006034</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Jarvis 4">
+      <option name="closed" value="true" />
+      <created>1751975399798</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1751975399798</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Jarvis 4 Final changes">
+      <option name="closed" value="true" />
+      <created>1751988888696</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1751988888696</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Jarvis 4 Final changes">
+      <option name="closed" value="true" />
+      <created>1751989580498</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1751989580498</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.settings" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="The starting point" />
+    <MESSAGE value="Changes due to TOS" />
+    <MESSAGE value="Security Changes And a change to the README" />
+    <MESSAGE value="Quality of life updates and Major Changes to Model Functionality and Flexibility" />
+    <MESSAGE value="Extra Info" />
+    <MESSAGE value="Quality of life updates" />
+    <MESSAGE value="Structure for future updates added" />
+    <MESSAGE value="Added The Ability to change Settings. (Further documentation will be added)" />
+    <MESSAGE value="Changes to documentation" />
+    <MESSAGE value="Addition Plus Changes to documentation." />
+    <MESSAGE value="Updates To Maintenance and Support Systems." />
+    <MESSAGE value="A massive change to security and Documentation." />
+    <MESSAGE value="A tiny Update" />
+    <MESSAGE value="Change in Pipeline (Updated from v1.02 to v1.13) and Improvements to the settings menu" />
+    <MESSAGE value="The Setup for the GUI" />
+    <MESSAGE value="Improved workflow for future updates. Preparation for GUI." />
+    <MESSAGE value="Bug Fixes, Better Documentation and GUI Setup." />
+    <MESSAGE value="Addition of Crash Dump" />
+    <MESSAGE value="GUI" />
+    <MESSAGE value="Web Interface" />
+    <MESSAGE value="Jarvis 4" />
+    <MESSAGE value="Jarvis 4 Final changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Jarvis 4 Final changes" />
+  </component>
+</project>

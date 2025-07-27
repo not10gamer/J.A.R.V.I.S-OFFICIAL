@@ -1,0 +1,133 @@
+<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Dark gradient background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0f0f0f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0f0f;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Primary cyan gradient -->
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00ccff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0099ff;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Electric blue gradient -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle glow -->
+    <filter id="subtleGlow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="300" height="80" fill="url(#bgGrad)" rx="8"/>
+
+  <!-- Logo section -->
+  <g transform="translate(20, 0)">
+    <!-- Main diamond structure -->
+    <g stroke="url(#primaryGrad)" stroke-width="1.5" fill="none" filter="url(#glow)">
+      <polygon points="40,20 55,35 40,50 25,35" stroke-width="2"/>
+
+      <!-- Extensions -->
+      <line x1="40" y1="20" x2="40" y2="10" stroke-width="1"/>
+      <line x1="55" y1="35" x2="65" y2="35" stroke-width="1"/>
+      <line x1="40" y1="50" x2="40" y2="60" stroke-width="1"/>
+      <line x1="25" y1="35" x2="15" y2="35" stroke-width="1"/>
+
+      <!-- Corner details -->
+      <line x1="47.5" y1="27.5" x2="52.5" y2="22.5" stroke-width="0.8"/>
+      <line x1="47.5" y1="42.5" x2="52.5" y2="47.5" stroke-width="0.8"/>
+      <line x1="32.5" y1="42.5" x2="27.5" y2="47.5" stroke-width="0.8"/>
+      <line x1="32.5" y1="27.5" x2="27.5" y2="22.5" stroke-width="0.8"/>
+    </g>
+
+    <!-- Neural network -->
+    <g filter="url(#subtleGlow)">
+      <!-- Central node -->
+      <circle cx="40" cy="35" r="2" fill="url(#accentGrad)" stroke="#ffffff" stroke-width="0.3"/>
+
+      <!-- Connected nodes -->
+      <circle cx="32" cy="28" r="1.2" fill="url(#primaryGrad)"/>
+      <circle cx="48" cy="28" r="1.2" fill="url(#primaryGrad)"/>
+      <circle cx="32" cy="42" r="1.2" fill="url(#primaryGrad)"/>
+      <circle cx="48" cy="42" r="1.2" fill="url(#primaryGrad)"/>
+
+      <!-- Connections -->
+      <g stroke="#00ffff" stroke-width="0.5" opacity="0.6">
+        <line x1="40" y1="35" x2="32" y2="28"/>
+        <line x1="40" y1="35" x2="48" y2="28"/>
+        <line x1="40" y1="35" x2="32" y2="42"/>
+        <line x1="40" y1="35" x2="48" y2="42"/>
+      </g>
+    </g>
+
+    <!-- Animated scan ring -->
+    <circle cx="40" cy="35" r="25" fill="none" stroke="#00ffff" stroke-width="0.5"
+            stroke-dasharray="3,6" opacity="0.4">
+      <animateTransform attributeName="transform" type="rotate"
+                        values="0 40 35;360 40 35" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Data pulse -->
+    <circle r="0.8" fill="#00ffff" opacity="0.8">
+      <animateMotion dur="2s" repeatCount="indefinite">
+        <path d="M 25,35 L 55,35 L 40,20 L 40,50 Z"/>
+      </animateMotion>
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Text section -->
+  <g transform="translate(90, 0)">
+    <!-- Main title -->
+    <text x="0" y="35" font-family="'JetBrains Mono', 'Fira Code', monospace"
+          font-size="24" font-weight="400" fill="url(#primaryGrad)" letter-spacing="3px">
+      JARVIS
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="50" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif"
+          font-size="10" fill="#00ffff" opacity="0.7" letter-spacing="1px" font-weight="300">
+      AI Assistant Installation
+    </text>
+
+    <!-- Progress indicator dots -->
+    <g transform="translate(0, 60)">
+      <circle cx="0" cy="0" r="2" fill="url(#primaryGrad)">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="10" cy="0" r="2" fill="url(#primaryGrad)">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1s" begin="0.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="20" cy="0" r="2" fill="url(#primaryGrad)">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- Status text -->
+  <text x="280" y="45" text-anchor="end" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif"
+        font-size="9" fill="#00ffff" opacity="0.5">
+    Installing...
+  </text>
+</svg>
